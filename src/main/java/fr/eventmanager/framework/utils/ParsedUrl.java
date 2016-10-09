@@ -2,6 +2,15 @@ package fr.eventmanager.framework.utils;
 
 /**
  * @author Clément Garbay
+ *
+ * URL are divided in different parts.
+ * For instance, "https://eventmanager.fr/events/subscribe/2" will be cut in :
+ *  - "events" the controller name
+ *  - "subscribe" the action name
+ *  - "2" the parameter name
+ *
+ * TODO: There is incorrect semantic meaning when the URL is "https://eventmanager.fr/events/2" (to display the event number 2 for example) because "2" will be in action name attribute whereas it is (in this case) a parameter.
+ * TODO: -> Review attributes names for semantic consistency ?
  */
 public class ParsedUrl {
 
