@@ -4,14 +4,23 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
+    <!-- SERVLETS -->
+
     <servlet>
-        <servlet-name>HelloServlet</servlet-name>
-        <servlet-class>fr.eventmanager.HelloWorld</servlet-class>
+        <servlet-name>Router</servlet-name>
+        <servlet-class>fr.eventmanager.framework.router.Router</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>EventsServlet</servlet-name>
+        <servlet-class>fr.eventmanager.controller.EventsServlet</servlet-class>
+    </servlet>
+
+    <!-- SERVLETS MAPPING -->
+
     <servlet-mapping>
-        <servlet-name>HelloServlet</servlet-name>
-        <url-pattern>/hello</url-pattern>
+        <servlet-name>Router</servlet-name>
+        <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
 </web-app>
