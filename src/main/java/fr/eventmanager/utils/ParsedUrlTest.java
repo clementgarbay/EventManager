@@ -1,4 +1,4 @@
-package fr.eventmanager.framework.utils;
+package fr.eventmanager.utils;
 
 import org.junit.Test;
 

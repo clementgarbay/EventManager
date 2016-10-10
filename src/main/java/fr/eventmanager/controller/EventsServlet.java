@@ -1,7 +1,6 @@
 package fr.eventmanager.controller;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -10,34 +9,35 @@ import java.io.PrintWriter;
 /**
  * @author Clément Garbay
  */
-public class EventsServlet extends HttpServlet {
+public class EventsServlet extends Servlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String action = (String) req.getAttribute("action");
+        super.doGet(req,resp);
 
-        switch (action) {
+        switch (getActionName()) {
             case "default":
-                get(req,resp);
+                getEvents(req, resp);
                 break;
             default:
                 try {
-                    int eventId = Integer.parseInt(action);
-                    getEvent(eventId, req,resp);
+                    int eventId = Integer.parseInt(getParameter());
+                    getEvent(req, resp, eventId);
                 } catch (NumberFormatException nfe) {
-                    resp.sendError(400);
+                    resp.sendError(404);
                 }
 
         }
     }
 
-    private void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-        out.println("<h1>Get : Event : index</h1>");
+    private void getEvents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        // TODO : add data
+
+        render("events.jspf", req, resp);
     }
 
-    private void getEvent(int eventId, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        PrintWriter out = resp.getWriter();
-        out.println("<h1>Get : Event : " + eventId + "</h1>");
+    private void getEvent(HttpServletRequest req, HttpServletResponse resp, int eventId) throws ServletException, IOException {
+        req.setAttribute("eventId", eventId);
+        render("event.jspf", req, resp);
     }
 }
