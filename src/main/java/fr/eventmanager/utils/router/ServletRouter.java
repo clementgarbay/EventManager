@@ -70,24 +70,31 @@ public class ServletRouter {
     }
 
     private Optional<UrlAction> getUrlAction(HttpMethod httpMethod, String path) {
-        return binder.get(httpMethod)
-                .entrySet()
-                .stream()
-                .filter(e -> e.getKey().matcher(path).matches())
-                .map(e -> {
-                    Pattern pattern = e.getKey();
-                    Matcher patternMatcher = pattern.matcher(path);
-                    String methodName = e.getValue();
+        Map<Pattern, String> entries = binder.get(httpMethod);
 
-                    patternMatcher.matches(); // MANDATORY (TOREVIEW)
+        if (entries != null) {
+            return entries
+                    .entrySet()
+                    .stream()
+                    .filter(e -> e.getKey().matcher(path).matches())
+                    .map(e -> {
+                        Pattern pattern = e.getKey();
+                        Matcher patternMatcher = pattern.matcher(path);
+                        String methodName = e.getValue();
 
-                    Map<String, String> parameters = new HashMap<>();
-                    getNamedGroupCandidates(pattern.pattern())
-                            .forEach(groupName -> parameters.put(groupName, patternMatcher.group(groupName)));
+                        patternMatcher.matches(); // MANDATORY (TOREVIEW)
 
-                    return new UrlAction(methodName, parameters);
-                })
-                .findFirst();
+                        Map<String, String> parameters = new HashMap<>();
+                        getNamedGroupCandidates(pattern.pattern())
+                                .forEach(groupName -> parameters.put(groupName, patternMatcher.group(groupName)));
+
+                        return new UrlAction(methodName, parameters);
+                    })
+                    .findFirst();
+        } else {
+            return Optional.empty();
+        }
+
     }
 
     private Set<String> getNamedGroupCandidates(String regex) {
