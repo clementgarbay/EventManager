@@ -1,6 +1,7 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.utils.ParsedUrl;
+import fr.eventmanager.utils.router.HttpMethod;
+import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,45 +14,30 @@ import java.io.IOException;
  */
 public abstract class Servlet extends HttpServlet {
 
-    private String actionName;
-    private String parameter;
+    ServletRouter servletRouter;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        parseUrl(req.getRequestURL().toString());
+        servletRouter.process(HttpMethod.GET, req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        parseUrl(req.getRequestURL().toString());
+        servletRouter.process(HttpMethod.POST, req, resp);
     }
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        parseUrl(req.getRequestURL().toString());
+        servletRouter.process(HttpMethod.PUT, req, resp);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        parseUrl(req.getRequestURL().toString());
+        servletRouter.process(HttpMethod.DELETE, req, resp);
     }
 
-    protected void parseUrl(String url) {
-        ParsedUrl parsedUrl = new ParsedUrl(url);
-        this.actionName = parsedUrl.getActionName();
-        this.parameter = (parsedUrl.getParameterName().isEmpty()) ? parsedUrl.getActionName() : parsedUrl.getParameterName();
-    }
-
-    protected void render(String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    void render(String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("jspPage", jspPage);
         getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
-    }
-
-    String getActionName() {
-        return actionName;
-    }
-
-    String getParameter() {
-        return parameter;
     }
 }

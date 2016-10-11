@@ -1,10 +1,14 @@
 package fr.eventmanager.controller;
 
+import fr.eventmanager.utils.router.HttpMethod;
+import fr.eventmanager.utils.router.ServletRouter;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * @author Clément Garbay
@@ -12,32 +16,24 @@ import java.io.PrintWriter;
 public class EventsServlet extends Servlet {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req,resp);
+    public void init() throws ServletException {
+        super.init();
 
-        switch (getActionName()) {
-            case "default":
-                getEvents(req, resp);
-                break;
-            default:
-                try {
-                    int eventId = Integer.parseInt(getParameter());
-                    getEvent(req, resp, eventId);
-                } catch (NumberFormatException nfe) {
-                    resp.sendError(404);
-                }
-
-        }
+        super.servletRouter = new ServletRouter(this)
+                .registerRouter(HttpMethod.GET, Pattern.compile("/"), "getEvents")
+                .registerRouter(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent");
     }
 
-    private void getEvents(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void getEvents(HttpServletRequest request, HttpServletResponse response, String path, Map<String, String> parameters) throws ServletException, IOException {
         // TODO : add data
-
-        render("events.jspf", req, resp);
+        render("events.jspf", request, response);
     }
 
-    private void getEvent(HttpServletRequest req, HttpServletResponse resp, int eventId) throws ServletException, IOException {
-        req.setAttribute("eventId", eventId);
-        render("event.jspf", req, resp);
+    private void getEvent(HttpServletRequest request,  HttpServletResponse response, String path, Map<String, String> parameters) throws ServletException, IOException {
+
+        System.out.println(parameters);
+
+//        req.setAttribute("eventId", eventId);
+        render("event.jspf", request, response);
     }
 }
