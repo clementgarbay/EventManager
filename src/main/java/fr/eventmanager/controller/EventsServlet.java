@@ -1,10 +1,10 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.dao.impl.EventDAOImpl;
+import fr.eventmanager.dao.impl.EventSampleDAOImpl;
 import fr.eventmanager.service.EventService;
 import fr.eventmanager.service.impl.EventServiceImpl;
+import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
-import fr.eventmanager.utils.JspErrorMessage;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -26,7 +27,7 @@ public class EventsServlet extends Servlet {
         super.init();
 
         // TODO : use injection dependency
-        this.eventService = new EventServiceImpl(new EventDAOImpl());
+        this.eventService = new EventServiceImpl(new EventSampleDAOImpl());
 
         super.servletRouter = new ServletRouter(this)
                 .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
@@ -57,18 +58,16 @@ public class EventsServlet extends Servlet {
         // TODO : check if a user is connected or if the user already exists
 
         if (!name.isEmpty() && !email.isEmpty() && !confirmEmail.isEmpty()) {
-            if (!email.equals(confirmEmail)) {
+            if (Objects.equals(email, confirmEmail)) {
 
                 // eventService.addParticipant()
 
-                render("event.jspf", request, response);
+                render("event.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Inscription validée. Vous allez recevoir un email de confirmation."));
             } else {
-                request.setAttribute("modalIsActivated", true);
-                request.setAttribute("error", new JspErrorMessage("Les emails doivent être identiques."));
+                render("event.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Les emails doivent être identiques."));
             }
         } else {
-            request.setAttribute("modalIsActivated", true);
-            request.setAttribute("error", new JspErrorMessage("Tous les champs doivent être remplis."));
+            render("event.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Tous les champs doivent être remplis."));
         }
     }
 

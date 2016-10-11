@@ -1,5 +1,6 @@
 package fr.eventmanager.controller;
 
+import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.ServletRouter;
 
@@ -17,27 +18,37 @@ public abstract class Servlet extends HttpServlet {
     ServletRouter servletRouter;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        servletRouter.process(HttpMethod.GET, req, resp);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletRouter.process(HttpMethod.GET, request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        servletRouter.process(HttpMethod.POST, req, resp);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletRouter.process(HttpMethod.POST, request, response);
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        servletRouter.process(HttpMethod.PUT, req, resp);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletRouter.process(HttpMethod.PUT, request, response);
     }
 
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        servletRouter.process(HttpMethod.DELETE, req, resp);
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        servletRouter.process(HttpMethod.DELETE, request, response);
     }
 
-    void render(String jspPage, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("jspPage", jspPage);
-        getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(req, resp);
+    void render(String partialPage, HttpServletRequest request, HttpServletResponse response, Alert alert) throws ServletException, IOException {
+        request.setAttribute("partialPage", partialPage);
+
+        if (alert != null) {
+            request.setAttribute("alertType", alert.getType().toString());
+            request.setAttribute("alertMessage", alert.getMessage());
+        }
+
+        getServletContext().getRequestDispatcher("/WEB-INF/index.jsp").forward(request, response);
+    }
+
+    void render(String partialPage, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        render(partialPage, request, response, null);
     }
 }

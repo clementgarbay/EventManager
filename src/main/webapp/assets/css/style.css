@@ -5,7 +5,7 @@ body {
 }
 
 .wrapper > .container {
-    padding-top: 120px;
+    padding-top: 95px;
 }
 
 .navbar.navbar-transparent {
@@ -30,9 +30,15 @@ body {
     padding: 10px 0 0 0 !important;
 }
 
-.card-split {
-    height: 100%;
+.card-infos {
     margin: 20px 0;
-    padding: 10px 0 10px 20px;
+    padding: 10px 20px;
     border-left: 1px solid #dddddd;
+}
+
+.alert {
+    position: fixed;
+    width: 90%;
+    margin: 20px 5%;
+    z-index: 99999;
 }
