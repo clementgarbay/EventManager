@@ -25,7 +25,7 @@ public class EventsServlet extends Servlet {
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        render("events.jspf", request, response);
+        render("events.jsp", request, response);
     }
 
     private void getEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
@@ -33,6 +33,6 @@ public class EventsServlet extends Servlet {
 
         System.out.println(eventId);
 
-        render("event.jspf", request, response);
+        render("event.jsp", request, response);
     }
 }
