@@ -14,6 +14,10 @@ public class User {
         this.company = company;
     }
 
+    public User(String email, String name) {
+        this(email, name, "");
+    }
+
     public String getEmail() {
         return email;
     }

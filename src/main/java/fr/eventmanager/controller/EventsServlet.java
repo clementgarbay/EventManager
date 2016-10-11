@@ -1,6 +1,10 @@
 package fr.eventmanager.controller;
 
+import fr.eventmanager.dao.impl.EventDAOImpl;
+import fr.eventmanager.service.EventService;
+import fr.eventmanager.service.impl.EventServiceImpl;
 import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.JspErrorMessage;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
@@ -15,15 +19,19 @@ import java.util.regex.Pattern;
  */
 public class EventsServlet extends Servlet {
 
+    private EventService eventService;
+
     @Override
     public void init() throws ServletException {
         super.init();
 
+        // TODO : use injection dependency
+        this.eventService = new EventServiceImpl(new EventDAOImpl());
+
         super.servletRouter = new ServletRouter(this)
                 .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
                 .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent")
-                .registerRoute(HttpMethod.POST, Pattern.compile("/(?<eventId>\\d+)"), "addEvent")
-                .registerRoute(HttpMethod.GET, Pattern.compile("/subscribe/(?<eventId>\\d+)"), "subscribe");
+                .registerRoute(HttpMethod.POST, Pattern.compile("/(?<eventId>\\d+)"), "addEvent");
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -46,11 +54,22 @@ public class EventsServlet extends Servlet {
 
         int eventId = Integer.parseInt(parameters.get("eventId"));
 
-        System.out.println(name);
-        System.out.println(email);
-        System.out.println(confirmEmail);
+        // TODO : check if a user is connected or if the user already exists
 
-        render("event.jspf", request, response);
+        if (!name.isEmpty() && !email.isEmpty() && !confirmEmail.isEmpty()) {
+            if (!email.equals(confirmEmail)) {
+
+                // eventService.addParticipant()
+
+                render("event.jspf", request, response);
+            } else {
+                request.setAttribute("modalIsActivated", true);
+                request.setAttribute("error", new JspErrorMessage("Les emails doivent être identiques."));
+            }
+        } else {
+            request.setAttribute("modalIsActivated", true);
+            request.setAttribute("error", new JspErrorMessage("Tous les champs doivent être remplis."));
+        }
     }
 
 

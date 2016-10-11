@@ -1,29 +1,31 @@
 package fr.eventmanager.model;
 
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 /**
  * @author Clément Garbay
  */
 public class Event {
-    private UUID id;
+    private int id;
     private String title;
     private String description;
-    private User owner;
     private Date date;
     private String postalAddress; // TODO : find a better solution to store postal address
+    private User owner;
+    private List<Integer> participantsIds;
 
-    public Event(UUID id, String title, String description, User owner, Date date, String postalAddress) {
+    public Event(int id, String title, String description, Date date, String postalAddress, User owner, List<Integer> participantsIds) {
         this.id = id;
         this.title = title;
         this.description = description;
-        this.owner = owner;
         this.date = date;
         this.postalAddress = postalAddress;
+        this.owner = owner;
+        this.participantsIds = participantsIds;
     }
 
-    public UUID getId() {
+    public int getId() {
         return id;
     }
 
@@ -35,15 +37,19 @@ public class Event {
         return description;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
     public Date getDate() {
         return date;
     }
 
     public String getPostalAddress() {
         return postalAddress;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public List<Integer> getParticipants() {
+        return participantsIds;
     }
 }
