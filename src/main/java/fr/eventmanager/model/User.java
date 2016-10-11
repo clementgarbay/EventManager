@@ -1,9 +1,11 @@
 package fr.eventmanager.model;
 
+import java.security.Principal;
+
 /**
  * @author Clément Garbay
  */
-public class User {
+public class User implements Principal {
     private String email; // unique id
     private String name;
     private String company;

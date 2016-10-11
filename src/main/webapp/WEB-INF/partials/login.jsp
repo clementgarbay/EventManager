@@ -1,13 +1,14 @@
+<%--<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>--%>
 <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="card card-signup">
-        <form class="form" method="post" action="">
+        <form class="form" method="post" action="/login">
             <div class="content">
                 <div class="input-group">
                     <span class="input-group-addon">
                         <i class="material-icons">email</i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="text" class="form-control" placeholder="Email">
+                        <input type="text" name="user_email" class="form-control" placeholder="Email">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -16,7 +17,7 @@
                         <i class="material-icons">lock_outline</i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="password" class="form-control" placeholder="Mot de passe">
+                        <input type="password" name="user_password" class="form-control" placeholder="Mot de passe">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -27,3 +28,5 @@
         </form>
     </div>
 </div>
+<br /><br />
+l'utilisateur existe : ${USER_EXISTS}
