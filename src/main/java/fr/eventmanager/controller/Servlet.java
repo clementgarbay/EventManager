@@ -1,6 +1,6 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.utils.router.HttpMethod;
+import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;

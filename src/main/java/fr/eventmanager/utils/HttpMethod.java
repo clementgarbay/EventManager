@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.router;
+package fr.eventmanager.utils;
 
 /**
  * @author Clément Garbay

@@ -1,6 +1,6 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.utils.router.HttpMethod;
+import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
@@ -20,20 +20,19 @@ public class EventsServlet extends Servlet {
         super.init();
 
         super.servletRouter = new ServletRouter(this)
-                .registerRouter(HttpMethod.GET, Pattern.compile("/"), "getEvents")
-                .registerRouter(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent");
+                .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
+                .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent");
     }
 
-    private void getEvents(HttpServletRequest request, HttpServletResponse response, String path, Map<String, String> parameters) throws ServletException, IOException {
-        // TODO : add data
+    private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         render("events.jspf", request, response);
     }
 
-    private void getEvent(HttpServletRequest request,  HttpServletResponse response, String path, Map<String, String> parameters) throws ServletException, IOException {
+    private void getEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+        int eventId = Integer.parseInt(parameters.get("eventId"));
 
-        System.out.println(parameters);
+        System.out.println(eventId);
 
-//        req.setAttribute("eventId", eventId);
         render("event.jspf", request, response);
     }
 }
