@@ -21,7 +21,9 @@ public class EventsServlet extends Servlet {
 
         super.servletRouter = new ServletRouter(this)
                 .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
-                .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent");
+                .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent")
+                .registerRoute(HttpMethod.POST, Pattern.compile("/(?<eventId>\\d+)"), "addEvent")
+                .registerRoute(HttpMethod.GET, Pattern.compile("/subscribe/(?<eventId>\\d+)"), "subscribe");
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,4 +37,21 @@ public class EventsServlet extends Servlet {
 
         render("event.jspf", request, response);
     }
+
+    private void addEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String confirmEmail = request.getParameter("confirm_email");
+
+        int eventId = Integer.parseInt(parameters.get("eventId"));
+
+        System.out.println(name);
+        System.out.println(email);
+        System.out.println(confirmEmail);
+
+        render("event.jspf", request, response);
+    }
+
+
 }
