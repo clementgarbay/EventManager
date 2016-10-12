@@ -58,41 +58,51 @@ public class ServletRouter {
         String pathInfo = request.getPathInfo();
         String path = (pathInfo != null) ? pathInfo : "/";
 
-        Optional<UrlAction> urlActionOptional = getUrlAction(httpMethod, path);
+        Optional<Route> routeOptional = getRoute(httpMethod, path);
 
-        if (urlActionOptional.isPresent()) {
-            UrlAction urlAction = urlActionOptional.get();
-            introspectMethod(urlAction.getMethodName(), request, response, urlAction.getParameters());
-        } else {
+        if (!routeOptional.isPresent()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
         }
+
+        Route route = routeOptional.get();
+
+        // TODO : use userService ?
+        boolean userIsAuthenticated = true;
+
+        if (route.isProtected() && !userIsAuthenticated) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return;
+        }
+
+        Map<String, String> parameters = extractParametersRouteInPath(route, path);
+        introspectMethod(route.getMethodNameToCall(), request, response, parameters);
     }
 
-    private Optional<UrlAction> getUrlAction(HttpMethod httpMethod, String path) {
+    private Map<String, String> extractParametersRouteInPath(Route route, String path) {
+        Pattern pattern = route.getPattern();
+        Matcher patternMatcher = pattern.matcher(path);
+
+        patternMatcher.matches(); // MANDATORY (TOREVIEW)
+
+        Map<String, String> parameters = new HashMap<>();
+        getNamedGroupCandidates(pattern.pattern())
+                .forEach(groupName -> parameters.put(groupName, patternMatcher.group(groupName)));
+
+        return parameters;
+    }
+
+    private Optional<Route> getRoute(HttpMethod httpMethod, String path) {
         List<Route> routesForHttpMethod = routes.get(httpMethod);
 
         if (routesForHttpMethod != null) {
             return routesForHttpMethod
                     .stream()
                     .filter(route -> route.matchPattern(path))
-                    .map(route -> {
-                        Pattern pattern = route.getPattern();
-                        Matcher patternMatcher = pattern.matcher(path);
-                        String methodName = route.getMethodNameToCall();
-
-                        patternMatcher.matches(); // MANDATORY (TOREVIEW)
-
-                        Map<String, String> parameters = new HashMap<>();
-                        getNamedGroupCandidates(pattern.pattern())
-                                .forEach(groupName -> parameters.put(groupName, patternMatcher.group(groupName)));
-
-                        return new UrlAction(methodName, parameters);
-                    })
                     .findFirst();
-        } else {
-            return Optional.empty();
         }
 
+        return Optional.empty();
     }
 
     private Set<String> getNamedGroupCandidates(String regex) {

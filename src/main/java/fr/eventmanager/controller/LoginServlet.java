@@ -1,6 +1,5 @@
 package fr.eventmanager.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import fr.eventmanager.dao.impl.UserSampleDAOImpl;
 import fr.eventmanager.service.UserService;
 import fr.eventmanager.service.impl.UserServiceImpl;
