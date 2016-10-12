@@ -1,6 +1,7 @@
+<%@ page import="fr.eventmanager.utils.router.Route" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ taglib prefix="app" uri="application" %>
 <html>
 <head>
     <title>Event Manager</title>
@@ -12,14 +13,13 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"/>
 
     <!-- CSS files -->
-    <link href="<%= request.getContextPath() %>/assets/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/material-kit.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/material-dashboard.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/style.css" rel="stylesheet"/>
+    <link href="<app:getResource path="/css/bootstrap.min.css"/>"       rel="stylesheet" type="text/css" />
+    <link href="<app:getResource path="/css/material-kit.css" />"       rel="stylesheet" type="text/css" />
+    <link href="<app:getResource path="/css/material-dashboard.css" />" rel="stylesheet" type="text/css" />
+    <link href="<app:getResource path="/css/style.css" />"              rel="stylesheet" type="text/css" />
 </head>
 <body>
-
-    <c:if test="${alertMessage != null}">
+    <c:if test="${not empty alertMessage}">
         <div class="alert alert-<c:out value='${alertType}'/>">
             <div class="container-fluid">
                 <div class="alert-icon">
@@ -28,7 +28,7 @@
                 <button type="button" class="close" data-dismiss="alert" aria-label="Fermer">
                     <span aria-hidden="true"><i class="material-icons">clear</i></span>
                 </button>
-                <c:out value="${alertMessage}"></c:out>
+                <c:out value="${alertMessage}" />
             </div>
         </div>
     </c:if>
@@ -46,11 +46,11 @@
     </div>
 
     <%-- Javascript files --%>
-    <script src="<%= request.getContextPath() %>/assets/js/jquery.min.js" type="text/javascript"></script>
-    <script src="<%= request.getContextPath() %>/assets/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="<%= request.getContextPath() %>/assets/js/material.min.js" type="text/javascript"></script>
-    <script src="<%= request.getContextPath() %>/assets/js/nouislider.min.js" type="text/javascript"></script>
-    <script src="<%= request.getContextPath() %>/assets/js/bootstrap-datepicker.js" type="text/javascript"></script>
-    <script src="<%= request.getContextPath() %>/assets/js/material-kit.js" type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/jquery.min.js" />"           type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/bootstrap.min.js" />"        type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/material.min.js" />"         type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/nouislider.min.js" />"       type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
+    <script src="<app:getResource path="/assets/js/material-kit.js" />"         type="text/javascript"></script>
 </body>
 </html>

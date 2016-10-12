@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  * @author Clément Garbay
  */
 public class EventsServlet extends Servlet {
+    public static final String ROUTE_EVENTS = "/";
 
     private EventService eventService;
 
@@ -30,7 +31,7 @@ public class EventsServlet extends Servlet {
         this.eventService = new EventServiceImpl(new EventSampleDAOImpl());
 
         super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
+                .registerRoute(HttpMethod.GET, Pattern.compile(ROUTE_EVENTS), "getEvents")
                 .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent")
                 .registerRoute(HttpMethod.POST, Pattern.compile("/(?<eventId>\\d+)"), "addEvent");
     }

@@ -14,12 +14,12 @@
         <div class="collapse navbar-collapse" id="navigation-doc">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="<%= request.getContextPath() %>/events">
+                    <a href="<app:getUrl route="EVENTS" />">
                         Prochains événements
                     </a>
                 </li>
                 <li>
-                    <a href="<%= request.getContextPath() %>/login">
+                    <a href="<%= request.getContextPath() %>/app/login">
                         <i class="fa fa-sign-in"></i>Se connecter
                     </a>
                 </li>
