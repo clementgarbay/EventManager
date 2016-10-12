@@ -5,6 +5,7 @@ import fr.eventmanager.dao.impl.UserSampleDAOImpl;
 import fr.eventmanager.service.UserService;
 import fr.eventmanager.service.impl.UserServiceImpl;
 import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
@@ -27,8 +28,8 @@ public class LoginServlet extends Servlet {
         this.userService = new UserServiceImpl(new UserSampleDAOImpl());
 
         super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, Pattern.compile("/"), "displayLoginPage")
-                .registerRoute(HttpMethod.POST, Pattern.compile("/"), "login");
+                .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/"), "displayLoginPage"))
+                .registerRoute(HttpMethod.POST, new Route(Pattern.compile("/"), "login"));
     }
 
     private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {

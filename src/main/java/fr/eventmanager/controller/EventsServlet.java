@@ -5,6 +5,7 @@ import fr.eventmanager.service.EventService;
 import fr.eventmanager.service.impl.EventServiceImpl;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
@@ -30,9 +31,9 @@ public class EventsServlet extends Servlet {
         this.eventService = new EventServiceImpl(new EventSampleDAOImpl());
 
         super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, Pattern.compile("/"), "getEvents")
-                .registerRoute(HttpMethod.GET, Pattern.compile("/(?<eventId>\\d+)"), "getEvent")
-                .registerRoute(HttpMethod.POST, Pattern.compile("/(?<eventId>\\d+)"), "addEvent");
+                .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/"), "getEvents"))
+                .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/(?<eventId>\\d+)"), "getEvent"))
+                .registerRoute(HttpMethod.POST, new Route(Pattern.compile("/(?<eventId>\\d+)"), "addEvent"));
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

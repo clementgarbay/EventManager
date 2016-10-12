@@ -22,27 +22,26 @@ import java.util.regex.Pattern;
 public class ServletRouter {
 
     private Servlet servlet;
-    private Map<HttpMethod, Map<Pattern, String>> binder;
+    private Map<HttpMethod, List<Route>> routes;
 
     public ServletRouter(Servlet servlet) {
         this.servlet = servlet;
-        this.binder = new HashMap<>();
+        this.routes = new HashMap<>();
     }
 
     /**
      * Register new route for this servlet.
      *
      * @param httpMethod    The associated http method for this route
-     * @param urlPattern    The pattern to match
-     * @param methodToCall  The servlet method to call when the url corresponds to the given pattern
+     * @param route         The route to add
      * @return this
      */
-    public ServletRouter registerRoute(HttpMethod httpMethod, Pattern urlPattern, String methodToCall) {
-        Map<Pattern, String> patternsOfMethod = this.binder.get(httpMethod);
-        if (patternsOfMethod == null) patternsOfMethod = new HashMap<>();
+    public ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
+        List<Route> routesForHttpMethod = routes.get(httpMethod);
+        if (routesForHttpMethod == null) routesForHttpMethod = new ArrayList<>();
 
-        patternsOfMethod.put(urlPattern, methodToCall);
-        this.binder.put(httpMethod, patternsOfMethod);
+        routesForHttpMethod.add(route);
+        routes.put(httpMethod, routesForHttpMethod);
 
         return this;
     }
@@ -70,17 +69,16 @@ public class ServletRouter {
     }
 
     private Optional<UrlAction> getUrlAction(HttpMethod httpMethod, String path) {
-        Map<Pattern, String> entries = binder.get(httpMethod);
+        List<Route> routesForHttpMethod = routes.get(httpMethod);
 
-        if (entries != null) {
-            return entries
-                    .entrySet()
+        if (routesForHttpMethod != null) {
+            return routesForHttpMethod
                     .stream()
-                    .filter(e -> e.getKey().matcher(path).matches())
-                    .map(e -> {
-                        Pattern pattern = e.getKey();
+                    .filter(route -> route.matchPattern(path))
+                    .map(route -> {
+                        Pattern pattern = route.getPattern();
                         Matcher patternMatcher = pattern.matcher(path);
-                        String methodName = e.getValue();
+                        String methodName = route.getMethodNameToCall();
 
                         patternMatcher.matches(); // MANDATORY (TOREVIEW)
 
