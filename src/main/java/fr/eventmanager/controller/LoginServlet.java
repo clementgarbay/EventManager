@@ -5,9 +5,11 @@ import fr.eventmanager.service.UserService;
 import fr.eventmanager.service.impl.UserServiceImpl;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -16,10 +18,23 @@ import java.util.regex.Pattern;
 /**
  * @author Clément Garbay
  */
+@WebServlet(name = "LoginServlet", urlPatterns = {LoginServlet.ROUTE_BASE + "/*"})
 public class LoginServlet extends Servlet {
+    public static final String ROUTE_BASE = "/app";
     public static final String ROUTE_LOGIN = "/login";
     public static final String ROUTE_LOGOUT = "/logout";
     private UserService userService;
+
+    public static String getFullRoute(Route route) {
+        switch (route) {
+            case LOGIN:
+                return ROUTE_BASE + ROUTE_LOGIN;
+            case LOGOUT:
+                return ROUTE_BASE + ROUTE_LOGOUT;
+            default:
+                return ROUTE_BASE;
+        }
+    }
 
     @Override
     public void init() throws ServletException {

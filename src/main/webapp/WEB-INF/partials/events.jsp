@@ -1,3 +1,4 @@
+<%@ taglib prefix="app" uri="application" %>
 <div class="col-sm-12">
     <div class="row">
         <div class="col-sm-4">
@@ -7,7 +8,7 @@
                 </div>
                 <div class="card-content">
                     <h3 class="title">
-                        <a href="events/1">Lorem ipsum dolor sit amet</a>
+                        <a href="<app:getUrl route="EVENTS" />1">Lorem ipsum dolor sit amet</a>
                     </h3>
                     <p class="category">Consectetur adipisicing elit. Architecto dolores est fugiat in iusto minus nam optio similique tenetur voluptatem. Debitis, dolore esse fugit impedit labore modi nemo nesciunt perspiciatis.</p>
                 </div>

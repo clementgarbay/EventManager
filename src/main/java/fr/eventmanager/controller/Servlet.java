@@ -3,7 +3,6 @@ package fr.eventmanager.controller;
 import fr.eventmanager.security.SecurityService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
-import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletConfig;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import fr.eventmanager.utils.UrlUtils;
+import fr.eventmanager.utils.URLUtils;
 
 /**
  * @author Clément Garbay
@@ -32,7 +31,7 @@ public abstract class Servlet extends HttpServlet {
             config.getServletContext().setAttribute(SecurityService.SECURITY_SERVICE, securityService);
         }
 
-        new UrlUtils();
+        new URLUtils();
     }
 
     @Override
