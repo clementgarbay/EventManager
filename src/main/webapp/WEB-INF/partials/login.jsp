@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="card card-signup">
         <form class="form" method="post" action="/login">
@@ -22,7 +24,10 @@
                 </div>
             </div>
             <div class="footer text-center">
-                <button type="submit" class="btn btn-simple btn-primary btn-lg">Se connecter</button>
+                <button type="submit" class="btn btn-simple btn-primary">Se connecter</button>
+                <div style="font-size: .8em; color: #555;">
+                    <a href="" style="color: #555;">S'inscrire</a> | <a href="" style="color: #555;">Mot de passe oublié ?</a>
+                </div>
             </div>
         </form>
     </div>
