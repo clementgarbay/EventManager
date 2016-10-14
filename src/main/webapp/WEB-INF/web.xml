@@ -35,4 +35,14 @@
         <servlet-name>default</servlet-name>
         <url-pattern>/assets/*</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProfilServlet</servlet-name>
+        <servlet-class>fr.eventmanager.controller.ProfilServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProfilServlet</servlet-name>
+        <url-pattern>/profil</url-pattern>
+    </servlet-mapping>
+
 </web-app>
