@@ -1,0 +1,9 @@
+{
+  "name": "event-manager",
+  "dependencies": {
+    "material-kit": "^1.1.0",
+    "material-dashboard": "https://github.com/creativetimofficial/material-dashboard.git",
+    "font-awesome": "^4.6.3",
+    "bootstrap": "^3.3.7"
+  }
+}

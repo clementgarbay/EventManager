@@ -32,5 +32,5 @@
         </form>
     </div>
 </div>
-<br /><br />
-l'utilisateur existe : ${USER_EXISTS}
+<%--<br /><br />--%>
+<%--l'utilisateur existe : ${USER_EXISTS}--%>

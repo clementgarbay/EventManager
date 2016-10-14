@@ -10,11 +10,6 @@
     <%--<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>--%>
 
     <!-- CSS files -->
-    <link href="<%= request.getContextPath() %>/assets/css/bootstrap.min.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/font-awesome.min.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/material-kit.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/material-dashboard.css" rel="stylesheet"/>
-    <link href="<%= request.getContextPath() %>/assets/css/material-icons.css" rel="stylesheet"/>
     <link href="<%= request.getContextPath() %>/assets/css/style.css" rel="stylesheet"/>
 </head>
 <body>
