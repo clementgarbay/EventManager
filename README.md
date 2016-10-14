@@ -21,11 +21,11 @@ gulp
 To build the application and run it in a embedded Tomcat (in the root folder) : 
 
 ```
-clean tomcat7:run-war
+mvn clean tomcat7:run-war
 ```
 
 ## Create WAR
 
 ```
-war:war
+mvn war:war
 ```
