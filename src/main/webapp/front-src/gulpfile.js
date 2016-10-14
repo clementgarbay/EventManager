@@ -4,7 +4,7 @@ var cleanCSS = require('gulp-clean-css');
 var clean = require('gulp-clean');
 
 var paths = {
-    style: './sass/style.scss',
+    style: './sass/main.scss',
     toCopy: ['./bower_components/font-awesome/fonts/*', './bower_components/material-kit/assets/js/*', './fonts/material-icons.woff2'],
     dest: '../assets'
 };

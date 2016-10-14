@@ -10,7 +10,7 @@
     <%--<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>--%>
 
     <!-- CSS files -->
-    <link href="<%= request.getContextPath() %>/assets/css/style.css" rel="stylesheet"/>
+    <link href="<%= request.getContextPath() %>/assets/css/main.css" rel="stylesheet"/>
 </head>
 <body>
 
