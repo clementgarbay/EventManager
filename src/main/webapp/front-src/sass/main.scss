@@ -1,9 +1,12 @@
-/* fallback */
+@import "../bower_components/material-kit/assets/sass/material-kit";
+@import "../bower_components/material-dashboard/assets/sass/material-dashboard";
+@import "../bower_components/font-awesome/scss/font-awesome";
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v18/2fcrYFNaTjcS6g4U3t-Y5UEw0lE80llgEseQY3FEmqw.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url('../fonts/material-icons.woff2') format('woff2');
 }
 
 .material-icons {

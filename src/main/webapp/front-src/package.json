@@ -1,0 +1,10 @@
+{
+  "name": "event-manager",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-contrib-copy": "^0.1.2",
+    "gulp-sass": "^2.3.2"
+  }
+}

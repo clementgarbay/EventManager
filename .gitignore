@@ -20,6 +20,7 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
 ### Maven template
 target/
 pom.xml.tag
@@ -30,4 +31,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+assets
+bower_components
 

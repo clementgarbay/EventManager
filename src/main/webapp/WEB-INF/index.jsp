@@ -16,6 +16,9 @@
     <link href="<%= request.getContextPath() %>/assets/css/material-dashboard.css" rel="stylesheet"/>
     <link href="<%= request.getContextPath() %>/assets/css/material-icons.css" rel="stylesheet"/>
     <link href="<%= request.getContextPath() %>/assets/css/style.css" rel="stylesheet"/>
+
+
+    <link href="<%= request.getContextPath() %>/bower_components/font-awesome" rel="stylesheet"/>
 </head>
 <body>
 
