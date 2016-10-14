@@ -4,7 +4,8 @@
   "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-contrib-copy": "^0.1.2",
+    "gulp-clean": "^0.3.2",
+    "gulp-clean-css": "^2.0.13",
     "gulp-sass": "^2.3.2"
   }
 }

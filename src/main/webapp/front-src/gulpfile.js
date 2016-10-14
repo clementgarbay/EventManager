@@ -1,36 +1,36 @@
 var gulp = require('gulp');
 var sass = require('gulp-sass');
-var copy = require('gulp-contrib-copy');
+var cleanCSS = require('gulp-clean-css');
 var clean = require('gulp-clean');
 
 var paths = {
-    style: './sass/main.scss',
-    toCopy: ['./bower_components/font-awesome/fonts/*', './bower_components/material-kit/assets/js/*'],
+    style: './sass/style.scss',
+    toCopy: ['./bower_components/font-awesome/fonts/*', './bower_components/material-kit/assets/js/*', './fonts/material-icons.woff2'],
     dest: '../assets'
 };
 
 gulp.task('clean', function(){
     return gulp.src(paths.dest, {read: false})
-        .pipe(clean());
+        .pipe(clean({force: true}));
 });
 
-
-gulp.task('copy', function() {
-    gulp.src(paths.toCopy)
-        .pipe(copy())
-        .pipe(gulp.dest(paths.dest));
-
-    return gulp.src(paths.toCopy, {base: './source/'})
-        .pipe(gulp.dest('./public/assets/'));
+gulp.task('copy', ['clean'], function() {
+    return gulp.src(paths.toCopy)
+        .pipe(gulp.dest(function(test) {
+            // to save folder name (css, fonts, ...)
+            var pathParts = test.path.split('/');
+            return  paths.dest + '/' + pathParts[pathParts.length-2]
+        }));
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', ['copy'], function () {
     return gulp.src(paths.style)
         .pipe(sass().on('error', sass.logError))
+        .pipe(cleanCSS())
         .pipe(gulp.dest(paths.dest + '/css'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['sass'], function () {
     gulp.watch(paths.style, ['sass']);
 });
 
