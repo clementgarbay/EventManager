@@ -32,7 +32,9 @@ public class EventSampleDAOImpl implements EventDAO {
 
     @Override
     public Event addEvent(Event event) {
+        persistenceManager.getEntityManager().getTransaction().begin();
         persistenceManager.getEntityManager().persist(event);
+        persistenceManager.getEntityManager().getTransaction().commit();
         return event;
     }
 
