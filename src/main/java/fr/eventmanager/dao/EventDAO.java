@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface EventDAO {
     List<Event> getAll();
     Optional<Event> getById(int eventId);
+    Event addEvent(Event event);
     boolean addParticipant(int eventId, int userId);
 }

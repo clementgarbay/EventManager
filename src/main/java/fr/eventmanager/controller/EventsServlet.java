@@ -37,6 +37,8 @@ public class EventsServlet extends Servlet {
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println(eventService.getEvents());
+
         render("events.jsp", request, response);
     }
 

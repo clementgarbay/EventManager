@@ -1,29 +1,43 @@
 package fr.eventmanager.model;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 /**
  * @author Clément Garbay
  */
-public class Event {
+@Entity
+public class Event implements Serializable {
+
+    @Id
+    @GeneratedValue
     private int id;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private Date date;
     private String postalAddress; // TODO : find a better solution to store postal address
+    @OneToOne
     private User owner;
-    private List<Integer> participantsIds;
+    @OneToMany
+    private List<User> participants;
 
-    public Event(int id, String title, String description, Date date, String postalAddress, User owner, List<Integer> participantsIds) {
-        this.id = id;
+    public Event(String title, String description, Date date, String postalAddress, User owner, List<User> participants) {
         this.title = title;
         this.description = description;
         this.date = date;
         this.postalAddress = postalAddress;
         this.owner = owner;
-        this.participantsIds = participantsIds;
+        this.participants = participants;
     }
+
+    public Event(String title, String description, Date date, String postalAddress, User owner) {
+        this(title, description, date, postalAddress, owner, null);
+    }
+
+    public Event() {}
 
     public int getId() {
         return id;
@@ -49,7 +63,7 @@ public class Event {
         return owner;
     }
 
-    public List<Integer> getParticipants() {
-        return participantsIds;
+    public List<User> getParticipants() {
+        return participants;
     }
 }

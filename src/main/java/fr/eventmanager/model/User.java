@@ -1,24 +1,40 @@
 package fr.eventmanager.model;
 
-import java.security.Principal;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @author Clément Garbay
  */
-public class User implements Principal {
+@Entity
+public class User implements Serializable {
+
+    @Id
+    @GeneratedValue
+    private int id;
     private String email; // unique id
     private String name;
+    private String password;
     private String company;
 
-    public User(String email, String name, String company) {
+    public User(String email, String name, String password, String company) {
         this.email = email;
         this.name = name;
+        this.password = password;
         this.company = company;
     }
 
-    public User(String email, String name) {
-        this(email, name, "");
+    public User(String email, String name, String company) {
+        this(email, name, null, company);
     }
+
+    public User(String email, String name) {
+        this(email, name, null);
+    }
+
+    public User() {}
 
     public String getEmail() {
         return email;
