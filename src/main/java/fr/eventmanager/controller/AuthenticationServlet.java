@@ -5,21 +5,18 @@ import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
-import fr.eventmanager.utils.router.RouteId;
+import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * @author Clément Garbay
  * @author Paul Defois
  */
 public class AuthenticationServlet extends Servlet {
-
-    static final String ROUTE_BASE = "/auth";
 
     private IUserService userService;
 
@@ -29,13 +26,9 @@ public class AuthenticationServlet extends Servlet {
 
         this.userService = new UserService(new UserSampleDAO());
 
-        super.servletRouter
-                .bind(RouteId.LOGIN, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/login"), false)
-                    .to(this, "displayLoginPage")
-                .bind(RouteId.LOGIN, HttpMethod.POST, ROUTE_BASE, Pattern.compile("/login"), false)
-                    .to(this, "login")
-                .bind(RouteId.LOGOUT, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/logout"), false)
-                    .to(this, "logout");
+        bind(HttpMethod.GET, Path.LOGIN, false).to("displayLoginPage");
+        bind(HttpMethod.POST, Path.LOGIN, false).to("login");
+        bind(HttpMethod.GET, Path.LOGOUT, false).to("logout");
     }
 
     private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {

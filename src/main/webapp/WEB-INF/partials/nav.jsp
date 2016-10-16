@@ -9,17 +9,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<app:getUrl routeId="EVENTS" />">Event Manager</a>
+            <a class="navbar-brand" href="<app:getUrl pathId="EVENTS" />">Event Manager</a>
         </div>
         <div class="collapse navbar-collapse" id="navigation-doc">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="<app:getUrl routeId="EVENTS" />">
+                    <a href="<app:getUrl pathId="EVENTS" />">
                         Prochains événements
                     </a>
                 </li>
                 <li>
-                    <a href="<app:getUrl routeId="LOGIN" />">
+                    <a href="<app:getUrl pathId="LOGIN" />">
                         <i class="fa fa-sign-in"></i>Se connecter
                     </a>
                 </li>

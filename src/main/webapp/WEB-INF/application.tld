@@ -26,10 +26,10 @@
         <body-content>empty</body-content>
 
         <attribute>
-            <name>routeId</name>
+            <name>pathId</name>
             <description>L'identifiant correspondant à l'URL à générer.</description>
             <required>true</required>
-            <type>fr.eventmanager.utils.router.RouteId</type>
+            <type>fr.eventmanager.utils.router.Path</type>
         </attribute>
     </tag>
 </taglib>
