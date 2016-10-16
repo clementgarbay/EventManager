@@ -4,7 +4,8 @@ var cleanCSS = require('gulp-clean-css');
 var clean = require('gulp-clean');
 
 var paths = {
-    style: './sass/main.scss',
+    styleMainFile: './sass/main.scss',
+    styleFiles: './sass/*',
     toCopy: ['./bower_components/font-awesome/fonts/*', './bower_components/material-kit/assets/js/*', './fonts/material-icons.woff2'],
     dest: '../assets'
 };
@@ -16,22 +17,22 @@ gulp.task('clean', function(){
 
 gulp.task('copy', ['clean'], function() {
     return gulp.src(paths.toCopy)
-        .pipe(gulp.dest(function(test) {
-            // to save folder name (css, fonts, ...)
-            var pathParts = test.path.split('/');
-            return  paths.dest + '/' + pathParts[pathParts.length-2]
+        .pipe(gulp.dest(function(file) {
+            // to keep directory name ("fonts" or "js")
+            var pathParts = file.path.split('/');
+            return paths.dest + '/' + pathParts[pathParts.length-2]
         }));
 });
 
 gulp.task('sass', ['copy'], function () {
-    return gulp.src(paths.style)
+    return gulp.src(paths.styleMainFile)
         .pipe(sass().on('error', sass.logError))
         .pipe(cleanCSS())
         .pipe(gulp.dest(paths.dest + '/css'));
 });
 
 gulp.task('watch', ['sass'], function () {
-    gulp.watch(paths.style, ['sass']);
+    gulp.watch(paths.styleFiles, ['sass']);
 });
 
 gulp.task('default', ['clean', 'copy', 'sass', 'watch']);

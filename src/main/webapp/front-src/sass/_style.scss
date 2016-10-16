@@ -20,14 +20,25 @@ body {
 }
 
 .card-content {
+  min-height: 190px;
   position: relative !important;
   margin-top: 30px !important;
   text-align: left !important;
+
+  .title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }
 
 .card-footer {
   height: auto !important;
   padding: 10px 0 0 0 !important;
+
+  .stats .material-icons {
+    top: -1px !important;
+  }
 }
 
 .card-infos {
