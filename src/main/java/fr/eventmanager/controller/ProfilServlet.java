@@ -4,10 +4,12 @@ import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@WebServlet(name = "ProfilServlet", urlPatterns = {"/profil/*"})
 public class ProfilServlet extends Servlet {
 
     @Override

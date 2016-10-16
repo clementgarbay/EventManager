@@ -4,6 +4,7 @@ import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.IOException;
 /**
  * @author Clément Garbay
  */
+@WebServlet(name = "HomeServlet", urlPatterns = {"/"})
 public class HomeServlet extends Servlet {
 
     @Override

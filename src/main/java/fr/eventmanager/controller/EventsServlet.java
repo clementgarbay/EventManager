@@ -9,6 +9,7 @@ import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,6 +21,7 @@ import java.util.Optional;
  * @author Clément Garbay
  * @author Paul Defois
  */
+@WebServlet(name = "EventServlet", urlPatterns = {"/events/*"})
 public class EventsServlet extends Servlet {
 
     private IEventService eventService;
