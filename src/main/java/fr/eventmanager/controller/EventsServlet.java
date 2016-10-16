@@ -1,8 +1,9 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.dao.impl.EventSampleDAOImpl;
-import fr.eventmanager.service.EventService;
-import fr.eventmanager.service.impl.EventServiceImpl;
+import fr.eventmanager.dao.impl.EventSampleDAO;
+import fr.eventmanager.model.Event;
+import fr.eventmanager.service.IEventService;
+import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Route;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -21,36 +23,39 @@ import java.util.regex.Pattern;
  */
 public class EventsServlet extends Servlet {
 
-    private EventService eventService;
+    private IEventService eventService;
 
     @Override
     public void init() throws ServletException {
         super.init();
 
         // TODO : use injection dependency
-        this.eventService = new EventServiceImpl(new EventSampleDAOImpl());
+        this.eventService = new EventService(new EventSampleDAO());
 
         super.servletRouter = new ServletRouter(this)
                 .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/"), "getEvents", false))
                 .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false))
-                .registerRoute(HttpMethod.POST, new Route(Pattern.compile("/(?<eventId>\\d+)"), "addEvent", true));
+                .registerRoute(HttpMethod.POST, new Route(Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println(eventService.getEvents());
-
+        request.setAttribute("events", eventService.getEvents());
         render("events.jsp", request, response);
     }
 
     private void getEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
         int eventId = Integer.parseInt(parameters.get("eventId"));
+        Optional<Event> eventOptional = eventService.getEvent(eventId);
 
-        System.out.println(eventId);
-
-        render("event.jsp", request, response);
+        if (eventOptional.isPresent()) {
+            request.setAttribute("event", eventOptional.get());
+            render("event.jsp", request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
-    private void addEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void addParticipant(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");

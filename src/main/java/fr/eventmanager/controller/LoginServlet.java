@@ -1,8 +1,8 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.dao.impl.UserSampleDAOImpl;
-import fr.eventmanager.service.UserService;
-import fr.eventmanager.service.impl.UserServiceImpl;
+import fr.eventmanager.dao.impl.UserSampleDAO;
+import fr.eventmanager.service.IUserService;
+import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
@@ -18,13 +18,13 @@ import java.util.regex.Pattern;
  * @author Clément Garbay
  */
 public class LoginServlet extends Servlet {
-    private UserService userService;
+    private IUserService userService;
 
     @Override
     public void init() throws ServletException {
         super.init();
 
-        this.userService = new UserServiceImpl(new UserSampleDAOImpl());
+        this.userService = new UserService(new UserSampleDAO());
 
         super.servletRouter = new ServletRouter(this)
                 .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/"), "displayLoginPage"))
