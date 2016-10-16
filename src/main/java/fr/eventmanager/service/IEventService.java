@@ -1,4 +1,4 @@
-package fr.eventmanager.dao;
+package fr.eventmanager.service;
 
 import fr.eventmanager.model.Event;
 
@@ -8,9 +8,8 @@ import java.util.Optional;
 /**
  * @author Clément Garbay
  */
-public interface EventDAO {
-    List<Event> getAll();
-    Optional<Event> getById(int eventId);
-    Event addEvent(Event event);
+public interface IEventService {
+    List<Event> getEvents();
+    Optional<Event> getEvent(int eventId);
     boolean addParticipant(int eventId, int userId);
 }

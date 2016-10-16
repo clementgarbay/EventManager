@@ -9,7 +9,7 @@ import java.util.List;
  * @author Clément Garbay
  */
 @Entity
-public class Event implements Serializable {
+public class Event implements Serializable, StorableEntity<Event> {
 
     @Id
     @GeneratedValue
@@ -39,8 +39,20 @@ public class Event implements Serializable {
 
     public Event() {}
 
+    @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public Event populateFrom(Event element) {
+        this.title = element.getTitle();
+        this.description = element.getDescription();
+        this.date = element.getDate();
+        this.postalAddress = element.getPostalAddress();
+        this.owner = element.getOwner();
+        this.participants = element.getParticipants();
+        return this;
     }
 
     public String getTitle() {

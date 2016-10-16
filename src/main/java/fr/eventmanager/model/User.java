@@ -9,19 +9,19 @@ import java.io.Serializable;
  * @author Clément Garbay
  */
 @Entity
-public class User implements Serializable {
+public class User implements Serializable, StorableEntity<User> {
 
     @Id
     @GeneratedValue
     private int id;
-    private String email; // unique id
     private String name;
+    private String email;
     private String password;
     private String company;
 
-    public User(String email, String name, String password, String company) {
-        this.email = email;
+    public User(String name, String email, String password, String company) {
         this.name = name;
+        this.email = email;
         this.password = password;
         this.company = company;
     }
@@ -36,12 +36,25 @@ public class User implements Serializable {
 
     public User() {}
 
-    public String getEmail() {
-        return email;
+    @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
+    public User populateFrom(User element) {
+        this.email = element.getEmail();
+        this.name = element.getName();
+        this.company = element.getCompany();
+        return this;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getCompany() {

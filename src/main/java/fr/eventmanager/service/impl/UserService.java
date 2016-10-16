@@ -1,18 +1,18 @@
 package fr.eventmanager.service.impl;
 
-import fr.eventmanager.dao.UserDAO;
+import fr.eventmanager.dao.IUserDAO;
 import fr.eventmanager.model.User;
-import fr.eventmanager.service.UserService;
+import fr.eventmanager.service.IUserService;
 
 /**
  * Implémentation du service utilisateur
  *
  * @author Paul Defois
  */
-public class UserServiceImpl implements UserService {
-    private UserDAO userDAO;
+public class UserService implements IUserService {
+    private IUserDAO userDAO;
 
-    public UserServiceImpl(UserDAO userDAO) {
+    public UserService(IUserDAO userDAO) {
         this.userDAO = userDAO;
     }
 

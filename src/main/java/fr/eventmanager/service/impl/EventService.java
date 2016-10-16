@@ -1,8 +1,8 @@
 package fr.eventmanager.service.impl;
 
-import fr.eventmanager.dao.EventDAO;
+import fr.eventmanager.dao.IEventDAO;
 import fr.eventmanager.model.Event;
-import fr.eventmanager.service.EventService;
+import fr.eventmanager.service.IEventService;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,22 +10,22 @@ import java.util.Optional;
 /**
  * @author Clément Garbay
  */
-public class EventServiceImpl implements EventService {
+public class EventService implements IEventService {
 
-    private EventDAO eventDAO;
+    private IEventDAO eventDAO;
 
-    public EventServiceImpl(EventDAO eventDAO) {
+    public EventService(IEventDAO eventDAO) {
         this.eventDAO = eventDAO;
     }
 
     @Override
     public List<Event> getEvents() {
-        return eventDAO.getAll();
+        return eventDAO.findAll();
     }
 
     @Override
     public Optional<Event> getEvent(int eventId) {
-        return eventDAO.getById(eventId);
+        return eventDAO.find(eventId);
     }
 
     @Override

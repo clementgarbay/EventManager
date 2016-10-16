@@ -1,6 +1,6 @@
 package fr.eventmanager.dao.impl;
 
-import fr.eventmanager.dao.UserDAO;
+import fr.eventmanager.dao.IUserDAO;
 import fr.eventmanager.model.User;
 
 import java.util.HashMap;
@@ -9,11 +9,11 @@ import java.util.Map;
 /**
  * Created by Polo on 11/10/2016.
  */
-public class UserSampleDAOImpl implements UserDAO {
+public class UserSampleDAO implements IUserDAO {
     private Map<String, String> credentials;
     private Map<String, User> users;
 
-    public UserSampleDAOImpl() {
+    public UserSampleDAO() {
         this.credentials = new HashMap<>();
         this.users = new HashMap<>();
 
