@@ -5,11 +5,9 @@ import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
-import fr.eventmanager.utils.router.Route;
-import fr.eventmanager.utils.router.ServletRouter;
+import fr.eventmanager.utils.router.RouteId;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -19,10 +17,9 @@ import java.util.regex.Pattern;
  * @author Clément Garbay
  * @author Paul Defois
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {LoginServlet.ROUTE_BASE + "/*"})
-public class LoginServlet extends Servlet {
+public class AuthenticationServlet extends Servlet {
 
-    static final String ROUTE_BASE = "/app";
+    static final String ROUTE_BASE = "/auth";
 
     private IUserService userService;
 
@@ -32,9 +29,13 @@ public class LoginServlet extends Servlet {
 
         this.userService = new UserService(new UserSampleDAO());
 
-        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "displayLoginPage"));
-        registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/login"), "login"));
-        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/logout"), "logout"));
+        super.servletRouter
+                .bind(RouteId.LOGIN, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/login"), false)
+                    .to(this, "displayLoginPage")
+                .bind(RouteId.LOGIN, HttpMethod.POST, ROUTE_BASE, Pattern.compile("/login"), false)
+                    .to(this, "login")
+                .bind(RouteId.LOGOUT, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/logout"), false)
+                    .to(this, "logout");
     }
 
     private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {

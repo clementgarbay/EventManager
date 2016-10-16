@@ -43,11 +43,11 @@
     </div>
 
     <%-- JavaScript files --%>
-    <script src="<app:getResource path="/assets/js/jquery.min.js" />"           type="text/javascript"></script>
-    <script src="<app:getResource path="/assets/js/bootstrap.min.js" />"        type="text/javascript"></script>
-    <script src="<app:getResource path="/assets/js/material.min.js" />"         type="text/javascript"></script>
-    <script src="<app:getResource path="/assets/js/nouislider.min.js" />"       type="text/javascript"></script>
-    <script src="<app:getResource path="/assets/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
-    <script src="<app:getResource path="/assets/js/material-kit.js" />"         type="text/javascript"></script>
+    <script src="<app:getResource path="/js/jquery.min.js" />"           type="text/javascript"></script>
+    <script src="<app:getResource path="/js/bootstrap.min.js" />"        type="text/javascript"></script>
+    <script src="<app:getResource path="/js/material.min.js" />"         type="text/javascript"></script>
+    <script src="<app:getResource path="/js/nouislider.min.js" />"       type="text/javascript"></script>
+    <script src="<app:getResource path="/js/bootstrap-datepicker.js" />" type="text/javascript"></script>
+    <script src="<app:getResource path="/js/material-kit.js" />"         type="text/javascript"></script>
 </body>
 </html>

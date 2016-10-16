@@ -6,10 +6,9 @@ import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
-import fr.eventmanager.utils.router.Route;
+import fr.eventmanager.utils.router.RouteId;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,7 +21,6 @@ import java.util.regex.Pattern;
  * @author Clément Garbay
  * @author Paul Defois
  */
-@WebServlet(name = "EventServlet", urlPatterns = {EventsServlet.ROUTE_BASE + "/*"})
 public class EventsServlet extends Servlet {
 
     static final String ROUTE_BASE = "/events";
@@ -36,9 +34,13 @@ public class EventsServlet extends Servlet {
         // TODO : use injection dependency
         this.eventService = new EventService(new EventSampleDAO());
 
-        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "getEvents", false));
-        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false));
-        registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
+        super.servletRouter
+                .bind(RouteId.EVENTS, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/"), false)
+                    .to(this, "getEvents")
+                .bind(RouteId.EVENT, HttpMethod.GET, ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), false)
+                    .to(this, "getEvent")
+                .bind(RouteId.EVENT, HttpMethod.POST, ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), false)
+                    .to(this, "addParticipant");
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,8 +1,8 @@
 package fr.eventmanager.utils.router;
 
+import fr.eventmanager.controller.Servlet;
 import fr.eventmanager.utils.HttpMethod;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -13,35 +13,43 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * ServletRouter
+ * ServletRouter (Singleton)
  *
- * Store all available routes with the associated http method and the related method to call.
+ * Store all available routes with the associated http method and the related servlet and method to call.
  *
  * @author Clément Garbay
  */
-public abstract class ServletRouter extends HttpServlet {
+public class ServletRouter {
+
+    private static ServletRouter INSTANCE = null;
 
     private Map<HttpMethod, List<Route>> routes;
 
-    public ServletRouter() {
+    private ServletRouter() {
         this.routes = new HashMap<>();
     }
 
+    public static synchronized ServletRouter getInstance() {
+        if (INSTANCE == null) INSTANCE = new ServletRouter();
+        return INSTANCE;
+    }
+
     /**
-     * Register new route
+     * Bind a new route to a servlet and method name (use temporary RoutePath object for a more confortable syntax)
      *
+     * @param routeId       The route id to use in jsp files
      * @param httpMethod    The associated http method for this route
-     * @param route         The route to add
-     * @return this
+     * @param pathBase      The base of the route path
+     * @param pathExtension The variable extension of the route path (a pattern to match)
+     * @param isProtected   Required authentication to access to the resource (true by default)
+     * @return
      */
-    public ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
-        List<Route> routesForHttpMethod = routes.get(httpMethod);
-        if (routesForHttpMethod == null) routesForHttpMethod = new ArrayList<>();
+    public RoutePath bind(RouteId routeId, HttpMethod httpMethod, String pathBase, Pattern pathExtension, boolean isProtected) {
+        return new RoutePath(this, httpMethod, routeId, pathBase, pathExtension, isProtected);
+    }
 
-        routesForHttpMethod.add(route);
-        routes.put(httpMethod, routesForHttpMethod);
-
-        return this;
+    public RoutePath bind(RouteId routeId, HttpMethod httpMethod, String pathBase, Pattern pathExtension) {
+        return bind(routeId, httpMethod, pathBase, pathExtension, true);
     }
 
     /**
@@ -74,11 +82,37 @@ public abstract class ServletRouter extends HttpServlet {
         }
 
         Map<String, String> parameters = extractParametersRouteInPath(route, path);
-        introspectMethod(route.getMethodNameToCall(), request, response, parameters);
+        introspectMethodInServlet(route.getServletToCall(), route.getMethodNameToCall(), request, response, parameters);
+    }
+
+    /**
+     * Get the full path from a route identifier.
+     *
+     * @param routeId   The related route id
+     * @return          The corresponding full path
+     */
+    public String getFullPath(RouteId routeId) {
+        return routes.values()
+                .stream()
+                .map(Collection::stream)
+                .flatMap(routesByHttpMethod -> routesByHttpMethod.filter(route -> route.getRouteId().equals(routeId)))
+                .map(Route::getFullPath)
+                .findFirst() // TODO
+                .orElse("");
+    }
+
+    ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
+        List<Route> routesForHttpMethod = routes.get(httpMethod);
+        if (routesForHttpMethod == null) routesForHttpMethod = new ArrayList<>();
+
+        routesForHttpMethod.add(route);
+        routes.put(httpMethod, routesForHttpMethod);
+
+        return this;
     }
 
     private Map<String, String> extractParametersRouteInPath(Route route, String path) {
-        Pattern pattern = route.getPattern();
+        Pattern pattern = route.getPathExtension();
         Matcher patternMatcher = pattern.matcher(path);
 
         patternMatcher.matches(); // MANDATORY (TOREVIEW)
@@ -96,7 +130,7 @@ public abstract class ServletRouter extends HttpServlet {
         if (routesForHttpMethod != null) {
             return routesForHttpMethod
                     .stream()
-                    .filter(route -> route.matchPattern(path))
+                    .filter(route -> route.matchRoute(path))
                     .findFirst();
         }
 
@@ -114,29 +148,29 @@ public abstract class ServletRouter extends HttpServlet {
         return namedGroups;
     }
 
-    private void introspectMethod(String methodName, HttpServletRequest request, HttpServletResponse response, Map<String, String> parameters) throws IOException {
+    private void introspectMethodInServlet(Servlet servlet, String methodName, HttpServletRequest request, HttpServletResponse response, Map<String, String> parameters) throws IOException {
 
         Class<?>[] argsClasses = {HttpServletRequest.class, HttpServletResponse.class, Map.class};
         Object[] args = {request, response, parameters};
 
-        if (!proceedToIntrospect(methodName, argsClasses, args)) {
+        if (!proceedToIntrospect(servlet, methodName, argsClasses, args)) {
 
             Class<?>[] argsClasses1 = {HttpServletRequest.class, HttpServletResponse.class};
             Object[] args1 = {request, response};
 
-            if (!proceedToIntrospect(methodName, argsClasses1, args1)) {
+            if (!proceedToIntrospect(servlet, methodName, argsClasses1, args1)) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         }
     }
 
-    private boolean proceedToIntrospect(String methodName, Class<?>[] argsClasses, Object... args) {
+    private boolean proceedToIntrospect(Servlet servlet, String methodName, Class<?>[] argsClasses, Object... args) {
         boolean success = true;
 
         try {
-            Method method = this.getClass().getDeclaredMethod(methodName, argsClasses);
+            Method method = servlet.getClass().getDeclaredMethod(methodName, argsClasses);
             method.setAccessible(true);
-            method.invoke(this, args);
+            method.invoke(servlet, args);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             success = false;
         }

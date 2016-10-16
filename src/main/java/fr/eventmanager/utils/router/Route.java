@@ -1,5 +1,7 @@
 package fr.eventmanager.utils.router;
 
+import fr.eventmanager.controller.Servlet;
+
 import java.util.regex.Pattern;
 
 /**
@@ -7,31 +9,40 @@ import java.util.regex.Pattern;
  */
 public class Route {
 
-    private String routeBase;
-    private Pattern pattern;
-    private String methodNameToCall;
+    private RouteId routeId;
+    private String pathBase;
+    private Pattern pathExtension;
     private boolean isProtected;
 
-    public Route(String routeBase, Pattern pattern, String methodNameToCall, boolean isProtected) {
-        this.routeBase = routeBase;
-        this.pattern = pattern;
-        this.methodNameToCall = methodNameToCall;
+    private Servlet servletToCall;
+    private String methodNameToCall;
+
+    public Route(RouteId routeId, String pathBase, Pattern pathExtension, boolean isProtected, Servlet servletToCall, String methodNameToCall) {
+        this.routeId = routeId;
+        this.pathBase = pathBase;
+        this.pathExtension = pathExtension;
         this.isProtected = isProtected;
+        this.servletToCall = servletToCall;
+        this.methodNameToCall = methodNameToCall;
     }
 
-    public Route(String routeBase, Pattern pattern, String methodNameToCall) {
-        this(routeBase, pattern, methodNameToCall, true);
+    public RouteId getRouteId() {
+        return routeId;
     }
 
-    boolean matchPattern(String str) {
-        return pattern.matcher(str).matches();
+    public boolean matchRoute(String str) {
+        return pathExtension.matcher(str).matches();
     }
 
-    Pattern getPattern() {
-        return pattern;
+    public Pattern getPathExtension() {
+        return pathExtension;
     }
 
-    String getMethodNameToCall() {
+    public Servlet getServletToCall() {
+        return servletToCall;
+    }
+
+    public String getMethodNameToCall() {
         return methodNameToCall;
     }
 
@@ -39,12 +50,10 @@ public class Route {
         return isProtected;
     }
 
-    public String getFullRoute() {
-        return routeBase + pattern.pattern();
+    public String getFullPath() {
+        return pathBase + pathExtension.pattern();
     }
 
-    public enum RouteId {
-        LOGIN, LOGOUT, EVENTS, EVENT
-    }
+
 }
 

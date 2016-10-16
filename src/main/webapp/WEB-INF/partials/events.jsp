@@ -9,7 +9,7 @@
 
         <c:forEach items="${events}" var="event">
             <div class="col-sm-4">
-                <a href="<app:getUrl route="EVENTS"/>${event.id}">
+                <a href="<app:getUrl routeId="EVENTS"/>${event.id}">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="purple">
                             <i class="material-icons">store</i>
