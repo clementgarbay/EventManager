@@ -9,17 +9,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="<%= request.getContextPath() %>">Event Manager</a>
+            <a class="navbar-brand" href="<app:getUrl route="EVENTS" />">Event Manager</a>
         </div>
         <div class="collapse navbar-collapse" id="navigation-doc">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="<%= request.getContextPath() %>/events">
+                    <a href="<app:getUrl route="EVENTS" />">
                         Prochains événements
                     </a>
                 </li>
                 <li>
-                    <a href="<%= request.getContextPath() %>/login">
+                    <a href="<app:getUrl route="LOGIN" />">
                         <i class="fa fa-sign-in"></i>Se connecter
                     </a>
                 </li>

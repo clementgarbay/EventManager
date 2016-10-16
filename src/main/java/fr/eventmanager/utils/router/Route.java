@@ -7,18 +7,20 @@ import java.util.regex.Pattern;
  */
 public class Route {
 
+    private String routeBase;
     private Pattern pattern;
     private String methodNameToCall;
     private boolean isProtected;
 
-    public Route(Pattern pattern, String methodNameToCall, boolean isProtected) {
+    public Route(String routeBase, Pattern pattern, String methodNameToCall, boolean isProtected) {
+        this.routeBase = routeBase;
         this.pattern = pattern;
         this.methodNameToCall = methodNameToCall;
         this.isProtected = isProtected;
     }
 
-    public Route(Pattern pattern, String methodNameToCall) {
-        this(pattern, methodNameToCall, true);
+    public Route(String routeBase, Pattern pattern, String methodNameToCall) {
+        this(routeBase, pattern, methodNameToCall, true);
     }
 
     boolean matchPattern(String str) {
@@ -36,4 +38,13 @@ public class Route {
     public boolean isProtected() {
         return isProtected;
     }
+
+    public String getFullRoute() {
+        return routeBase + pattern.pattern();
+    }
+
+    public enum RouteId {
+        LOGIN, LOGOUT, EVENTS, EVENT
+    }
 }
+

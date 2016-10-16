@@ -4,45 +4,9 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <servlet>
-        <servlet-name>EventsServlet</servlet-name>
-        <servlet-class>fr.eventmanager.controller.EventsServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>EventsServlet</servlet-name>
-        <url-pattern>/events/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>UsersServlet</servlet-name>
-        <servlet-class>fr.eventmanager.controller.UsersServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>UsersServlet</servlet-name>
-        <url-pattern>/users/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>fr.eventmanager.controller.LoginServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>LoginServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>/assets/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>ProfilServlet</servlet-name>
-        <servlet-class>fr.eventmanager.controller.ProfilServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ProfilServlet</servlet-name>
-        <url-pattern>/profil</url-pattern>
-    </servlet-mapping>
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>/assets/*</url-pattern>-->
+    <!--</servlet-mapping>-->
 
 </web-app>

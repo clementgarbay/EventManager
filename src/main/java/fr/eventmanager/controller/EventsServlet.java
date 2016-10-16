@@ -10,6 +10,7 @@ import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,8 +21,12 @@ import java.util.regex.Pattern;
 
 /**
  * @author Clément Garbay
+ * @author Paul Defois
  */
+@WebServlet(name = "EventServlet", urlPatterns = {EventsServlet.ROUTE_BASE + "/*"})
 public class EventsServlet extends Servlet {
+
+    static final String ROUTE_BASE = "/events";
 
     private IEventService eventService;
 
@@ -33,9 +38,9 @@ public class EventsServlet extends Servlet {
         this.eventService = new EventService(new EventSampleDAO());
 
         super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/"), "getEvents", false))
-                .registerRoute(HttpMethod.GET, new Route(Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false))
-                .registerRoute(HttpMethod.POST, new Route(Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
+                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "getEvents", false))
+                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false))
+                .registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

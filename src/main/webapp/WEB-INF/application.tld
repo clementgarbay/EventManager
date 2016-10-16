@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>application</short-name>
+    <uri>application</uri>
+
+    <tag>
+        <name>getResource</name>
+        <tag-class>fr.eventmanager.tags.application.GetResource</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>path</name>
+            <description>Le path à ajouter</description>
+            <required>true</required>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>getUrl</name>
+        <tag-class>fr.eventmanager.tags.application.GetUrl</tag-class>
+        <body-content>empty</body-content>
+
+        <attribute>
+            <name>route</name>
+            <description>L'url à générer</description>
+            <required>true</required>
+            <type>fr.eventmanager.utils.router.Route</type>
+        </attribute>
+    </tag>
+</taglib>

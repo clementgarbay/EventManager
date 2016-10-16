@@ -2,13 +2,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="app" uri="application" %>
 
 <div class="col-sm-12">
     <div class="row">
 
         <c:forEach items="${events}" var="event">
             <div class="col-sm-4">
-                <a href="events/${event.id}">
+                <a href="<app:getUrl route="EVENTS"/>${event.id}">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="purple">
                             <i class="material-icons">store</i>

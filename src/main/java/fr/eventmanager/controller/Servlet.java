@@ -1,21 +1,39 @@
 package fr.eventmanager.controller;
 
+import fr.eventmanager.security.SecurityService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.Route;
 import fr.eventmanager.utils.router.ServletRouter;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import fr.eventmanager.utils.URLUtils;
+
 /**
  * @author Clément Garbay
  */
 public abstract class Servlet extends HttpServlet {
-
     ServletRouter servletRouter;
+    SecurityService securityService;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        securityService = (SecurityService) config.getServletContext().getAttribute(SecurityService.SECURITY_SERVICE);
+        if (securityService == null) {
+            securityService = new SecurityService();
+            config.getServletContext().setAttribute(SecurityService.SECURITY_SERVICE, securityService);
+        }
+
+        new URLUtils();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
