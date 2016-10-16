@@ -17,7 +17,7 @@ import java.io.IOException;
  * @author Clément Garbay
  * @author Paul Defois
  */
-@WebServlet(name = "AuthenticationServlet", urlPatterns = {"/auth/*"})
+@WebServlet(name = "AuthenticationServlet", urlPatterns = {Path.PathConstants.AUTH + "/*"})
 public class AuthenticationServlet extends Servlet {
 
     private IUserService userService;
@@ -46,7 +46,7 @@ public class AuthenticationServlet extends Servlet {
     private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         securityService.setLogged(false, request, response);
 
-        render("login.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Logout Success !"));
+        render("login.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

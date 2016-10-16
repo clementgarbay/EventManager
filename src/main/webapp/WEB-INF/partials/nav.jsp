@@ -14,15 +14,31 @@
         <div class="collapse navbar-collapse" id="navigation-doc">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="<app:getUrl pathId="EVENTS" />">
+                    <a href="<app:getUrl pathId="EVENTS"/>">
                         Prochains événements
                     </a>
                 </li>
-                <li>
-                    <a href="<app:getUrl pathId="LOGIN" />">
-                        <i class="fa fa-sign-in"></i>Se connecter
-                    </a>
-                </li>
+                <c:choose>
+                    <c:when test="${IS_LOGGED}">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                <i class="material-icons">settings</i>
+                                <b class="caret"></b>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li><a href="<app:getUrl pathId="PROFIL"/>">Profil</a></li>
+                                <li class="divider"></li>
+                                <li><a href="<app:getUrl pathId="LOGOUT"/>">Se déconnecter</a></li>
+                            </ul>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li>
+                            <a href="<app:getUrl pathId="LOGIN"/>">
+                                <i class="fa fa-sign-in"></i>Se connecter
+                            </a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
             </ul>
         </div>
     </div>

@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="app" uri="application" %>
 
 <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="card card-signup">
-        <form class="form" method="post" action="/app/login">
+        <form class="form" method="post" action="<app:getUrl pathId="LOGIN"/>">
             <div class="content">
                 <div class="input-group">
                     <span class="input-group-addon">

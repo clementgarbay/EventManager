@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSession;
 
 public class SecurityService {
     public static final String SECURITY_SERVICE = "SECURITY_SERVICE";
-
     public static final String SECURITY_IS_LOGGED = "IS_LOGGED";
     private User userConnected;
 

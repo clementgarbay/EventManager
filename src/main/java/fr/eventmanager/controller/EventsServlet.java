@@ -21,7 +21,7 @@ import java.util.Optional;
  * @author Clément Garbay
  * @author Paul Defois
  */
-@WebServlet(name = "EventServlet", urlPatterns = {"/events/*"})
+@WebServlet(name = "EventServlet", urlPatterns = {Path.PathConstants.EVENTS + "/*"})
 public class EventsServlet extends Servlet {
 
     private IEventService eventService;

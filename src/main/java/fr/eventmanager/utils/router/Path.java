@@ -11,17 +11,17 @@ import java.util.regex.Pattern;
  * @author Clément Garbay
  */
 public enum Path {
-    HOME ("", Pattern.compile("/")),
-    LOGIN ("/auth", Pattern.compile("/login")),
-    LOGOUT ("/auth", Pattern.compile("/logout")),
-    EVENTS ("/events", Pattern.compile("/")),
-    EVENT ("/events", Pattern.compile("/(?<eventId>\\d+)")),
-    PROFIL ("/profil", Pattern.compile("/"));
+    HOME (PathConstants.BLANK, Pattern.compile("/")),
+    LOGIN (PathConstants.AUTH, Pattern.compile("/login")),
+    LOGOUT (PathConstants.AUTH, Pattern.compile("/logout")),
+    EVENTS (PathConstants.EVENTS, Pattern.compile("/")),
+    EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)")),
+    PROFIL (PathConstants.PROFIL, Pattern.compile("/"));
 
     private final String pathBase;
     private final Pattern pathExtension;
 
-    Path(final String pathBase, Pattern pathExtension) {
+    Path(final String pathBase, final Pattern pathExtension) {
         this.pathBase = pathBase;
         this.pathExtension = pathExtension;
     }
@@ -65,5 +65,12 @@ public enum Path {
         }
 
         return namedGroups;
+    }
+
+    public static class PathConstants {
+        public static final String BLANK = "";
+        public static final String EVENTS = "/events";
+        public static final String AUTH = "/auth";
+        public static final String PROFIL = "/profil";
     }
 }
