@@ -7,7 +7,6 @@ import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Route;
-import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,10 +36,9 @@ public class EventsServlet extends Servlet {
         // TODO : use injection dependency
         this.eventService = new EventService(new EventSampleDAO());
 
-        super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "getEvents", false))
-                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false))
-                .registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
+        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "getEvents", false));
+        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "getEvent", false));
+        registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/(?<eventId>\\d+)"), "addParticipant", true));
     }
 
     private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

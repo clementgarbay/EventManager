@@ -32,10 +32,9 @@ public class LoginServlet extends Servlet {
 
         this.userService = new UserService(new UserSampleDAO());
 
-        super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "displayLoginPage"))
-                .registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/login"), "login"))
-                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/logout"), "logout"));
+        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "displayLoginPage"));
+        registerRoute(HttpMethod.POST, new Route(ROUTE_BASE, Pattern.compile("/login"), "login"));
+        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/logout"), "logout"));
     }
 
     private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {

@@ -1,8 +1,8 @@
 package fr.eventmanager.utils.router;
 
-import fr.eventmanager.controller.Servlet;
 import fr.eventmanager.utils.HttpMethod;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,22 +15,20 @@ import java.util.regex.Pattern;
 /**
  * ServletRouter
  *
- * Store all available routes for a specific servlet with the associated http method and the related method to call.
+ * Store all available routes with the associated http method and the related method to call.
  *
  * @author Clément Garbay
  */
-public class ServletRouter {
+public abstract class ServletRouter extends HttpServlet {
 
-    private Servlet servlet;
     private Map<HttpMethod, List<Route>> routes;
 
-    public ServletRouter(Servlet servlet) {
-        this.servlet = servlet;
+    public ServletRouter() {
         this.routes = new HashMap<>();
     }
 
     /**
-     * Register new route for this servlet.
+     * Register new route
      *
      * @param httpMethod    The associated http method for this route
      * @param route         The route to add
@@ -136,9 +134,9 @@ public class ServletRouter {
         boolean success = true;
 
         try {
-            Method method = servlet.getClass().getDeclaredMethod(methodName, argsClasses);
+            Method method = this.getClass().getDeclaredMethod(methodName, argsClasses);
             method.setAccessible(true);
-            method.invoke(servlet, args);
+            method.invoke(this, args);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             success = false;
         }

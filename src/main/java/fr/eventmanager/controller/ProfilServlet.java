@@ -2,7 +2,6 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.utils.HttpMethod;
 import fr.eventmanager.utils.router.Route;
-import fr.eventmanager.utils.router.ServletRouter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,8 +19,7 @@ public class ProfilServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        super.servletRouter = new ServletRouter(this)
-                .registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "displayProfilPage"));
+        registerRoute(HttpMethod.GET, new Route(ROUTE_BASE, Pattern.compile("/"), "displayProfilPage"));
     }
 
     private void displayProfilPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
