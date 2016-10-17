@@ -32,4 +32,11 @@
             <type>fr.eventmanager.utils.router.Path</type>
         </attribute>
     </tag>
+
+    <tag-file>
+
+        <name>event</name>
+        <path>/WEB-INF/tags/event.tag</path>
+
+    </tag-file>
 </taglib>

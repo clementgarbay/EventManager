@@ -3,6 +3,7 @@ package fr.eventmanager.tags.application;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 
@@ -11,8 +12,9 @@ public class GetUrl extends SimpleTagSupport {
 
     @Override
     public void doTag() throws JspException {
+        PageContext pageContext = (PageContext) getJspContext();
         try {
-            getJspContext().getOut().print(path.getFullPath());
+            getJspContext().getOut().print(pageContext.getServletContext().getContextPath() + path.getFullPath());
         } catch (IOException e) {
             e.printStackTrace();
         }
