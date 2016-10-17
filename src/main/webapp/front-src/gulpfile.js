@@ -19,8 +19,9 @@ gulp.task('copy', ['clean'], function() {
     return gulp.src(paths.toCopy)
         .pipe(gulp.dest(function(file) {
             // to keep directory name ("fonts" or "js")
-            var pathParts = file.path.split('/');
-            return paths.dest + '/' + pathParts[pathParts.length-2]
+            var pathParts = file.path.replace(/\\/g,"/").split('/');
+            var directoryName = pathParts[pathParts.length-2];
+            return paths.dest + '/' + directoryName
         }));
 });
 
