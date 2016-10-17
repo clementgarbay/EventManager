@@ -12,7 +12,7 @@
                 <a href="<app:getUrl pathId="EVENTS"/>${event.id}">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="purple">
-                            <i class="material-icons">store</i>
+                            <i class="fa fa-home"></i>
                         </div>
                         <div class="card-content">
                             <h3 class="title">${event.title}</h3>
@@ -20,7 +20,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-                                <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' h'h'" value="${event.date}" />
+                                <i class="fa fa-calendar"></i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' h'h'" value="${event.date}" />
                             </div>
                         </div>
                     </div>

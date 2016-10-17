@@ -7,7 +7,7 @@
             <div class="content">
                 <div class="input-group">
                     <span class="input-group-addon">
-                        <i class="material-icons">email</i>
+                        <i class="fa fa-envelope"></i>
                     </span>
                     <div class="form-group is-empty">
                         <input type="text" name="user_email" class="form-control" placeholder="Email">
@@ -16,7 +16,7 @@
                 </div>
                 <div class="input-group">
                     <span class="input-group-addon">
-                        <i class="material-icons">lock_outline</i>
+                        <i class="fa fa-key"></i>
                     </span>
                     <div class="form-group is-empty">
                         <input type="password" name="user_password" class="form-control" placeholder="Mot de passe">
