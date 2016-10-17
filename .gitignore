@@ -35,6 +35,4 @@ buildNumber.properties
 assets
 bower_components
 node_modules
-
-/src/main/resources/META-INF/persistence.xml
-/src/main/webapp/front-src/node/
+node
