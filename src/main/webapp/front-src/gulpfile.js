@@ -35,4 +35,4 @@ gulp.task('watch', ['sass'], function () {
     gulp.watch(paths.styleFiles, ['sass']);
 });
 
-gulp.task('default', ['clean', 'copy', 'sass', 'watch']);
+gulp.task('default', ['clean', 'copy', 'sass']);
