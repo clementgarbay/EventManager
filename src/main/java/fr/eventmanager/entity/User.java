@@ -1,5 +1,6 @@
 package fr.eventmanager.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,42 +9,57 @@ import java.io.Serializable;
 /**
  * @author Clément Garbay
  */
-@Entity
+@Entity(name = User.tableName)
 public class User implements Serializable, StorableEntity {
+
+    static final String tableName = "User";
 
     @Id
     @GeneratedValue
-    private int id;
-    private String name;
-    private String email;
-    private String password;
-    private String company;
-    private boolean connected;
+    @Column(name = "id")
+    private Integer id;
 
-    public User(String name, String email, String password, String company) {
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "company", nullable = false)
+    private String company;
+
+    @Column(name = "registered", nullable = false)
+    private boolean registered = false;
+
+    public User(String name, String email, String password, String company, boolean registered) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.company = company;
-        this.connected = false;
+        this.registered = registered;
     }
 
-    public User(String email, String name, String company) {
-        this(email, name, null, company);
+    /**
+     * Constructor corresponding to an user registered by the signup form
+     */
+    public User(String name, String email, String password, String company) {
+        this(name, email, password, company, true);
     }
 
-    public User(String email, String name) {
-        this(email, name, null);
+    /**
+     * Constructor corresponding to an participant user to an event (filled with the event's form) with no registered account
+     */
+    public User(String name, String email, String company) {
+        this(name, email, null, company, false);
     }
 
     public User() {}
 
-    public static String getTableName() {
-        return "User";
-    }
-
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -59,11 +75,7 @@ public class User implements Serializable, StorableEntity {
         return company;
     }
 
-    public boolean getConnected() {
-        return connected;
-    }
-
-    public void setConnected(boolean connected) {
-        this.connected = connected;
+    public boolean isRegistered() {
+        return registered;
     }
 }

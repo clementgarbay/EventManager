@@ -9,48 +9,70 @@ import java.util.List;
  * @author Clément Garbay
  */
 @Entity
-@Table(name = "Event")
+@Table(name = Event.tableName)
 public class Event implements Serializable, StorableEntity {
+
+    static final String tableName = "Event";
 
     @Id
     @GeneratedValue
-    private int id;
+    @Column(name = "id")
+    private Integer id;
+
     @Column(name = "title", nullable = false)
     private String title;
+
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
+
+    @Temporal(TemporalType.DATE)
     @Column(name = "date", nullable = false)
     private Date date;
-    @Column(name = "postalAddress", nullable = false)
-    private String postalAddress; // TODO : find a better solution to store postal address
-    @OneToOne
-    @Column(name = "owner", nullable = false)
+
+    @Embedded
+    @Column(name = "address", nullable = false)
+    private Address address;
+
+    @Column(name = "maxTickets", nullable = false)
+    private Integer maxTickets;
+
+    @Column(name = "price", nullable = false)
+    private Double price = 0.00;
+
+    @ManyToOne
+    @JoinColumn(name="owner", nullable = false)
     private User owner;
-    @OneToMany
-    @Column(name = "participants")
+
+    @ManyToMany
+    @JoinTable(name = "event_user",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     private List<User> participants;
 
-    public Event(String title, String description, Date date, String postalAddress, User owner, List<User> participants) {
+    public Event(String title, String description, Date date, Address address, Integer maxTickets, Double price, User owner, List<User> participants) {
         this.title = title;
         this.description = description;
         this.date = date;
-        this.postalAddress = postalAddress;
+        this.address = address;
+        this.maxTickets = maxTickets;
+        this.price = price;
         this.owner = owner;
         this.participants = participants;
     }
 
-    public Event(String title, String description, Date date, String postalAddress, User owner) {
-        this(title, description, date, postalAddress, owner, null);
+    public Event(String title, String description, Date date, Address address, Integer maxTickets, Double price, User owner) {
+        this(title, description, date, address, maxTickets, price, owner, null);
+    }
+
+    public Event(String title, String description, Date date, Address address, Integer maxTickets, User owner) {
+        this(title, description, date, address, maxTickets, 0.0, owner, null);
     }
 
     public Event() {}
 
-    public static String getTableName() {
-        return "Event";
-    }
-
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -66,8 +88,16 @@ public class Event implements Serializable, StorableEntity {
         return date;
     }
 
-    public String getPostalAddress() {
-        return postalAddress;
+    public Address getAddress() {
+        return address;
+    }
+
+    public Integer getMaxTickets() {
+        return maxTickets;
+    }
+
+    public Double getPrice() {
+        return price;
     }
 
     public User getOwner() {
