@@ -5,6 +5,8 @@ import fr.eventmanager.dao.PersistenceManager;
 import fr.eventmanager.entity.StorableEntity;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,34 +23,25 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
     protected String tableName;
     protected Class<T> entityClassType;
+    protected CriteriaQuery<T> createQuery;
 
     public BasicDAO() {
-
-        // TODOOOOOOOOO
-
-        
-
-        try {
-            Method method = entityClassType.getClass().getDeclaredMethod("getTableName");
-            method.setAccessible(true);
-            String invoke = (String) method.invoke(entityClassType);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-
         try {
             this.entityClassType = this.getEntityClassType();
-            Field tableNameField = entityClassType.getDeclaredField("tableName");
-            tableNameField.setAccessible(true);
-            this.tableName = (String) tableNameField.get(null);
-        } catch (IllegalAccessException | NoSuchFieldException | ClassNotFoundException e) {
+            this.createQuery = persistenceManager.getCriteriaBuilder().createQuery(entityClassType);
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public Optional<T> find(int id) {
-        return Optional.ofNullable(persistenceManager.getEntityManager().find(entityClassType, id));
+        Root<T> entity = createQuery.from(entityClassType);
+        createQuery.select(entity)
+                .where( persistenceManager.getCriteriaBuilder().equal(entity.get("id"), id));
+        Query query = persistenceManager.getEntityManager().createQuery(createQuery);
+
+        return Optional.ofNullable((T) query.getSingleResult());
     }
 
     @Override

@@ -3,8 +3,8 @@ package fr.eventmanager.entity;
 /**
  * @author Clément Garbay
  */
-public abstract class StorableEntity {
-    abstract int getId();
+public interface StorableEntity {
+    int getId();
     static String getTableName() {
         return "";
     }

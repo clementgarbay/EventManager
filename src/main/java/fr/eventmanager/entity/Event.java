@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "Event")
-public class Event extends StorableEntity implements Serializable {
+public class Event implements Serializable, StorableEntity {
 
     @Id
     @GeneratedValue

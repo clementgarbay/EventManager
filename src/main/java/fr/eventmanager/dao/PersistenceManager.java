@@ -6,6 +6,7 @@ import fr.eventmanager.entity.User;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 
 
@@ -18,10 +19,12 @@ public class PersistenceManager {
 
     private EntityManagerFactory emf;
     private EntityManager em;
+    private CriteriaBuilder cb;
 
     private PersistenceManager() {
         emf = Persistence.createEntityManagerFactory("EventManagerUnit");
         em = emf.createEntityManager();
+        cb = em.getCriteriaBuilder();
 
         populate();
     }
@@ -33,6 +36,10 @@ public class PersistenceManager {
 
     public EntityManager getEntityManager() {
         return em;
+    }
+
+    public CriteriaBuilder getCriteriaBuilder() {
+        return cb;
     }
 
     public void close() {
