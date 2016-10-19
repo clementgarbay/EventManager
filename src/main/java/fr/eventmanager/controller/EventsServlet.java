@@ -1,7 +1,7 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.dao.impl.EventSampleDAO;
-import fr.eventmanager.model.Event;
+import fr.eventmanager.dao.impl.EventDAO;
+import fr.eventmanager.entity.Event;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
@@ -31,7 +31,7 @@ public class EventsServlet extends Servlet {
         super.init();
 
         // TODO : use injection dependency
-        this.eventService = new EventService(new EventSampleDAO());
+        this.eventService = new EventService(new EventDAO());
 
         bind(HttpMethod.GET, Path.EVENTS, false).to("getEvents");
         bind(HttpMethod.GET, Path.EVENT, false).to("getEvent");

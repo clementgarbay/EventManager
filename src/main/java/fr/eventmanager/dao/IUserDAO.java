@@ -1,12 +1,13 @@
 package fr.eventmanager.dao;
 
-import fr.eventmanager.model.User;
+import fr.eventmanager.entity.User;
+
+import java.util.Optional;
 
 /**
- * Created by Polo on 11/10/2016.
+ * @author Paul Defois
  */
-public interface IUserDAO {
-    boolean areCredentialsValid(String email, String password);
-    User getUserByEmail(String email);
-    boolean isUserExists(String email);
+public interface IUserDAO extends IBasicDAO<User> {
+    Optional<User> findByEmail(String email);
+    Optional<User> findByEmailAndPassword(String email, String password);
 }

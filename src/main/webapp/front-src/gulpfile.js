@@ -37,3 +37,4 @@ gulp.task('watch', ['sass'], function () {
 });
 
 gulp.task('default', ['clean', 'copy', 'sass']);
+gulp.task('dev', ['default', 'watch']);

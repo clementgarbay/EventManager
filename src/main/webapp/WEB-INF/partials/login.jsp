@@ -7,7 +7,7 @@
             <div class="content">
                 <div class="input-group">
                     <span class="input-group-addon">
-                        <i class="fa fa-envelope"></i>
+                        <i class="fa fa-user"></i>
                     </span>
                     <div class="form-group is-empty">
                         <input type="text" name="user_email" class="form-control" placeholder="Email">
@@ -25,13 +25,11 @@
                 </div>
             </div>
             <div class="footer text-center">
-                <button type="submit" class="btn btn-simple btn-primary">Se connecter</button>
-                <div style="font-size: .8em; color: #555;">
+                <button type="submit" class="btn btn-primary" style="margin: 20px 0 0 0;">Se connecter</button>
+                <div style="font-size: .8em; color: #555; margin: 10px 0;">
                     <a href="" style="color: #555;">S'inscrire</a> | <a href="" style="color: #555;">Mot de passe oublié ?</a>
                 </div>
             </div>
         </form>
     </div>
 </div>
-<%--<br /><br />--%>
-<%--l'utilisateur existe : ${USER_EXISTS}--%>

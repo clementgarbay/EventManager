@@ -1,7 +1,7 @@
 package fr.eventmanager.dao;
 
-import fr.eventmanager.model.Event;
-import fr.eventmanager.model.User;
+import fr.eventmanager.entity.Event;
+import fr.eventmanager.entity.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

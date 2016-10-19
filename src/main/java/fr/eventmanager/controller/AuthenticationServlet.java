@@ -1,6 +1,6 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.dao.impl.UserSampleDAO;
+import fr.eventmanager.dao.impl.UserDAO;
 import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.Alert;
@@ -26,7 +26,7 @@ public class AuthenticationServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        this.userService = new UserService(new UserSampleDAO());
+        this.userService = new UserService(new UserDAO());
 
         bind(HttpMethod.GET, Path.LOGIN, false).to("displayLoginPage");
         bind(HttpMethod.POST, Path.LOGIN, false).to("login");

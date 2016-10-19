@@ -1,4 +1,4 @@
-package fr.eventmanager.model;
+package fr.eventmanager.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author Clément Garbay
  */
 @Entity
-public class User implements Serializable, StorableEntity<User> {
+public class User implements Serializable, StorableEntity {
 
     @Id
     @GeneratedValue
@@ -38,17 +38,13 @@ public class User implements Serializable, StorableEntity<User> {
 
     public User() {}
 
-    @Override
-    public int getId() {
-        return id;
+    public static String getTableName() {
+        return "User";
     }
 
     @Override
-    public User populateFrom(User element) {
-        this.email = element.getEmail();
-        this.name = element.getName();
-        this.company = element.getCompany();
-        return this;
+    public int getId() {
+        return id;
     }
 
     public String getName() {

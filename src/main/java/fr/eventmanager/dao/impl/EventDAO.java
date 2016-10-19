@@ -1,15 +1,15 @@
 package fr.eventmanager.dao.impl;
 
 import fr.eventmanager.dao.IEventDAO;
-import fr.eventmanager.model.Event;
+import fr.eventmanager.entity.Event;
 
 /**
  * @author Clément Garbay
  */
-public class EventSampleDAO extends BasicDAO<Event> implements IEventDAO {
+public class EventDAO extends BasicDAO<Event> implements IEventDAO {
 
-    public EventSampleDAO() {
-        super("Event", Event.class);
+    public EventDAO() {
+        super();
     }
 
     @Override
@@ -19,4 +19,5 @@ public class EventSampleDAO extends BasicDAO<Event> implements IEventDAO {
 //        eventOptional.ifPresent(event -> event.getParticipants().add(userId));
 //        return eventOptional.isPresent();
     }
+
 }

@@ -1,7 +1,7 @@
 package fr.eventmanager.service.impl;
 
 import fr.eventmanager.dao.IEventDAO;
-import fr.eventmanager.model.Event;
+import fr.eventmanager.entity.Event;
 import fr.eventmanager.service.IEventService;
 
 import java.util.List;

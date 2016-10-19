@@ -1,8 +1,10 @@
 package fr.eventmanager.service.impl;
 
 import fr.eventmanager.dao.IUserDAO;
-import fr.eventmanager.model.User;
+import fr.eventmanager.entity.User;
 import fr.eventmanager.service.IUserService;
+
+import java.util.Optional;
 
 /**
  * Implémentation du service utilisateur
@@ -18,16 +20,16 @@ public class UserService implements IUserService {
 
     @Override
     public boolean areCredentialsValid(String email, String password) {
-        return userDAO.areCredentialsValid(email, password);
+        return userDAO.findByEmailAndPassword(email, password).isPresent();
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userDAO.getUserByEmail(email);
+    public Optional<User> getUserByEmail(String email) {
+        return userDAO.findByEmail(email);
     }
 
     @Override
     public boolean isUserExists(String email) {
-        return userDAO.isUserExists(email);
+        return userDAO.findByEmail(email).isPresent();
     }
 }

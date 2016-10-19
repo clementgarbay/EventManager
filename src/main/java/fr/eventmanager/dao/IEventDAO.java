@@ -1,6 +1,6 @@
 package fr.eventmanager.dao;
 
-import fr.eventmanager.model.Event;
+import fr.eventmanager.entity.Event;
 
 /**
  * @author Clément Garbay

@@ -7,8 +7,8 @@
 
     <persistence-unit name="EventManagerUnit" transaction-type="RESOURCE_LOCAL">
 
-        <class>fr.eventmanager.model.Event</class>
-        <class>fr.eventmanager.model.User</class>
+        <class>fr.eventmanager.entity.Event</class>
+        <class>fr.eventmanager.entity.User</class>
 
         <properties>
             <property name="hibernate.archive.autodetection"    value="class" />

@@ -1,6 +1,6 @@
 package fr.eventmanager.security;
 
-import fr.eventmanager.model.User;
+import fr.eventmanager.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

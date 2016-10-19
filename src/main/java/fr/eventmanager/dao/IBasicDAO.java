@@ -1,6 +1,6 @@
 package fr.eventmanager.dao;
 
-import fr.eventmanager.model.StorableEntity;
+import fr.eventmanager.entity.StorableEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * @author Clément Garbay
  */
-public interface IBasicDAO<T extends StorableEntity<T>> {
+public interface IBasicDAO<T extends StorableEntity> {
     Optional<T> find(int id);
     List<T> findAll();
     T create(T element);

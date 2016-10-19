@@ -1,4 +1,4 @@
-package fr.eventmanager.model;
+package fr.eventmanager.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -9,19 +9,25 @@ import java.util.List;
  * @author Clément Garbay
  */
 @Entity
-public class Event implements Serializable, StorableEntity<Event> {
+@Table(name = "Event")
+public class Event extends StorableEntity implements Serializable {
 
     @Id
     @GeneratedValue
     private int id;
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(columnDefinition = "TEXT")
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
+    @Column(name = "date", nullable = false)
     private Date date;
+    @Column(name = "postalAddress", nullable = false)
     private String postalAddress; // TODO : find a better solution to store postal address
     @OneToOne
+    @Column(name = "owner", nullable = false)
     private User owner;
     @OneToMany
+    @Column(name = "participants")
     private List<User> participants;
 
     public Event(String title, String description, Date date, String postalAddress, User owner, List<User> participants) {
@@ -39,20 +45,13 @@ public class Event implements Serializable, StorableEntity<Event> {
 
     public Event() {}
 
-    @Override
-    public int getId() {
-        return id;
+    public static String getTableName() {
+        return "Event";
     }
 
     @Override
-    public Event populateFrom(Event element) {
-        this.title = element.getTitle();
-        this.description = element.getDescription();
-        this.date = element.getDate();
-        this.postalAddress = element.getPostalAddress();
-        this.owner = element.getOwner();
-        this.participants = element.getParticipants();
-        return this;
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -78,4 +77,5 @@ public class Event implements Serializable, StorableEntity<Event> {
     public List<User> getParticipants() {
         return participants;
     }
+
 }
