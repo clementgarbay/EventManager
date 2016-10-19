@@ -1,13 +1,17 @@
 package fr.eventmanager.dao.impl;
 
+import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IUserDAO;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaQuery;
+import java.text.Format;
 import java.util.Optional;
 
 /**
+ * @author Clément Garbay
  * @author Paul Defois
  */
 public class UserDAO extends BasicDAO<User> implements IUserDAO {
@@ -17,13 +21,11 @@ public class UserDAO extends BasicDAO<User> implements IUserDAO {
     }
 
     public Optional<User> findByEmail(String email) {
-        Query query = persistenceManager.getEntityManager().createQuery(String.format("SELECT name, email, company FROM %s WHERE email=%s", super.tableName, email));
-        return Optional.ofNullable((User) query.getSingleResult());
+        return findByFields(new DbField("email", email));
     }
 
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        Query query = persistenceManager.getEntityManager().createQuery(String.format("SELECT name, email, company FROM %s WHERE email=%s AND password=%s", super.tableName, email, password));
-        return Optional.ofNullable((User) query.getSingleResult());
+        return findByFields(new DbField("email", email), new DbField("password", password));
     }
 
 }

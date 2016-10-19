@@ -25,7 +25,7 @@ public class EventService implements IEventService {
 
     @Override
     public Optional<Event> getEvent(int eventId) {
-        return eventDAO.find(eventId);
+        return eventDAO.findById(eventId);
     }
 
     @Override
