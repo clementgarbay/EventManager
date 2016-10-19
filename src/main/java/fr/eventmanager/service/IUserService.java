@@ -5,7 +5,7 @@ import fr.eventmanager.entity.User;
 import java.util.Optional;
 
 /**
- * Created by Polo on 11/10/2016.
+ * @author Paul Defois
  */
 public interface IUserService {
     Optional<User> getUserByEmail(String email);
