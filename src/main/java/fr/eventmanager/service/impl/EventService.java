@@ -1,7 +1,7 @@
 package fr.eventmanager.service.impl;
 
 import fr.eventmanager.dao.IEventDAO;
-import fr.eventmanager.model.Event;
+import fr.eventmanager.entity.Event;
 import fr.eventmanager.service.IEventService;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public class EventService implements IEventService {
 
     @Override
     public Optional<Event> getEvent(int eventId) {
-        return eventDAO.find(eventId);
+        return eventDAO.findById(eventId);
     }
 
     @Override

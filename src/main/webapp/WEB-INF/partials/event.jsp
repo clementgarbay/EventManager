@@ -14,7 +14,7 @@
             <p><fmt:formatDate pattern="dd/MM/yyyy',' h'h'" value="${event.date}" /></p>
 
             <h3>Lieu</h3>
-            <p>${event.postalAddress}</p>
+            <p>${event.address.getName()}<br><small>${event.address.getCity()}, ${event.address.getZipCode()} (${event.address.getCountry()})</small></p>
 
             <h3>Participants</h3>
             <c:choose>

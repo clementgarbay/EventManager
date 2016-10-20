@@ -1,6 +1,6 @@
 package fr.eventmanager.service;
 
-import fr.eventmanager.model.Event;
+import fr.eventmanager.entity.Event;
 
 import java.util.List;
 import java.util.Optional;

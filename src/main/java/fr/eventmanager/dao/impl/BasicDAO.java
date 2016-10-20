@@ -1,39 +1,54 @@
 package fr.eventmanager.dao.impl;
 
+import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IBasicDAO;
 import fr.eventmanager.dao.PersistenceManager;
-import fr.eventmanager.model.StorableEntity;
+import fr.eventmanager.entity.StorableEntity;
 
 import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 
 /**
  * @author Clément Garbay
  */
-public class BasicDAO<T extends StorableEntity<T>> implements IBasicDAO<T> {
+public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
-    protected final PersistenceManager persistenceManager = PersistenceManager.getInstance();
+    private final PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-    private String tableName;
-    private Class classType;
+    private Class<T> entityClassType;
+    private CriteriaBuilder criteriaBuilder;
 
-    public BasicDAO(String tableName, Class<T> classType) {
-        this.tableName = tableName;
-        this.classType = classType;
+    public BasicDAO() {
+        try {
+            this.entityClassType = this.getEntityClassType();
+            this.criteriaBuilder = persistenceManager.getCriteriaBuilder();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public Optional<T> find(int id) {
-        T element = (T) persistenceManager.getEntityManager().find(classType, id);
-        if (element == null) return Optional.empty();
-        return Optional.of(element);
+    public Optional<T> findById(int id) {
+        return findByFields(new DbField("id", id));
+    }
+
+    @Override
+    public Optional<T> findByFields(DbField... fields) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
+        for (DbField field : fields) {
+            criteriaQuery.where(criteriaBuilder.equal(getEntity(criteriaQuery).get(field.getFieldName()), field.getFieldValue()));
+        }
+        return Optional.ofNullable(getSingleResult(criteriaQuery));
     }
 
     @Override
     public List<T> findAll() {
-        Query query = persistenceManager.getEntityManager().createQuery("SELECT e FROM " + tableName + " e");
-        return (List<T>) query.getResultList();
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
+        criteriaQuery.select(getEntity(criteriaQuery));
+        return getResultList(criteriaQuery);
     }
 
     @Override
@@ -46,24 +61,74 @@ public class BasicDAO<T extends StorableEntity<T>> implements IBasicDAO<T> {
 
     @Override
     public boolean update(T element) {
-        Optional<T> elementOptional = find(element.getId());
+        Optional<T> elementOptional = findById(element.getId());
         if (!elementOptional.isPresent()) return false;
         persistenceManager.getEntityManager().getTransaction().begin();
-
-        // TOREVIEW : update only the modified fields
-        elementOptional.get().populateFrom(element);
-
+        persistenceManager.getEntityManager().merge(element);
         persistenceManager.getEntityManager().getTransaction().commit();
         return true;
     }
 
     @Override
     public boolean delete(int id) {
-        Optional<T> elementOptional = find(id);
+        Optional<T> elementOptional = findById(id);
         if (!elementOptional.isPresent()) return false;
-        persistenceManager.getEntityManager().getTransaction().begin();
-        persistenceManager.getEntityManager().remove(elementOptional.get());
-        persistenceManager.getEntityManager().getTransaction().commit();
-        return true;
+        CriteriaDelete<T> criteriaDelete = createCriteriaDelete();
+        criteriaDelete.where(criteriaBuilder.equal(getEntity(criteriaDelete).get("id"), id));
+        return execute(criteriaDelete) != 0;
     }
+
+    private Class<T> getEntityClassType() throws ClassNotFoundException {
+        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
+
+    Root<T> getEntity(CriteriaQuery<T> criteriaQuery) {
+        return criteriaQuery.from(entityClassType);
+    }
+
+    Root<T> getEntity(CriteriaUpdate<T> criteriaQuery) {
+        return criteriaQuery.from(entityClassType);
+    }
+
+    Root<T> getEntity(CriteriaDelete<T> criteriaQuery) {
+        return criteriaQuery.from(entityClassType);
+    }
+
+    CriteriaQuery<T> createCriteriaQuery() {
+        return criteriaBuilder.createQuery(entityClassType);
+    }
+
+    CriteriaUpdate<T> createCriteriaUpdate() {
+        return criteriaBuilder.createCriteriaUpdate(entityClassType);
+    }
+
+    CriteriaDelete<T> createCriteriaDelete() {
+        return criteriaBuilder.createCriteriaDelete(entityClassType);
+    }
+
+    int execute(CriteriaQuery<T> criteriaQuery) {
+        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
+        return query.executeUpdate();
+    }
+
+    int execute(CriteriaUpdate<T> criteriaQuery) {
+        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
+        return query.executeUpdate();
+    }
+
+    int execute(CriteriaDelete<T> criteriaQuery) {
+        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
+        return query.executeUpdate();
+    }
+
+    T getSingleResult(CriteriaQuery<T> criteriaQuery) {
+        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
+        return (T) query.getSingleResult();
+    }
+
+    List<T> getResultList(CriteriaQuery<T> criteriaQuery) {
+        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
+        return (List<T>) query.getResultList();
+    }
+
 }

@@ -1,12 +1,14 @@
 package fr.eventmanager.service;
 
-import fr.eventmanager.model.User;
+import fr.eventmanager.entity.User;
+
+import java.util.Optional;
 
 /**
- * Created by Polo on 11/10/2016.
+ * @author Paul Defois
  */
 public interface IUserService {
-    boolean areCredentialsValid(String email, String password);
-    User getUserByEmail(String email);
+    Optional<User> getUserByEmail(String email);
     boolean isUserExists(String email);
+    boolean areCredentialsValid(String email, String password);
 }
