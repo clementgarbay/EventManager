@@ -46,7 +46,9 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
     @Override
     public List<T> findAll() {
-        return getResultList(createCriteriaQuery());
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
+        criteriaQuery.select(getEntity(criteriaQuery));
+        return getResultList(criteriaQuery);
     }
 
     @Override
