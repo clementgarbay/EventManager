@@ -95,7 +95,8 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
     }
 
     CriteriaQuery<T> createCriteriaQuery() {
-        return criteriaBuilder.createQuery(entityClassType);
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClassType);
+        return criteriaQuery.select(getEntity(criteriaQuery));
     }
 
     CriteriaUpdate<T> createCriteriaUpdate() {
@@ -123,7 +124,12 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
     T getSingleResult(CriteriaQuery<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        return (T) query.getSingleResult();
+        query.setMaxResults(1);
+        List<T> list = query.getResultList();
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
     }
 
     List<T> getResultList(CriteriaQuery<T> criteriaQuery) {

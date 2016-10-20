@@ -2,7 +2,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%@ attribute name="event" type="fr.eventmanager.model.Event" required="true" description="L'évènement à afficher" rtexprvalue="true" %>
+<%@ attribute name="event" type="fr.eventmanager.entity.Event" required="true" description="L'évènement à afficher" rtexprvalue="true" %>
 
 <div class="col-sm-4">
     <a href="<app:getUrl pathId="EVENTS"/>${event.id}">

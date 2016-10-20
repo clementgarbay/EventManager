@@ -25,7 +25,8 @@ public class UserDAO extends BasicDAO<User> implements IUserDAO {
     }
 
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        return findByFields(new DbField("email", email), new DbField("password", password));
+        Optional<User> userOptional = findByFields(new DbField("email", email), new DbField("password", password));
+        return userOptional;
     }
 
 }
