@@ -56,7 +56,6 @@
                             <div class="form-group is-empty">
                                 <input type="email" name="confirm_email" class="form-control" placeholder="Confirmer l'email">
                             </div>
-                            </c:choose>
                         </div>
                     </div>
                 </div>

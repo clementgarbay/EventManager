@@ -10,8 +10,9 @@ import java.util.Optional;
  */
 public interface IBasicDAO<T extends StorableEntity> {
     Optional<T> findById(int id);
-    Optional<T> findByFields(DbField... fields);
+    Optional<T> findSingleByFields(DbField... fields);
     List<T> findAll();
+    List<T> findListByFields(DbField... fields);
     T create(T element);
     boolean update(T element);
     boolean delete(int id);

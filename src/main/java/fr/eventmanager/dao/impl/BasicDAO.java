@@ -18,8 +18,8 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
     private final PersistenceManager persistenceManager = PersistenceManager.getInstance();
 
-    private Class<T> entityClassType;
-    private CriteriaBuilder criteriaBuilder;
+    Class<T> entityClassType;
+    CriteriaBuilder criteriaBuilder;
 
     public BasicDAO() {
         try {
@@ -32,15 +32,12 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
 
     @Override
     public Optional<T> findById(int id) {
-        return findByFields(new DbField("id", id));
+        return findSingleByFields(new DbField("id", id));
     }
 
     @Override
-    public Optional<T> findByFields(DbField... fields) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
-        for (DbField field : fields) {
-            criteriaQuery.where(criteriaBuilder.equal(getEntity(criteriaQuery).get(field.getFieldName()), field.getFieldValue()));
-        }
+    public Optional<T> findSingleByFields(DbField... fields) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQueryByFields(fields);
         return Optional.ofNullable(getSingleResult(criteriaQuery));
     }
 
@@ -48,6 +45,12 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
     public List<T> findAll() {
         CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
         criteriaQuery.select(getEntity(criteriaQuery));
+        return getResultList(criteriaQuery);
+    }
+
+    @Override
+    public List<T> findListByFields(DbField... fields) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQueryByFields(fields);
         return getResultList(criteriaQuery);
     }
 
@@ -99,30 +102,38 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
         return criteriaQuery.select(getEntity(criteriaQuery));
     }
 
-    CriteriaUpdate<T> createCriteriaUpdate() {
+    private CriteriaQuery<T> createCriteriaQueryByFields(DbField... fields) {
+        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
+        for (DbField field : fields) {
+            criteriaQuery.where(criteriaBuilder.equal(getEntity(criteriaQuery).get(field.getFieldName()), field.getFieldValue()));
+        }
+        return criteriaQuery;
+    }
+
+    private CriteriaUpdate<T> createCriteriaUpdate() {
         return criteriaBuilder.createCriteriaUpdate(entityClassType);
     }
 
-    CriteriaDelete<T> createCriteriaDelete() {
+    private CriteriaDelete<T> createCriteriaDelete() {
         return criteriaBuilder.createCriteriaDelete(entityClassType);
     }
 
-    int execute(CriteriaQuery<T> criteriaQuery) {
+    private int execute(CriteriaQuery<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
         return query.executeUpdate();
     }
 
-    int execute(CriteriaUpdate<T> criteriaQuery) {
+    private int execute(CriteriaUpdate<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
         return query.executeUpdate();
     }
 
-    int execute(CriteriaDelete<T> criteriaQuery) {
+    private int execute(CriteriaDelete<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
         return query.executeUpdate();
     }
 
-    T getSingleResult(CriteriaQuery<T> criteriaQuery) {
+    private T getSingleResult(CriteriaQuery<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
         query.setMaxResults(1);
         List<T> list = query.getResultList();
@@ -132,7 +143,7 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
         return list.get(0);
     }
 
-    List<T> getResultList(CriteriaQuery<T> criteriaQuery) {
+    private List<T> getResultList(CriteriaQuery<T> criteriaQuery) {
         Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
         return (List<T>) query.getResultList();
     }

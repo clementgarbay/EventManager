@@ -1,7 +1,11 @@
 package fr.eventmanager.dao.impl;
 
+import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IEventDAO;
 import fr.eventmanager.entity.Event;
+import fr.eventmanager.entity.User;
+
+import java.util.List;
 
 /**
  * @author Clément Garbay
@@ -10,6 +14,16 @@ public class EventDAO extends BasicDAO<Event> implements IEventDAO {
 
     public EventDAO() {
         super();
+    }
+
+    @Override
+    public List<Event> findByOwner(User user) {
+        return findListByFields(new DbField("owner", user));
+    }
+
+    @Override
+    public List<Event> findByParticipant(User user) {
+        return null;
     }
 
     @Override
