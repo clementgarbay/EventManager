@@ -22,8 +22,9 @@
                     <c:when test="${IS_LOGGED}">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <i class="material-icons">settings</i>
+                                <i class="fa fa-cog"></i>
                                 <b class="caret"></b>
+                            </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="<app:getUrl pathId="PROFIL"/>">Profil</a></li>
                                 <li class="divider"></li>
