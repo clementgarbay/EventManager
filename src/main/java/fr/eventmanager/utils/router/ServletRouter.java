@@ -1,6 +1,6 @@
 package fr.eventmanager.utils.router;
 
-import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.security.SecurityService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -61,8 +61,7 @@ public abstract class ServletRouter extends HttpServlet {
 
         Route route = routeOptional.get();
 
-        // TODO : use userService ?
-        boolean userIsAuthenticated = true;
+        boolean userIsAuthenticated = SecurityService.isLogged(request);
 
         if (route.isProtected() && !userIsAuthenticated) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
@@ -101,25 +100,29 @@ public abstract class ServletRouter extends HttpServlet {
         Class<?>[] argsClasses = {HttpServletRequest.class, HttpServletResponse.class, Map.class};
         Object[] args = {request, response, parameters};
 
-        if (!proceedToIntrospect(methodName, argsClasses, args)) {
+        try {
+            if (!proceedToIntrospect(methodName, argsClasses, args)) {
 
-            Class<?>[] argsClasses1 = {HttpServletRequest.class, HttpServletResponse.class};
-            Object[] args1 = {request, response};
+                Class<?>[] argsClasses1 = {HttpServletRequest.class, HttpServletResponse.class};
+                Object[] args1 = {request, response};
 
-            if (!proceedToIntrospect(methodName, argsClasses1, args1)) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                if (!proceedToIntrospect(methodName, argsClasses1, args1)) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
             }
+        } catch (InvocationTargetException e) {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
     }
 
-    private boolean proceedToIntrospect(String methodName, Class<?>[] argsClasses, Object... args) {
+    private boolean proceedToIntrospect(String methodName, Class<?>[] argsClasses, Object... args) throws InvocationTargetException {
         boolean success = true;
 
         try {
             Method method = this.getClass().getDeclaredMethod(methodName, argsClasses);
             method.setAccessible(true);
             method.invoke(this, args);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (NoSuchMethodException | IllegalAccessException e) {
             success = false;
         }
 

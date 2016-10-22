@@ -1,7 +1,5 @@
 package fr.eventmanager.utils.router;
 
-import fr.eventmanager.utils.HttpMethod;
-
 /**
  * @author Clément Garbay
  */
