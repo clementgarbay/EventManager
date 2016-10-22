@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface IEventService {
     List<Event> getEvents();
     Optional<Event> getEvent(int eventId);
+    Event addEvent(Event event);
     boolean addParticipant(int eventId, int userId);
 }

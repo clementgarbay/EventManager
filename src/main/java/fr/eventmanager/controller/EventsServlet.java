@@ -5,7 +5,8 @@ import fr.eventmanager.entity.Event;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
-import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.HttpMethod;
+import fr.eventmanager.entity.helper.EventHelper;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
@@ -33,17 +34,19 @@ public class EventsServlet extends Servlet {
         // TODO : use injection dependency
         this.eventService = new EventService(new EventDAO());
 
-        bind(HttpMethod.GET, Path.EVENTS, false).to("getEvents");
-        bind(HttpMethod.GET, Path.EVENT, false).to("getEvent");
+        bind(HttpMethod.GET, Path.EVENTS, false).to("displayEventsPage");
+        bind(HttpMethod.GET, Path.EVENT, false).to("displayEventPage");
+        bind(HttpMethod.GET, Path.NEW_EVENT, false).to("displayNewEventPage");
+        bind(HttpMethod.POST, Path.NEW_EVENT).to("addEvent");
         bind(HttpMethod.POST, Path.EVENT, false).to("addParticipant");
     }
 
-    private void getEvents(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayEventsPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("events", eventService.getEvents());
         render("events.jsp", request, response);
     }
 
-    private void getEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void displayEventPage(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
@@ -53,6 +56,28 @@ public class EventsServlet extends Servlet {
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    private void displayNewEventPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+        render("event_new.jsp", request, response);
+    }
+
+    private void addEvent(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+        Event eventBuilt = EventHelper.build(request);
+
+        eventBuilt
+            .validate()
+            .apply(success -> {
+                Event event = eventService.addEvent(success.getEntity());
+
+                // TODO : control if there is no error (currently 500 if failed)
+
+                request.setAttribute("event", event);
+                render("event.jsp", request, response);
+            }, error -> {
+                request.setAttribute("event", error.getEntity());
+                render("event_new.jsp", request, response, new Alert(Alert.AlertType.DANGER, error.getMessage()));
+            });
     }
 
     private void addParticipant(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {

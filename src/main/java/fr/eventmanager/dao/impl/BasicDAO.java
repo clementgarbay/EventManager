@@ -1,8 +1,8 @@
 package fr.eventmanager.dao.impl;
 
+import fr.eventmanager.dao.PersistenceManager;
 import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IBasicDAO;
-import fr.eventmanager.dao.PersistenceManager;
 import fr.eventmanager.entity.StorableEntity;
 
 import javax.persistence.Query;

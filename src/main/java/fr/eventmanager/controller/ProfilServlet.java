@@ -1,6 +1,6 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ public class ProfilServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        bind(HttpMethod.GET, Path.PROFIL, false).to("displayProfilPage");
+        bind(HttpMethod.GET, Path.PROFIL).to("displayProfilPage");
     }
 
     private void displayProfilPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {

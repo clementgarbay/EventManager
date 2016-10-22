@@ -29,6 +29,11 @@ public class EventService implements IEventService {
     }
 
     @Override
+    public Event addEvent(Event event) {
+        return eventDAO.create(event);
+    }
+
+    @Override
     public boolean addParticipant(int eventId, int userId) {
         return eventDAO.addParticipant(eventId, userId);
     }

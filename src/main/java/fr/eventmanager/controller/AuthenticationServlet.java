@@ -2,10 +2,11 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.dao.impl.UserDAO;
 import fr.eventmanager.entity.User;
+import fr.eventmanager.security.SecurityService;
 import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.Alert;
-import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
@@ -36,7 +37,7 @@ public class AuthenticationServlet extends Servlet {
     }
 
     private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
-        if (!securityService.isLoggedIn(request)) {
+        if (!SecurityService.isLogged(request)) {
             render("login.jsp", request, response);
         } else {
             render("events.jsp", request, response);
@@ -51,7 +52,7 @@ public class AuthenticationServlet extends Servlet {
             Optional<User> userOptional = userService.getUserByEmail(email);
 
             if (userOptional.isPresent()) { // useless ?
-                securityService.setLogged(request, true, userOptional.get());
+                SecurityService.setLoggedUser(request, userOptional.get());
                 render("events.jsp", request, response);
             } else {
                 render("login.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
@@ -62,7 +63,7 @@ public class AuthenticationServlet extends Servlet {
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        securityService.clear(request);
+        SecurityService.clear(request);
         render("login.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
     }
 

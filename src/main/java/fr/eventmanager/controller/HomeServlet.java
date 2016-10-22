@@ -1,6 +1,6 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.utils.HttpMethod;
+import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;
@@ -23,8 +23,6 @@ public class HomeServlet extends Servlet {
     }
 
     private void displayHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("ok!");
-
         render("events.jsp", request, response);
     }
 }
