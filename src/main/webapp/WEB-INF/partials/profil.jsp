@@ -22,7 +22,7 @@
                         </li>
                         <li>
                             <a href="#events_participant" data-toggle="tab" aria-expanded="false">
-                                <i class="fa fa-calendar-o"></i> Événements auquels je participe
+                                <i class="fa fa-calendar-o"></i> Événements auxquels je participe
                                 <div class="ripple-container"></div>
                             </a>
                         </li>

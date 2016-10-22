@@ -3,19 +3,19 @@ package fr.eventmanager.utils.validator;
 /**
  * @author Clément Garbay
  */
-public class Message {
+public class ValidationMessage {
 
     private String message;
 
-    public Message(String message) {
+    public ValidationMessage(String message) {
         this.message = message;
     }
 
-    public Message(ErrorMessage errorMessage, Object... args) {
+    public ValidationMessage(ErrorMessage errorMessage, Object... args) {
         this(String.format(errorMessage.getMessage(), args));
     }
 
-    public Message() {
+    public ValidationMessage() {
         this("");
     }
 

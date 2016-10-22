@@ -6,11 +6,11 @@ package fr.eventmanager.utils.validator;
 public class ValidatorResult<T> {
 
     private T entity;
-    private Message message;
+    private ValidationMessage validationMessage;
 
-    public ValidatorResult(T entity, Message message) {
+    public ValidatorResult(T entity, ValidationMessage validationMessage) {
         this.entity = entity;
-        this.message = message;
+        this.validationMessage = validationMessage;
     }
 
     public T getEntity() {
@@ -18,6 +18,6 @@ public class ValidatorResult<T> {
     }
 
     public String getMessage() {
-        return message.getMessage();
+        return validationMessage.getMessage();
     }
 }
