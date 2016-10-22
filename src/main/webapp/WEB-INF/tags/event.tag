@@ -1,6 +1,8 @@
-<%@ taglib prefix="app" uri="application" %>
+<%@ tag pageEncoding="UTF-8" %>
+
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="app" uri="application" %>
 
 <%@ attribute name="event" type="fr.eventmanager.entity.Event" required="true" description="L'évènement à afficher" rtexprvalue="true" %>
 
@@ -16,7 +18,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' h'h'" value="${event.date}" />
+                    <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' H'h'm" value="${event.date}" />
                 </div>
             </div>
         </div>

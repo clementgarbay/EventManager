@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
+<%@ taglib prefix="app" uri="application" %>
 
 <div class="col-sm-12">
     <div class="card">
@@ -24,12 +26,6 @@
                                 <div class="ripple-container"></div>
                             </a>
                         </li>
-                        <li style="float: right;">
-                            <a href="" data-toggle="modal" data-target="#newEvent">
-                                <i class="fa fa-plus"></i> Créer un événement
-                                <div class="ripple-container"></div>
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -38,7 +34,7 @@
         <div class="content">
             <div class="tab-content">
                 <div class="tab-pane active" id="profile">
-                    <h3>Profil</h3>
+                    <h4 style="margin-top: 0;">${SECURITY_LOGGED_USER.name} <small>${SECURITY_LOGGED_USER.email}</small></h4>
                 </div>
                 <div class="tab-pane" id="events_owner">
                     <table class="table">
@@ -122,46 +118,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="newEvent" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Créer un événement</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <input type="text" class="form-control" placeholder="Titre">
-                        <textarea class="form-control" placeholder="Description" rows="8"></textarea>
-                        <input type="text" class="form-control" placeholder="Lieu">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="control-label">Nombre de places</label>
-                            <input type="number" class="form-control">
-                            <span class="material-input"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label class="control-label">Date</label>
-                            <input type="date" class="form-control">
-                            <span class="material-input"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default btn-simple">Enregistrer</button>
-                <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>

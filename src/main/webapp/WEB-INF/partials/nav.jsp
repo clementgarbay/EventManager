@@ -19,7 +19,7 @@
                     </a>
                 </li>
                 <c:choose>
-                    <c:when test="${IS_LOGGED}">
+                    <c:when test="${SECURITY_IS_LOGGED}">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-cog"></i>
@@ -27,6 +27,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="<app:getUrl pathId="PROFIL"/>">Profil</a></li>
+                                <li><a href="<app:getUrl pathId="NEW_EVENT"/>"><i class="fa fa-plus"></i> Créer un événement</a></li>
                                 <li class="divider"></li>
                                 <li><a href="<app:getUrl pathId="LOGOUT"/>">Se déconnecter</a></li>
                             </ul>

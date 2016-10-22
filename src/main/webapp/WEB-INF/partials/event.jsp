@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -11,7 +12,7 @@
         </div>
         <div class="col-sm-3 card-infos">
             <h3 style="margin-top: 0;">Date et heure</h3>
-            <p><fmt:formatDate pattern="dd/MM/yyyy',' h'h'" value="${event.date}" /></p>
+            <p><fmt:formatDate pattern="dd/MM/yyyy',' H'h'm" value="${event.date}" /></p>
 
             <h3>Lieu</h3>
             <p>${event.address.getName()}<br><small>${event.address.getCity()}, ${event.address.getZipCode()} (${event.address.getCountry()})</small></p>
@@ -44,7 +45,7 @@
             </div>
             <form class="form" method="post" action="">
                 <div class="modal-body">
-                    S'inscrire à l'événement <b>${event.title}</b> du <b><fmt:formatDate pattern="dd/MM/yyyy 'à' h'h'" value="${event.date}" /></b>.
+                    S'inscrire à l'événement <b>${event.title}</b> du <b><fmt:formatDate pattern="dd/MM/yyyy 'à' H'h'm" value="${event.date}" /></b>.
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group is-empty">
