@@ -1,16 +1,21 @@
 package fr.eventmanager.entity;
 
+import fr.eventmanager.utils.validator.*;
+import fr.eventmanager.utils.validator.Message.ErrorMessage;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 /**
  * @author Clément Garbay
  */
 @Entity
 @Table(name = Event.tableName)
-public class Event implements Serializable, StorableEntity {
+public class Event implements Serializable, StorableEntity, ValidatableEntity {
 
     static final String tableName = "Event";
 
@@ -106,6 +111,29 @@ public class Event implements Serializable, StorableEntity {
 
     public List<User> getParticipants() {
         return participants;
+    }
+
+    @Override
+    public EitherValidator<Event> validate() {
+
+        if ((isNull(title) || title.isEmpty()) ||
+            (isNull(description) || description.isEmpty()) ||
+            (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
+            isNull(maxTickets) ||
+            isNull(price) ||
+            isNull(owner)) {
+            return EitherValidator.error(this, new Message(ErrorMessage.ARE_EMPTY));
+        }
+
+        if (isNull(date)) {
+            return EitherValidator.error(this, new Message(ErrorMessage.IS_INCORRECT, "date & heure"));
+        }
+
+        if (String.valueOf(address.zipCode).length() > 5) {
+            return EitherValidator.error(this, new Message(ErrorMessage.IS_INCORRECT, "code postal"));
+        }
+
+        return EitherValidator.success(this);
     }
 
 }
