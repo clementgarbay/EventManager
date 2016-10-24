@@ -12,10 +12,6 @@ import java.util.Optional;
  */
 public class UserDAO extends BasicDAO<User> implements IUserDAO {
 
-    public UserDAO() {
-        super();
-    }
-
     public Optional<User> findByEmail(String email) {
         return findSingleByFields(new QueryField<>("email", email));
     }

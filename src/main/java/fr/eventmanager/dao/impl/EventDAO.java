@@ -12,10 +12,6 @@ import java.util.List;
  */
 public class EventDAO extends BasicDAO<Event> implements IEventDAO {
 
-    public EventDAO() {
-        super();
-    }
-
     @Override
     public List<Event> findByOwner(User user) {
         return findListByFields(new QueryField<>("owner", user));
@@ -23,11 +19,13 @@ public class EventDAO extends BasicDAO<Event> implements IEventDAO {
 
     @Override
     public List<Event> findByParticipant(User user) {
+        // TODO
         return null;
     }
 
     @Override
     public boolean addParticipant(int eventId, int userId) {
+        // TODO
         return false;
 //        Optional<Event> eventOptional = getById(eventId);
 //        eventOptional.ifPresent(event -> event.getParticipants().add(userId));

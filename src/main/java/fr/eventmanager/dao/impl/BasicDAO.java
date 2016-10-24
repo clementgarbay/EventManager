@@ -16,6 +16,8 @@ import javax.persistence.criteria.CriteriaUpdate;
 import java.util.*;
 
 /**
+ * Provides CRUD methods on a specific entity.
+ *
  * @author Clément Garbay
  */
 public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> implements IBasicDAO<T> {
