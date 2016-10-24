@@ -8,6 +8,7 @@ import javax.persistence.criteria.*;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Clément Garbay
@@ -102,8 +103,15 @@ public class DatabaseManager<T extends StorableEntity> {
         return (List<T>) query.getResultList();
     }
 
-    protected boolean executeQuery(Query query) {
-        return query.executeUpdate() != 0;
+    protected boolean proceedToQuery(Consumer<EntityManager> consumer) {
+        try {
+            begin();
+            consumer.accept(entityManager);
+            commit();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private Class<T> getEntityClassType() throws ClassNotFoundException {

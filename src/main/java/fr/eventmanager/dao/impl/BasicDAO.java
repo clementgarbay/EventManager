@@ -10,9 +10,7 @@ import fr.eventmanager.utils.persistence.DatabaseManager;
 import fr.eventmanager.utils.persistence.QueryField;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import java.util.*;
 
 /**
@@ -54,36 +52,22 @@ public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> imple
     }
 
     @Override
-    public T create(T element) {
-        begin();
-        entityManager.persist(element);
-        commit();
-        return element;
+    public boolean create(T element) {
+        return proceedToQuery(entityManager -> entityManager.persist(element));
     }
 
     @Override
     public boolean update(T element) {
         Optional<T> elementOptional = findById(element.getId());
-        if (!elementOptional.isPresent()) return false;
-
-        BaseQuery<T> baseQuery = getBaseQuery(Action.UPDATE);
-        CriteriaUpdate<T> criteriaUpdate = ((CriteriaUpdate<T>) baseQuery.getAbstractCriteria());
-
-        element.getFields().forEach(field -> criteriaUpdate.set(field.getName(), field.getValue()));
-
-        return executeQuery(entityManager.createQuery(criteriaUpdate));
+        return  elementOptional.isPresent() &&
+                proceedToQuery(entityManager -> entityManager.merge(element));
     }
 
     @Override
     public boolean delete(int id) {
         Optional<T> elementOptional = findById(id);
-        if (!elementOptional.isPresent()) return false;
-
-        BaseQuery<T> baseQuery = getBaseQuery(Action.DELETE);
-        CriteriaDelete<T> criteriaDelete = ((CriteriaDelete<T>) baseQuery.getAbstractCriteria())
-                .where(criteriaBuilder.equal(baseQuery.getEntity().get("id"), id));
-
-        return executeQuery(entityManager.createQuery(criteriaDelete));
+        return  elementOptional.isPresent() &&
+                proceedToQuery(entityManager -> entityManager.remove(elementOptional.get()));
     }
 
     private void populateWithDummyData() {

@@ -12,7 +12,7 @@
         </div>
         <div class="col-sm-3 card-infos">
             <h3 style="margin-top: 0;">Date et heure</h3>
-            <p><fmt:formatDate pattern="dd/MM/yyyy',' H'h'm" value="${event.date}" /></p>
+            <p><fmt:formatDate pattern="dd/MM/yyyy',' H'h'mm" value="${event.date}" /></p>
 
             <h3>Lieu</h3>
             <p>${event.address.getName()}<br><small>${event.address.getCity()}, ${event.address.getZipCode()} (${event.address.getCountry()})</small></p>

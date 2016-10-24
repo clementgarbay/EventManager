@@ -14,7 +14,7 @@ public interface IBasicDAO<T extends StorableEntity> {
     Optional<T> findSingleByFields(QueryField... fields);
     List<T> findAll();
     List<T> findListByFields(QueryField... fields);
-    T create(T element);
+    boolean create(T element);
     boolean update(T element);
     boolean delete(int id);
 }

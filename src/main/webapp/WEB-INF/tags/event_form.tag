@@ -28,7 +28,7 @@
     <div class="col-sm-2">
         <div class="form-group">
             <label class="control-label">Code postal</label>
-            <input type="number" name="address_zipCode" class="form-control" placeholder="44300" value="${event.address.zipCode}">
+            <input type="number" name="address_zipCode" min="0" class="form-control" placeholder="44300" value="${event.address.zipCode}">
             <span class="material-input"></span>
         </div>
     </div>
@@ -44,7 +44,7 @@
     <div class="col-sm-2">
         <div class="form-group">
             <label class="control-label">Prix du ticket</label>
-            <input type="number" name="price" min="0" class="form-control" placeholder="0" value="${event.price}">
+            <input type="number" name="price" min="0" class="form-control" placeholder="0.0" value="${event.price}">
             <span class="material-input"></span>
         </div>
     </div>

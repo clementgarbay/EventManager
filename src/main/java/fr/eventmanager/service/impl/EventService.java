@@ -29,7 +29,7 @@ public class EventService implements IEventService {
     }
 
     @Override
-    public Event addEvent(Event event) {
+    public boolean addEvent(Event event) {
         return eventDAO.create(event);
     }
 

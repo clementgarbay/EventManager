@@ -1,6 +1,5 @@
 package fr.eventmanager.entity;
 
-import fr.eventmanager.utils.Field;
 import fr.eventmanager.utils.validator.EitherValidatorResult;
 import fr.eventmanager.utils.validator.ValidatableEntity;
 import fr.eventmanager.utils.validator.ValidationMessage;
@@ -8,7 +7,6 @@ import fr.eventmanager.utils.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -132,25 +130,11 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
     }
 
     @Override
-    public List<Field> getFields() {
-        return new ArrayList<Field>() {{
-            add(new Field<>(fieldTitle, title));
-            add(new Field<>(fieldDescription, description));
-            add(new Field<>(fieldDate, date));
-            add(new Field<>(fieldAddress, address));
-            add(new Field<>(fieldMaxTickets, maxTickets));
-            add(new Field<>(fieldPrice, price));
-            add(new Field<>(fieldOwner, owner));
-            add(new Field<>(fieldParticipants, participants));
-        }};
-    }
-
-    @Override
     public EitherValidatorResult<Event> validate() {
 
         if ((isNull(title) || title.isEmpty()) ||
             (isNull(description) || description.isEmpty()) ||
-            (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
+            (isNull(address) || isNull(address.zipCode) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
             isNull(maxTickets) ||
             isNull(price) ||
             isNull(owner)) {
@@ -158,11 +142,11 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
         }
 
         if (isNull(date)) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "date & heure"));
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "\"Date & heure\""));
         }
 
-        if (String.valueOf(address.zipCode).length() > 5) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "code postal"));
+        if (String.valueOf(address.zipCode).length() != 5) {
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "\"Code postal\""));
         }
 
         return EitherValidatorResult.success();

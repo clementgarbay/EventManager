@@ -82,12 +82,13 @@ public class EventsServlet extends Servlet {
         eventBuilt
             .validate()
             .apply(success -> {
-                Event event = eventService.addEvent(eventBuilt);
+                request.setAttribute("event", eventBuilt);
 
-                // TODO : control if there is no error (currently 500 if failed)
-
-                request.setAttribute("event", event);
-                render("event.jsp", request, response);
+                if (eventService.addEvent(eventBuilt)) {
+                    render("event.jsp", request, response);
+                } else {
+                    render("event_new.jsp", request, response, new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
+                }
             }, error -> {
                 request.setAttribute("event", eventBuilt);
                 render("event_new.jsp", request, response, new Alert(AlertType.DANGER, error.getMessage()));
@@ -107,6 +108,7 @@ public class EventsServlet extends Servlet {
                 .validate()
                 .apply(success -> {
                     request.setAttribute("event", modifiedEventBuilt);
+
                     if (eventService.updateEvent(modifiedEventBuilt)) {
                         render("event.jsp", request, response);
                     } else {

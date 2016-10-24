@@ -1,6 +1,5 @@
 package fr.eventmanager.entity;
 
-import fr.eventmanager.utils.Field;
 import fr.eventmanager.utils.validator.EitherValidatorResult;
 import fr.eventmanager.utils.validator.ValidatableEntity;
 import fr.eventmanager.utils.validator.ValidationMessage;
@@ -11,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import static java.util.Objects.isNull;
 
@@ -94,17 +91,6 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
 
     public boolean isRegistered() {
         return registered;
-    }
-
-    @Override
-    public List<Field> getFields() {
-        return new ArrayList<Field>() {{
-            add(new Field<>(fieldName, name));
-            add(new Field<>(fieldEmail, email));
-            add(new Field<>(fieldPassword, password));
-            add(new Field<>(fieldCompany, company));
-            add(new Field<>(fieldRegistered, registered));
-        }};
     }
 
     @Override
