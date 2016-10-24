@@ -16,7 +16,7 @@
             <property name="javax.persistence.jdbc.user"     value="eventmanager" />
             <property name="javax.persistence.jdbc.password" value="J4ebEPQIw9aBlN0E" />
             <property name="hibernate.dialect"               value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto"          value="update"/>
+            <property name="hibernate.hbm2ddl.auto"          value="create-drop"/>
             <property name="hibernate.show_sql"              value="true"/>
             <property name="hibernate.flushMode"             value="FLUSH_AUTO" />
         </properties>
