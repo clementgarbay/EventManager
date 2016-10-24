@@ -154,18 +154,18 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
             isNull(maxTickets) ||
             isNull(price) ||
             isNull(owner)) {
-            return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.ARE_EMPTY));
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.ARE_EMPTY));
         }
 
         if (isNull(date)) {
-            return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.IS_INCORRECT, "date & heure"));
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "date & heure"));
         }
 
         if (String.valueOf(address.zipCode).length() > 5) {
-            return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.IS_INCORRECT, "code postal"));
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "code postal"));
         }
 
-        return EitherValidatorResult.success(this);
+        return EitherValidatorResult.success();
     }
 
 }

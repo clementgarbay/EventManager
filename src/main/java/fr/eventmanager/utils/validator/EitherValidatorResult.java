@@ -12,31 +12,28 @@ import java.util.function.Consumer;
  */
 public class EitherValidatorResult<T extends ValidatableEntity> {
 
-    private T entity;
-
     private Optional<ValidationMessage> success;
     private Optional<ValidationMessage> error;
 
-    private EitherValidatorResult(T entity, Optional<ValidationMessage> success, Optional<ValidationMessage> error) {
-        this.entity = entity;
+    private EitherValidatorResult(Optional<ValidationMessage> success, Optional<ValidationMessage> error) {
         this.success = success;
         this.error = error;
     }
 
-    public static <T extends ValidatableEntity> EitherValidatorResult<T> success(T entity, ValidationMessage success) {
-        return new EitherValidatorResult<>(entity, Optional.of(success), Optional.empty());
+    public static <T extends ValidatableEntity> EitherValidatorResult<T> success(ValidationMessage success) {
+        return new EitherValidatorResult<>(Optional.of(success), Optional.empty());
     }
 
-    public static <T extends ValidatableEntity> EitherValidatorResult<T> success(T entity) {
-        return new EitherValidatorResult<>(entity, Optional.of(new ValidationMessage()), Optional.empty());
+    public static <T extends ValidatableEntity> EitherValidatorResult<T> success() {
+        return new EitherValidatorResult<>(Optional.of(new ValidationMessage()), Optional.empty());
     }
 
-    public static <T extends ValidatableEntity> EitherValidatorResult<T> error(T entity, ValidationMessage error) {
-        return new EitherValidatorResult<>(entity, Optional.empty(), Optional.of(error));
+    public static <T extends ValidatableEntity> EitherValidatorResult<T> error(ValidationMessage error) {
+        return new EitherValidatorResult<>(Optional.empty(), Optional.of(error));
     }
 
-    public void apply(Consumer<? super ValidatorResult<T>> successConsumer, Consumer<? super ValidatorResult<T>> errorConsumer) {
-        if (success.isPresent()) successConsumer.accept(new ValidatorResult<>(entity, success.get()));
-        if (error.isPresent()) errorConsumer.accept(new ValidatorResult<>(entity, error.get()));
+    public void apply(Consumer<? super ValidationMessage> successConsumer, Consumer<? super ValidationMessage> errorConsumer) {
+        success.ifPresent(successConsumer);
+        error.ifPresent(errorConsumer);
     }
 }

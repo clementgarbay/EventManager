@@ -113,13 +113,13 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
         if ((isNull(name) || name.isEmpty()) ||
             (isNull(email) || email.isEmpty()) ||
             (isNull(password) || password.isEmpty())) {
-            return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.ARE_EMPTY));
+            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.ARE_EMPTY));
         }
 
         if (String.valueOf(password).length() > 8) {
-            return EitherValidatorResult.error(this, new ValidationMessage("Le mot de passe est trop court."));
+            return EitherValidatorResult.error(new ValidationMessage("Le mot de passe est trop court."));
         }
 
-        return EitherValidatorResult.success(this);
+        return EitherValidatorResult.success();
     }
 }
