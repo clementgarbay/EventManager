@@ -2,6 +2,7 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
+import fr.eventmanager.utils.router.WrappedHttpServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,10 +20,13 @@ public class HomeServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        bind(HttpMethod.GET, Path.HOME, false).to("displayHomePage");
+        bind(HttpMethod.GET, Path.HOME, false).to(this::displayHomePage);
     }
 
-    private void displayHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayHomePage(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         render("events.jsp", request, response);
     }
 }

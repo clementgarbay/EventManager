@@ -9,6 +9,7 @@ import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.Alert.AlertType;
 import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
+import fr.eventmanager.utils.router.WrappedHttpServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,21 +35,28 @@ public class EventsServlet extends Servlet {
 
         this.eventService = new EventService(new EventDAO());
 
-        bind(HttpMethod.GET, Path.EVENTS, false).to("displayEventsPage");
-        bind(HttpMethod.GET, Path.EVENT, false).to("displayEventPage");
-        bind(HttpMethod.GET, Path.NEW_EVENT).to("displayNewEventPage");
-        bind(HttpMethod.GET, Path.EDIT_EVENT).to("displayEditEventPage");
-        bind(HttpMethod.POST, Path.NEW_EVENT).to("addEvent");
-        bind(HttpMethod.POST, Path.EDIT_EVENT).to("editEvent");
-        bind(HttpMethod.POST, Path.EVENT, false).to("addParticipant");
+        bind(HttpMethod.GET, Path.EVENTS, false).to(this::displayEventsPage);
+        bind(HttpMethod.GET, Path.EVENT, false).to(this::displayEventPage);
+        bind(HttpMethod.GET, Path.NEW_EVENT).to(this::displayNewEventPage);
+        bind(HttpMethod.GET, Path.EDIT_EVENT).to(this::displayEditEventPage);
+        bind(HttpMethod.POST, Path.NEW_EVENT).to(this::addEvent);
+        bind(HttpMethod.POST, Path.EDIT_EVENT).to(this::editEvent);
+        bind(HttpMethod.POST, Path.EVENT, false).to(this::addParticipant);
     }
 
-    private void displayEventsPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void displayEventsPage(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         request.setAttribute("events", eventService.getEvents());
         render("events.jsp", request, response);
     }
 
-    private void displayEventPage(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void displayEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+        Map<String, String> parameters = wrappedHttpServlet.getParameters();
+
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
@@ -60,11 +68,18 @@ public class EventsServlet extends Servlet {
         }
     }
 
-    private void displayNewEventPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+    private void displayNewEventPage(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         render("event_new.jsp", request, response);
     }
 
-    private void displayEditEventPage(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void displayEditEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+        Map<String, String> parameters = wrappedHttpServlet.getParameters();
+
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
@@ -76,7 +91,10 @@ public class EventsServlet extends Servlet {
         }
     }
 
-    private void addEvent(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+    private void addEvent(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         Event eventBuilt = EventHelper.build(request);
 
         eventBuilt
@@ -95,7 +113,11 @@ public class EventsServlet extends Servlet {
             });
     }
 
-    private void editEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void editEvent(WrappedHttpServlet wrappedHttpServlet) throws IOException {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+        Map<String, String> parameters = wrappedHttpServlet.getParameters();
+
         int eventId = Integer.parseInt(parameters.get("eventId"));
 
         Optional<Event> eventOptional = eventService.getEvent(eventId);
@@ -123,7 +145,10 @@ public class EventsServlet extends Servlet {
         }
     }
 
-    private void addParticipant(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+    private void addParticipant(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+        Map<String, String> parameters = wrappedHttpServlet.getParameters();
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
