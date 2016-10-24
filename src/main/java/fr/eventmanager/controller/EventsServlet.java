@@ -6,6 +6,7 @@ import fr.eventmanager.entity.helper.EventHelper;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
+import fr.eventmanager.utils.Alert.AlertType;
 import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
 
@@ -31,13 +32,14 @@ public class EventsServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        // TODO : use injection dependency
         this.eventService = new EventService(new EventDAO());
 
         bind(HttpMethod.GET, Path.EVENTS, false).to("displayEventsPage");
         bind(HttpMethod.GET, Path.EVENT, false).to("displayEventPage");
-        bind(HttpMethod.GET, Path.NEW_EVENT, false).to("displayNewEventPage");
+        bind(HttpMethod.GET, Path.NEW_EVENT).to("displayNewEventPage");
+        bind(HttpMethod.GET, Path.EDIT_EVENT).to("displayEditEventPage");
         bind(HttpMethod.POST, Path.NEW_EVENT).to("addEvent");
+        bind(HttpMethod.POST, Path.EDIT_EVENT).to("editEvent");
         bind(HttpMethod.POST, Path.EVENT, false).to("addParticipant");
     }
 
@@ -62,6 +64,18 @@ public class EventsServlet extends Servlet {
         render("event_new.jsp", request, response);
     }
 
+    private void displayEditEventPage(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+        int eventId = Integer.parseInt(parameters.get("eventId"));
+        Optional<Event> eventOptional = eventService.getEvent(eventId);
+
+        if (eventOptional.isPresent()) {
+            request.setAttribute("event", eventOptional.get());
+            render("event_edit.jsp", request, response);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
     private void addEvent(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
         Event eventBuilt = EventHelper.build(request);
 
@@ -76,8 +90,35 @@ public class EventsServlet extends Servlet {
                 render("event.jsp", request, response);
             }, error -> {
                 request.setAttribute("event", error.getEntity());
-                render("event_new.jsp", request, response, new Alert(Alert.AlertType.DANGER, error.getMessage()));
+                render("event_new.jsp", request, response, new Alert(AlertType.DANGER, error.getMessage()));
             });
+    }
+
+    private void editEvent(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
+        int eventId = Integer.parseInt(parameters.get("eventId"));
+
+        Optional<Event> eventOptional = eventService.getEvent(eventId);
+        Event modifiedEventBuilt = EventHelper.build(request);
+
+        if (eventOptional.isPresent()) {
+            modifiedEventBuilt.setId(eventId);
+
+            modifiedEventBuilt
+                .validate()
+                .apply(success -> {
+                    request.setAttribute("event", success.getEntity());
+                    if (eventService.updateEvent(success.getEntity())) {
+                        render("event.jsp", request, response);
+                    } else {
+                        render("event_edit.jsp", request, response, new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
+                    }
+                }, error -> {
+                    request.setAttribute("event", error.getEntity());
+                    render("event_edit.jsp", request, response, new Alert(AlertType.DANGER, error.getMessage()));
+                });
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     private void addParticipant(HttpServletRequest request,  HttpServletResponse response, Map<String, String> parameters) throws ServletException, IOException {
@@ -95,12 +136,12 @@ public class EventsServlet extends Servlet {
 
                 // eventService.addParticipant()
 
-                render("event.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Inscription validée. Vous allez recevoir un email de confirmation."));
+                render("event.jsp", request, response, new Alert(AlertType.SUCCESS, "Inscription validée. Vous allez recevoir un email de confirmation."));
             } else {
-                render("event.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Les emails doivent être identiques."));
+                render("event.jsp", request, response, new Alert(AlertType.DANGER, "Les emails doivent être identiques."));
             }
         } else {
-            render("event.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Tous les champs doivent être remplis."));
+            render("event.jsp", request, response, new Alert(AlertType.DANGER, "Tous les champs doivent être remplis."));
         }
     }
 

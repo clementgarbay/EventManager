@@ -17,6 +17,7 @@ public enum Path {
     EVENTS (PathConstants.EVENTS, Pattern.compile("/")),
     EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)")),
     NEW_EVENT (PathConstants.EVENTS, Pattern.compile("/new")),
+    EDIT_EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/edit")),
     PROFIL (PathConstants.PROFIL, Pattern.compile("/"));
 
     private final String pathBase;

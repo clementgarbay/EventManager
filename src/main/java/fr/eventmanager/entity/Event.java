@@ -90,6 +90,10 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
 
     public Event() {}
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     @Override
     public Integer getId() {
         return id;
@@ -145,11 +149,11 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
     public EitherValidatorResult<Event> validate() {
 
         if ((isNull(title) || title.isEmpty()) ||
-                (isNull(description) || description.isEmpty()) ||
-                (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
-                isNull(maxTickets) ||
-                isNull(price) ||
-                isNull(owner)) {
+            (isNull(description) || description.isEmpty()) ||
+            (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
+            isNull(maxTickets) ||
+            isNull(price) ||
+            isNull(owner)) {
             return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.ARE_EMPTY));
         }
 

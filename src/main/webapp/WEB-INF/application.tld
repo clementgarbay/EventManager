@@ -34,9 +34,12 @@
     </tag>
 
     <tag-file>
-
         <name>event</name>
         <path>/WEB-INF/tags/event.tag</path>
+    </tag-file>
 
+    <tag-file>
+        <name>eventForm</name>
+        <path>/WEB-INF/tags/event_form.tag</path>
     </tag-file>
 </taglib>

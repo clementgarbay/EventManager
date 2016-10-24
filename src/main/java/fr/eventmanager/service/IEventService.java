@@ -13,4 +13,5 @@ public interface IEventService {
     Optional<Event> getEvent(int eventId);
     Event addEvent(Event event);
     boolean addParticipant(int eventId, int userId);
+    boolean updateEvent(Event event);
 }
