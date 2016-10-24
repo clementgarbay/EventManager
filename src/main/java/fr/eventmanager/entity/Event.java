@@ -1,10 +1,14 @@
 package fr.eventmanager.entity;
 
-import fr.eventmanager.utils.validator.*;
+import fr.eventmanager.utils.Field;
+import fr.eventmanager.utils.validator.EitherValidatorResult;
+import fr.eventmanager.utils.validator.ValidatableEntity;
+import fr.eventmanager.utils.validator.ValidationMessage;
 import fr.eventmanager.utils.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,33 +23,43 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
 
     static final String tableName = "Event";
 
+    private static final String fieldId = "id";
+    private static final String fieldTitle = "title";
+    private static final String fieldDescription = "description";
+    private static final String fieldDate = "date";
+    private static final String fieldAddress = "address";
+    private static final String fieldMaxTickets = "maxTickets";
+    private static final String fieldPrice = "price";
+    private static final String fieldOwner = "owner";
+    private static final String fieldParticipants = "participants";
+
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = fieldId)
     private Integer id;
 
-    @Column(name = "title", nullable = false)
+    @Column(name = fieldTitle, nullable = false)
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
+    @Column(name = fieldDescription, columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = "date", nullable = false)
+    @Column(name = fieldDate, nullable = false)
     private Date date;
 
     @Embedded
-    @Column(name = "address", nullable = false)
+    @Column(name = fieldAddress, nullable = false)
     private Address address;
 
-    @Column(name = "maxTickets", nullable = false)
+    @Column(name = fieldMaxTickets, nullable = false)
     private Integer maxTickets;
 
-    @Column(name = "price", nullable = false)
+    @Column(name = fieldPrice, nullable = false)
     private Double price = 0.00;
 
     @ManyToOne
-    @JoinColumn(name="owner", nullable = false)
+    @JoinColumn(name = fieldOwner, nullable = false)
     private User owner;
 
     @ManyToMany
@@ -114,14 +128,28 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
     }
 
     @Override
+    public List<Field> getFields() {
+        return new ArrayList<Field>() {{
+            add(new Field<>(fieldTitle, title));
+            add(new Field<>(fieldDescription, description));
+            add(new Field<>(fieldDate, date));
+            add(new Field<>(fieldAddress, address));
+            add(new Field<>(fieldMaxTickets, maxTickets));
+            add(new Field<>(fieldPrice, price));
+            add(new Field<>(fieldOwner, owner));
+            add(new Field<>(fieldParticipants, participants));
+        }};
+    }
+
+    @Override
     public EitherValidatorResult<Event> validate() {
 
         if ((isNull(title) || title.isEmpty()) ||
-            (isNull(description) || description.isEmpty()) ||
-            (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
-            isNull(maxTickets) ||
-            isNull(price) ||
-            isNull(owner)) {
+                (isNull(description) || description.isEmpty()) ||
+                (isNull(address) || address.name.isEmpty() || address.city.isEmpty() || address.country.isEmpty()) ||
+                isNull(maxTickets) ||
+                isNull(price) ||
+                isNull(owner)) {
             return EitherValidatorResult.error(this, new ValidationMessage(ErrorMessage.ARE_EMPTY));
         }
 

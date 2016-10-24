@@ -2,11 +2,11 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.dao.impl.EventDAO;
 import fr.eventmanager.entity.Event;
+import fr.eventmanager.entity.helper.EventHelper;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.router.HttpMethod;
-import fr.eventmanager.entity.helper.EventHelper;
 import fr.eventmanager.utils.router.Path;
 
 import javax.servlet.ServletException;

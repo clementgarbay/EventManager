@@ -1,64 +1,61 @@
 package fr.eventmanager.dao.impl;
 
-import fr.eventmanager.dao.PersistenceManager;
-import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IBasicDAO;
+import fr.eventmanager.entity.Address;
+import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.StorableEntity;
+import fr.eventmanager.entity.User;
+import fr.eventmanager.utils.persistence.BaseQuery;
+import fr.eventmanager.utils.persistence.DatabaseManager;
+import fr.eventmanager.utils.persistence.QueryField;
 
 import javax.persistence.Query;
-import javax.persistence.criteria.*;
-import java.lang.reflect.ParameterizedType;
-import java.util.List;
-import java.util.Optional;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import java.util.*;
 
 /**
  * @author Clément Garbay
  */
-public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
-
-    private final PersistenceManager persistenceManager = PersistenceManager.getInstance();
-
-    Class<T> entityClassType;
-    CriteriaBuilder criteriaBuilder;
+public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> implements IBasicDAO<T> {
 
     public BasicDAO() {
-        try {
-            this.entityClassType = this.getEntityClassType();
-            this.criteriaBuilder = persistenceManager.getCriteriaBuilder();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        super("EventManagerUnit");
+
+        populateWithDummyData();
     }
 
     @Override
     public Optional<T> findById(int id) {
-        return findSingleByFields(new DbField("id", id));
+        return findSingleByFields(new QueryField<>("id", id));
     }
 
     @Override
-    public Optional<T> findSingleByFields(DbField... fields) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQueryByFields(fields);
-        return Optional.ofNullable(getSingleResult(criteriaQuery));
+    public Optional<T> findSingleByFields(QueryField... fields) {
+        Query query = getReadQueryBy(fields);
+        return Optional.ofNullable(getSingleResult(query));
     }
 
     @Override
     public List<T> findAll() {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
-        criteriaQuery.select(getEntity(criteriaQuery));
-        return getResultList(criteriaQuery);
+        BaseQuery<T> baseQuery = getBaseQuery(Action.READ);
+        CriteriaQuery<T> abstractCriteria = ((CriteriaQuery<T>) baseQuery.getAbstractCriteria())
+                .select(baseQuery.getEntity());
+        return getResultList(entityManager.createQuery(abstractCriteria));
     }
 
     @Override
-    public List<T> findListByFields(DbField... fields) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQueryByFields(fields);
-        return getResultList(criteriaQuery);
+    public List<T> findListByFields(QueryField... fields) {
+        Query query = getReadQueryBy(fields);
+        return getResultList(query);
     }
 
     @Override
     public T create(T element) {
-        persistenceManager.getEntityManager().getTransaction().begin();
-        persistenceManager.getEntityManager().persist(element);
-        persistenceManager.getEntityManager().getTransaction().commit();
+        begin();
+        entityManager.persist(element);
+        commit();
         return element;
     }
 
@@ -66,86 +63,45 @@ public class BasicDAO<T extends StorableEntity> implements IBasicDAO<T> {
     public boolean update(T element) {
         Optional<T> elementOptional = findById(element.getId());
         if (!elementOptional.isPresent()) return false;
-        persistenceManager.getEntityManager().getTransaction().begin();
-        persistenceManager.getEntityManager().merge(element);
-        persistenceManager.getEntityManager().getTransaction().commit();
-        return true;
+
+        BaseQuery<T> baseQuery = getBaseQuery(Action.UPDATE);
+        CriteriaUpdate<T> criteriaUpdate = ((CriteriaUpdate<T>) baseQuery.getAbstractCriteria());
+
+        element.getFields().forEach(field -> criteriaUpdate.set(field.getName(), field.getValue()));
+
+        return executeQuery(entityManager.createQuery(criteriaUpdate));
     }
 
     @Override
     public boolean delete(int id) {
         Optional<T> elementOptional = findById(id);
         if (!elementOptional.isPresent()) return false;
-        CriteriaDelete<T> criteriaDelete = createCriteriaDelete();
-        criteriaDelete.where(criteriaBuilder.equal(getEntity(criteriaDelete).get("id"), id));
-        return execute(criteriaDelete) != 0;
+
+        BaseQuery<T> baseQuery = getBaseQuery(Action.DELETE);
+        CriteriaDelete<T> criteriaDelete = ((CriteriaDelete<T>) baseQuery.getAbstractCriteria())
+                .where(criteriaBuilder.equal(baseQuery.getEntity().get("id"), id));
+
+        return executeQuery(entityManager.createQuery(criteriaDelete));
     }
 
-    private Class<T> getEntityClassType() throws ClassNotFoundException {
-        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    private void populateWithDummyData() {
+        User userClement = new User("Clément", "clementgarbay@gmail.com", "garbay", "Dictanova");
+        User userElie = new User("Elie", "elie.gourdeau@gmail.com", "gourdeau", "Orange");
+        User userPaul = new User("Paul", "paul.defois@gmail.com", "defois", "Kosmos");
+
+        Event event1 = new Event("Gouvernance et transmission dans les entreprises familiales",  "Comment la gouvernance peut-elle favoriser la transmission dans les entreprises familiales ? Quels outils pour quelle gouvernance ? Comment les outils de gouvernance peuvent permettre d’anticiper la transmission de l’entreprise ? Sophie Bellon, Présidente du Conseil d'Administration de Sodexo sera l'invitée d'honneur de cette conférence.Son intervention sera suivie d'une table ronde où témoigneront chefs d'entreprises familiales et experts pour échanger sur les différents outils facilitant l’organisation de la transmission par la gouvernance.", randomDate(), new Address("Audencia Business School, 8 route de la jonelière", "Nantes", 44300, "France"), 50, userClement);
+        Event event2 = new Event("Le carrefour de la gouvernance - Entreprises",  "NAPF, Audencia, IFA et APIA ont le plaisir de vous inviter à cette soirée exceptionnelle dédiée aux rencontres entre entreprises et administrateurs le jeudi 20 octobre à 18h30 au Château de la Gournerie.", randomDate(), new Address("Château de la Gournerie", "Saint-Herblain", 44800, "France"), 35, userElie);
+        Event event3 = new Event("Formation Zoho CRM NANTES",  "Cette formation s'adresse à toute personne souhaitant avoir les bons réflexes pour acquérir les bonnes pratiques d'utilisation pour les commerciaux (atelier du matin), jusqu'à l'optimisation sa base Zoho CRM, depuis l'adaptation du paramétrage standard au métier de l'entreprise (atelier de l'après-midi).", randomDate(), new Address("BIOBURO, 14 rue François Evellin", "Nantes", 44000, "France"), 45, userPaul);
+
+        begin();
+
+        Arrays.asList(userClement, userElie, userPaul, event1, event2, event3).forEach(element -> entityManager.persist(element));
+
+        commit();
     }
 
-    Root<T> getEntity(CriteriaQuery<T> criteriaQuery) {
-        return criteriaQuery.from(entityClassType);
-    }
-
-    Root<T> getEntity(CriteriaUpdate<T> criteriaQuery) {
-        return criteriaQuery.from(entityClassType);
-    }
-
-    Root<T> getEntity(CriteriaDelete<T> criteriaQuery) {
-        return criteriaQuery.from(entityClassType);
-    }
-
-    CriteriaQuery<T> createCriteriaQuery() {
-        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClassType);
-        return criteriaQuery.select(getEntity(criteriaQuery));
-    }
-
-    private CriteriaQuery<T> createCriteriaQueryByFields(DbField... fields) {
-        CriteriaQuery<T> criteriaQuery = createCriteriaQuery();
-        for (DbField field : fields) {
-            criteriaQuery.where(criteriaBuilder.equal(getEntity(criteriaQuery).get(field.getFieldName()), field.getFieldValue()));
-        }
-        return criteriaQuery;
-    }
-
-    private CriteriaUpdate<T> createCriteriaUpdate() {
-        return criteriaBuilder.createCriteriaUpdate(entityClassType);
-    }
-
-    private CriteriaDelete<T> createCriteriaDelete() {
-        return criteriaBuilder.createCriteriaDelete(entityClassType);
-    }
-
-    private int execute(CriteriaQuery<T> criteriaQuery) {
-        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        return query.executeUpdate();
-    }
-
-    private int execute(CriteriaUpdate<T> criteriaQuery) {
-        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        return query.executeUpdate();
-    }
-
-    private int execute(CriteriaDelete<T> criteriaQuery) {
-        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        return query.executeUpdate();
-    }
-
-    private T getSingleResult(CriteriaQuery<T> criteriaQuery) {
-        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        query.setMaxResults(1);
-        List<T> list = query.getResultList();
-        if (list == null || list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
-    }
-
-    private List<T> getResultList(CriteriaQuery<T> criteriaQuery) {
-        Query query = persistenceManager.getEntityManager().createQuery(criteriaQuery);
-        return (List<T>) query.getResultList();
+    private Date randomDate() {
+        return new Date((long) (1293861599 + new Random().nextDouble() * 60 * 60 * 24 * 365));
     }
 
 }

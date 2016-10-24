@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 public class UserHelper {
 
     public static User build(HttpServletRequest request) {
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String company = request.getParameter("company");
 
-        // TODO
-
-        return new User();
+        return new User(name, email, password, company);
     }
 }

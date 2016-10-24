@@ -1,8 +1,8 @@
 package fr.eventmanager.dao.impl;
 
-import fr.eventmanager.dao.DbField;
 import fr.eventmanager.dao.IUserDAO;
 import fr.eventmanager.entity.User;
+import fr.eventmanager.utils.persistence.QueryField;
 
 import java.util.Optional;
 
@@ -17,11 +17,11 @@ public class UserDAO extends BasicDAO<User> implements IUserDAO {
     }
 
     public Optional<User> findByEmail(String email) {
-        return findSingleByFields(new DbField("email", email));
+        return findSingleByFields(new QueryField<>("email", email));
     }
 
     public Optional<User> findByEmailAndPassword(String email, String password) {
-        return findSingleByFields(new DbField("email", email), new DbField("password", password));
+        return findSingleByFields(new QueryField<>("email", email), new QueryField<>("password", password));
     }
 
 }
