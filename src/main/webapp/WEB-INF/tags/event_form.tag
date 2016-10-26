@@ -51,7 +51,7 @@
     <div class="col-sm-2 col-sm-offset-2">
         <div class="form-group">
             <label class="control-label">Date & heure</label>
-            <input type="date" name="date_day" class="form-control" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${event.date}"/>">
+            <input type="text" name="date_day" class="datepicker form-control" placeholder="01/01/2016" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${event.date}"/>">
             <span class="material-input"></span>
         </div>
     </div>
@@ -63,3 +63,5 @@
         </div>
     </div>
 </div>
+
+<script>$('.datepicker').datepicker({weekStart: 1});</script>
