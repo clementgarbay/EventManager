@@ -7,7 +7,7 @@
 <%@ attribute name="event" type="fr.eventmanager.entity.Event" required="true" description="L'évènement à afficher" rtexprvalue="true" %>
 
 <div class="col-sm-4">
-    <a href="<app:getUrl pathId="EVENTS"/>${event.id}">
+    <a href="<app:getUrl pathId="EVENT" params="{eventId:${event.id}}"/>">
         <div class="card card-stats">
             <div class="card-header" data-background-color="purple">
                 <i class="material-icons">store</i>

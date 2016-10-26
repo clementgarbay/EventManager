@@ -28,7 +28,7 @@
             <h3>Participants</h3>
             <c:choose>
                 <c:when test="${nbParticipants > 0}">
-                    <p>${fn:length(event.participants)} personne(s) inscrite(s)<br><small>${remainingTickets} place(s) restante(s)</small></p>
+                    <p>${fn:length(event.participants)} personne(s) inscrite(s)<br><small class="text-muted"><i>${remainingTickets} place(s) restante(s)</i></small></p>
                 </c:when>
                 <c:otherwise>
                     <p>Aucun inscrit</p>
@@ -37,7 +37,7 @@
 
             <c:choose>
                 <c:when test="${SECURITY_IS_LOGGED && !event.isOwner(SECURITY_LOGGED_USER) && !event.isParticipant(SECURITY_LOGGED_USER) && remainingTickets > 0}">
-                    <form class="form" method="post" action="<app:getUrl pathId="EVENTS"/>${event.id}/subscribe">
+                    <form class="form" method="post" action="<app:getUrl pathId="EVENT_SUBSCRIBE" params="{eventId:${event.id}}"/>">
                         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 40px;">
                             <i class="fa fa-plus" style="margin-right: 5px;"></i> S'inscrire
                         </button>
@@ -53,7 +53,7 @@
                     <p class="text-center text-success" style="width: 100%; margin-top: 40px;">
                         <i class="fa fa-check" style="margin-right: 5px;"></i> Inscrit
                     </p>
-                    <form class="form" method="post" action="<app:getUrl pathId="EVENTS"/>${event.id}/unsubscribe">
+                    <form class="form" method="post" action="<app:getUrl pathId="EVENT_UNSUBSCRIBE" params="{eventId:${event.id}}"/>">
                         <button type="submit" class="btn btn-sm btn-danger" style="width: 100%; margin: 0;">
                             Se désinscrire
                         </button>
@@ -70,38 +70,3 @@
         </div>
     </div>
 </div>
-
-<%--<div class="modal fade" id="subscribeModal" style="display: none">--%>
-    <%--<div class="modal-dialog">--%>
-        <%--<div class="modal-content">--%>
-            <%--<div class="modal-header">--%>
-                <%--<button type="button" class="close" data-dismiss="modal">--%>
-                    <%--<i class="material-icons">clear</i>--%>
-                <%--</button>--%>
-                <%--<h4 class="modal-title">S'inscrire</h4>--%>
-            <%--</div>--%>
-            <%--<form class="form" method="post" action="">--%>
-                <%--<div class="modal-body">--%>
-                    <%--S'inscrire à l'événement <b>${event.title}</b> du <b><fmt:formatDate pattern="dd/MM/yyyy 'à' H'h'm" value="${event.date}" /></b>.--%>
-                    <%--<div class="row">--%>
-                        <%--<div class="col-sm-6">--%>
-                            <%--<div class="form-group is-empty">--%>
-                                <%--<input type="text" name="name" class="form-control" placeholder="Nom">--%>
-                            <%--</div>--%>
-                            <%--<div class="form-group is-empty">--%>
-                                <%--<input type="email" name="email" class="form-control" placeholder="Email">--%>
-                            <%--</div>--%>
-                            <%--<div class="form-group is-empty">--%>
-                                <%--<input type="email" name="confirm_email" class="form-control" placeholder="Confirmer l'email">--%>
-                            <%--</div>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-                <%--<div class="modal-footer">--%>
-                    <%--<button type="submit" class="btn btn-default btn-simple">S'inscrire</button>--%>
-                    <%--<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Fermer</button>--%>
-                <%--</div>--%>
-            <%--</form>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>

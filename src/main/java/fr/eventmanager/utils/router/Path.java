@@ -7,6 +7,8 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.util.Objects.isNull;
+
 /**
  * @author Clément Garbay
  */
@@ -43,6 +45,27 @@ public enum Path {
     }
 
     /**
+     * Replace pattern's named group with values and return the instantiate fullpath
+     *
+     * For instance, Path.EVENT_EDIT.getFullPath(Collections.singletonMap("eventId", 2))
+     * return "/events/2/edit"
+     */
+    public String getFullPath(Map<String, String> params) {
+        Matcher matcher = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>[a-zA-Z0-9\\\\+]*\\)").matcher(getFullPath());
+        StringBuffer fullPath = new StringBuffer();
+
+        while (matcher.find()) {
+            String key = matcher.group(1);
+            String value = params.get(key);
+            value = isNull(value) ? key : value;
+            matcher.appendReplacement(fullPath, value);
+        }
+        matcher.appendTail(fullPath);
+
+        return fullPath.toString();
+    }
+
+    /**
      * Extract parameters in a path string from a corresponding path pattern.
      *
      * For instance, Path.EVENT.extractParametersOf("/events/2")
@@ -60,9 +83,9 @@ public enum Path {
         return parameters;
     }
 
-    private Set<String> getNamedGroupCandidates(String regex) {
+    private Set<String> getNamedGroupCandidates(String path) {
         Set<String> namedGroups = new TreeSet<>();
-        Matcher matcher = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>").matcher(regex);
+        Matcher matcher = Pattern.compile("\\(\\?<([a-zA-Z][a-zA-Z0-9]*)>").matcher(path);
 
         while (matcher.find()) {
             namedGroups.add(matcher.group(1));

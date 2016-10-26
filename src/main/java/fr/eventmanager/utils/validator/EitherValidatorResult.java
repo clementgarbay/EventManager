@@ -2,7 +2,6 @@ package fr.eventmanager.utils.validator;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * @author Clément Garbay

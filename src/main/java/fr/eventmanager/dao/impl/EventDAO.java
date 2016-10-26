@@ -7,8 +7,7 @@ import fr.eventmanager.utils.persistence.BaseQuery;
 import fr.eventmanager.utils.persistence.QueryField;
 
 import javax.persistence.criteria.CriteriaQuery;
- import java.util.List;
-import java.util.Optional;
+import java.util.List;
 
 /**
  * @author Clément Garbay

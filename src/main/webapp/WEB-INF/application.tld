@@ -31,6 +31,14 @@
             <required>true</required>
             <type>fr.eventmanager.utils.router.Path</type>
         </attribute>
+
+        <attribute>
+            <name>params</name>
+            <description>Les valeurs (sous une chaine JSON) à insérer dans l'URL générée.</description>
+            <required>false</required>
+            <type>java.lang.String</type>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
     <tag-file>
