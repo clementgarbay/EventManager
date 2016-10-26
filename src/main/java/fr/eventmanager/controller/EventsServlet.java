@@ -49,7 +49,7 @@ public class EventsServlet extends Servlet {
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
         request.setAttribute("events", eventService.getEvents());
-        render("events.jsp", request, response);
+        render(request, response, "events.jsp");
     }
 
     private void displayEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -62,7 +62,7 @@ public class EventsServlet extends Servlet {
 
         if (eventOptional.isPresent()) {
             request.setAttribute("event", eventOptional.get());
-            render("event.jsp", request, response);
+            render(request, response, "event.jsp");
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
@@ -72,7 +72,7 @@ public class EventsServlet extends Servlet {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
-        render("event_new.jsp", request, response);
+        render(request, response, "event_new.jsp");
     }
 
     private void displayEditEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -85,13 +85,13 @@ public class EventsServlet extends Servlet {
 
         if (eventOptional.isPresent()) {
             request.setAttribute("event", eventOptional.get());
-            render("event_edit.jsp", request, response);
+            render(request, response, "event_edit.jsp");
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    private void addEvent(WrappedHttpServlet wrappedHttpServlet) {
+    private void addEvent(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
@@ -100,16 +100,15 @@ public class EventsServlet extends Servlet {
         eventBuilt
             .validate()
             .apply(success -> {
-                request.setAttribute("event", eventBuilt);
-
                 if (eventService.addEvent(eventBuilt)) {
-                    render("event.jsp", request, response);
+                    redirect(response, Path.EVENTS.getFullPath() + Integer.toString(eventBuilt.getId()));
                 } else {
-                    render("event_new.jsp", request, response, new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
+                    request.setAttribute("event", eventBuilt);
+                    render(request, response, "event_new.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
                 }
             }, error -> {
                 request.setAttribute("event", eventBuilt);
-                render("event_new.jsp", request, response, new Alert(AlertType.DANGER, error.getMessage()));
+                render(request, response, "event_new.jsp", new Alert(AlertType.DANGER, error.getMessage()));
             });
     }
 
@@ -129,16 +128,15 @@ public class EventsServlet extends Servlet {
             modifiedEventBuilt
                 .validate()
                 .apply(success -> {
-                    request.setAttribute("event", modifiedEventBuilt);
-
                     if (eventService.updateEvent(modifiedEventBuilt)) {
-                        render("event.jsp", request, response);
+                        redirect(response, Path.EVENTS.getFullPath() + Integer.toString(modifiedEventBuilt.getId()));
                     } else {
-                        render("event_edit.jsp", request, response, new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
+                        request.setAttribute("event", modifiedEventBuilt);
+                        render(request, response, "event_edit.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
                     }
                 }, error -> {
                     request.setAttribute("event", modifiedEventBuilt);
-                    render("event_edit.jsp", request, response, new Alert(AlertType.DANGER, error.getMessage()));
+                    render(request, response, "event_edit.jsp", new Alert(AlertType.DANGER, error.getMessage()));
                 });
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -163,12 +161,12 @@ public class EventsServlet extends Servlet {
 
                 // eventService.addParticipant()
 
-                render("event.jsp", request, response, new Alert(AlertType.SUCCESS, "Inscription validée. Vous allez recevoir un email de confirmation."));
+                render(request, response, "event.jsp", new Alert(AlertType.SUCCESS, "Inscription validée. Vous allez recevoir un email de confirmation."));
             } else {
-                render("event.jsp", request, response, new Alert(AlertType.DANGER, "Les emails doivent être identiques."));
+                render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Les emails doivent être identiques."));
             }
         } else {
-            render("event.jsp", request, response, new Alert(AlertType.DANGER, "Tous les champs doivent être remplis."));
+            render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Tous les champs doivent être remplis."));
         }
     }
 

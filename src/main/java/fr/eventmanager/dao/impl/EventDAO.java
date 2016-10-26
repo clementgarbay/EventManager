@@ -3,9 +3,11 @@ package fr.eventmanager.dao.impl;
 import fr.eventmanager.dao.IEventDAO;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
+import fr.eventmanager.utils.persistence.BaseQuery;
 import fr.eventmanager.utils.persistence.QueryField;
 
-import java.util.List;
+import javax.persistence.criteria.CriteriaQuery;
+ import java.util.List;
 
 /**
  * @author Clément Garbay
@@ -19,8 +21,11 @@ public class EventDAO extends BasicDAO<Event> implements IEventDAO {
 
     @Override
     public List<Event> findByParticipant(User user) {
-        // TODO
-        return null;
+        BaseQuery<Event, CriteriaQuery<Event>> baseQuery = getBaseQuery(Action.READ);
+        CriteriaQuery<Event> criteriaQuery = baseQuery.getAbstractCriteria()
+                .where(super.criteriaBuilder.isMember(user, baseQuery.getEntity().get("participants")));
+
+        return getResultList(entityManager.createQuery(criteriaQuery));
     }
 
     @Override

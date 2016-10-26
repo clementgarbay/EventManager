@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author Clément Garbay
@@ -27,6 +26,6 @@ public class HomeServlet extends Servlet {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
-        render("events.jsp", request, response);
+        render(request, response, "events.jsp");
     }
 }

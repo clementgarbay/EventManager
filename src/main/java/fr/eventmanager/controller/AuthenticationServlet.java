@@ -14,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -42,9 +41,9 @@ public class AuthenticationServlet extends Servlet {
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
         if (!SecurityService.isLogged(request)) {
-            render("login.jsp", request, response);
+            render(request, response, "login.jsp");
         } else {
-            render("events.jsp", request, response);
+            render(request, response, "events.jsp");
         }
     }
 
@@ -60,12 +59,12 @@ public class AuthenticationServlet extends Servlet {
 
             if (userOptional.isPresent()) { // useless ?
                 SecurityService.setLoggedUser(request, userOptional.get());
-                render("events.jsp", request, response);
+                render(request, response, "events.jsp");
             } else {
-                render("login.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
+                render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
             }
         } else {
-            render("login.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Couple email / mot de passe incorrect."));
+            render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Couple email / mot de passe incorrect."));
         }
     }
 
@@ -74,7 +73,7 @@ public class AuthenticationServlet extends Servlet {
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
         SecurityService.clear(request);
-        render("login.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
+        render(request, response, "login.jsp", new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
     }
 
 }

@@ -8,7 +8,6 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @WebServlet(name = "ProfilServlet", urlPatterns = {Path.PathConstants.PROFIL + "/*"})
 public class ProfilServlet extends Servlet {
@@ -24,7 +23,7 @@ public class ProfilServlet extends Servlet {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
-        render("profil.jsp", request, response);
+        render(request, response, "profil.jsp");
     }
 
 }
