@@ -8,6 +8,7 @@ import fr.eventmanager.utils.persistence.QueryField;
 
 import javax.persistence.criteria.CriteriaQuery;
  import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Clément Garbay
@@ -29,12 +30,14 @@ public class EventDAO extends BasicDAO<Event> implements IEventDAO {
     }
 
     @Override
-    public boolean addParticipant(int eventId, int userId) {
-        // TODO
-        return false;
-//        Optional<Event> eventOptional = getById(eventId);
-//        eventOptional.ifPresent(event -> event.getParticipants().add(userId));
-//        return eventOptional.isPresent();
+    public boolean subscribe(Event event, User user) {
+        event.addParticipant(user);
+        return update(event);
     }
 
+    @Override
+    public boolean unsubscribe(Event event, User user) {
+        event.removeParticipant(user);
+        return update(event);
+    }
 }

@@ -11,5 +11,6 @@ import java.util.List;
 public interface IEventDAO extends IBasicDAO<Event> {
     List<Event> findByOwner(User user);
     List<Event> findByParticipant(User user);
-    boolean addParticipant(int eventId, int userId);
+    boolean subscribe(Event event, User user);
+    boolean unsubscribe(Event event, User user);
 }

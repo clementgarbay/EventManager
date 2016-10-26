@@ -7,6 +7,8 @@ import fr.eventmanager.utils.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -79,11 +81,11 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
     }
 
     public Event(String title, String description, Date date, Address address, Integer maxTickets, Double price, User owner) {
-        this(title, description, date, address, maxTickets, price, owner, null);
+        this(title, description, date, address, maxTickets, price, owner, new ArrayList<>());
     }
 
     public Event(String title, String description, Date date, Address address, Integer maxTickets, User owner) {
-        this(title, description, date, address, maxTickets, 0.0, owner, null);
+        this(title, description, date, address, maxTickets, 0.0, owner, new ArrayList<>());
     }
 
     public Event() {}
@@ -127,6 +129,27 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
 
     public List<User> getParticipants() {
         return participants;
+    }
+
+    public Event addParticipant(User user) {
+        if (isNull(participants)) participants = new ArrayList<>();
+        participants.add(user);
+        return this;
+    }
+
+    public Event removeParticipant(User user) {
+        if (!isNull(participants)) {
+            participants.removeIf(participant -> participant.getId().equals(user.getId()));
+        }
+        return this;
+    }
+
+    public boolean isOwner(User user) {
+        return !isNull(this.owner) && this.owner.getId().equals(user.getId());
+    }
+
+    public boolean isParticipant(User user) {
+        return participants.stream().anyMatch(u -> u.getId().equals(user.getId()));
     }
 
     @Override

@@ -6,7 +6,7 @@ import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.StorableEntity;
 import fr.eventmanager.entity.User;
 import fr.eventmanager.utils.persistence.BaseQuery;
-import fr.eventmanager.utils.persistence.DatabaseManager;
+import fr.eventmanager.utils.persistence.PersistenceManager;
 import fr.eventmanager.utils.persistence.QueryField;
 
 import javax.persistence.Query;
@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author Clément Garbay
  */
-public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> implements IBasicDAO<T> {
+public class BasicDAO<T extends StorableEntity> extends PersistenceManager<T> implements IBasicDAO<T> {
 
     public BasicDAO() {
         super("EventManagerUnit");
@@ -76,7 +76,7 @@ public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> imple
         User userPaul = new User("Paul", "paul.defois@gmail.com", "defois", "Kosmos");
 
         Event event1 = new Event("Gouvernance et transmission dans les entreprises familiales",  "Comment la gouvernance peut-elle favoriser la transmission dans les entreprises familiales ? Quels outils pour quelle gouvernance ? Comment les outils de gouvernance peuvent permettre d’anticiper la transmission de l’entreprise ? Sophie Bellon, Présidente du Conseil d'Administration de Sodexo sera l'invitée d'honneur de cette conférence.Son intervention sera suivie d'une table ronde où témoigneront chefs d'entreprises familiales et experts pour échanger sur les différents outils facilitant l’organisation de la transmission par la gouvernance.", randomDate(), new Address("Audencia Business School, 8 route de la jonelière", "Nantes", 44300, "France"), 50, userClement);
-        Event event2 = new Event("Le carrefour de la gouvernance - Entreprises",  "NAPF, Audencia, IFA et APIA ont le plaisir de vous inviter à cette soirée exceptionnelle dédiée aux rencontres entre entreprises et administrateurs le jeudi 20 octobre à 18h30 au Château de la Gournerie.", randomDate(), new Address("Château de la Gournerie", "Saint-Herblain", 44800, "France"), 35, userElie);
+        Event event2 = new Event("Le carrefour de la gouvernance - Entreprises",  "NAPF, Audencia, IFA et APIA ont le plaisir de vous inviter à cette soirée exceptionnelle dédiée aux rencontres entre entreprises et administrateurs le jeudi 20 octobre à 18h30 au Château de la Gournerie.", randomDate(), new Address("Château de la Gournerie", "Saint-Herblain", 44800, "France"), 1, userElie);
         Event event3 = new Event("Formation Zoho CRM NANTES",  "Cette formation s'adresse à toute personne souhaitant avoir les bons réflexes pour acquérir les bonnes pratiques d'utilisation pour les commerciaux (atelier du matin), jusqu'à l'optimisation sa base Zoho CRM, depuis l'adaptation du paramétrage standard au métier de l'entreprise (atelier de l'après-midi).", randomDate(), new Address("BIOBURO, 14 rue François Evellin", "Nantes", 44000, "France"), 45, userPaul);
 
         begin();

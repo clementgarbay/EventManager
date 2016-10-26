@@ -17,4 +17,5 @@ public interface IBasicDAO<T extends StorableEntity> {
     boolean create(T element);
     boolean update(T element);
     boolean delete(int id);
+    void close();
 }

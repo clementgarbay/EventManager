@@ -6,6 +6,9 @@
 
 <%@ taglib prefix="app" uri="application" %>
 
+<c:set var="nbParticipants" scope="page" value="${fn:length(event.participants)}"/>
+<c:set var="remainingTickets" scope="page" value="${event.maxTickets - nbParticipants}"/>
+
 <div class="col-sm-12">
     <div class="card">
         <div class="col-sm-9">
@@ -24,27 +27,44 @@
 
             <h3>Participants</h3>
             <c:choose>
-                <c:when test="${fn:length(event.participants) > 0}">
-                    <p>${fn:length(event.participants)} personnes inscrites <small>(6 places restantes)</small></p>
+                <c:when test="${nbParticipants > 0}">
+                    <p>${fn:length(event.participants)} personne(s) inscrite(s)<br><small>${remainingTickets} place(s) restante(s)</small></p>
                 </c:when>
                 <c:otherwise>
                     <p>Aucun inscrit</p>
                 </c:otherwise>
             </c:choose>
 
-
             <c:choose>
-                <c:when test="${SECURITY_IS_LOGGED}">
-                    <button class="btn btn-primary" style="width: 100%; margin-top: 50px;" data-toggle="modal" data-target="#subscribeModal">
+                <c:when test="${SECURITY_IS_LOGGED && !event.isOwner(SECURITY_LOGGED_USER) && !event.isParticipant(SECURITY_LOGGED_USER) && remainingTickets > 0}">
+                    <form class="form" method="post" action="<app:getUrl pathId="EVENTS"/>${event.id}/subscribe">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 40px;">
+                            <i class="fa fa-plus" style="margin-right: 5px;"></i> S'inscrire
+                        </button>
+                    </form>
+                </c:when>
+                <c:when test="${SECURITY_IS_LOGGED && !event.isOwner(SECURITY_LOGGED_USER) && !event.isParticipant(SECURITY_LOGGED_USER) && remainingTickets == 0}">
+                    <button type="submit" disabled class="btn btn-primary" style="width: 100%; margin-top: 40px;">
                         <i class="fa fa-plus" style="margin-right: 5px;"></i> S'inscrire
                     </button>
+                    <p class="text-muted" style="line-height: 1; text-align: center;"><small>Il n'y a plus de ticket disponible.</small></p>
                 </c:when>
-                <c:otherwise>
-                    <a href="<app:getUrl pathId="LOGIN"/>" class="btn" style="width: 100%; margin-top: 50px;">
+                <c:when test="${SECURITY_IS_LOGGED && !event.isOwner(SECURITY_LOGGED_USER) && event.isParticipant(SECURITY_LOGGED_USER)}">
+                    <p class="text-center text-success" style="width: 100%; margin-top: 40px;">
+                        <i class="fa fa-check" style="margin-right: 5px;"></i> Inscrit
+                    </p>
+                    <form class="form" method="post" action="<app:getUrl pathId="EVENTS"/>${event.id}/unsubscribe">
+                        <button type="submit" class="btn btn-sm btn-danger" style="width: 100%; margin: 0;">
+                            Se désinscrire
+                        </button>
+                    </form>
+                </c:when>
+                <c:when test="${!SECURITY_IS_LOGGED}">
+                    <a href="<app:getUrl pathId="LOGIN"/>" class="btn" style="width: 100%; margin-top: 40px;">
                         Se connecter
                     </a>
-                    <p class="text-muted" style="line-height: 1; text-align: center;"><small>Vous devez être connecté pour s'inscrire à cet événement.</small></p>
-                </c:otherwise>
+                    <p class="text-muted" style="line-height: 1; text-align: center;"><small>Veuillez vous connecter pour vous inscrire à l'événement.</small></p>
+                </c:when>
             </c:choose>
 
         </div>

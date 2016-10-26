@@ -32,4 +32,9 @@ public class UserService implements IUserService {
     public boolean isUserExists(String email) {
         return userDAO.findByEmail(email).isPresent();
     }
+
+    @Override
+    public void close() {
+        userDAO.close();
+    }
 }

@@ -8,7 +8,7 @@
         <div class="content">
             <h4>Créer un événement</h4>
 
-            <form method="post" action="<app:getUrl pathId="NEW_EVENT"/>">
+            <form method="post" action="<app:getUrl pathId="EVENTS_NEW"/>">
                 <app:eventForm event="${event}" />
                 <button type="submit" class="btn btn-default" style="margin-top: 40px">Enregistrer</button>
             </form>

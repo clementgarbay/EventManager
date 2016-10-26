@@ -1,37 +1,129 @@
 package fr.eventmanager.utils.persistence;
 
+import fr.eventmanager.entity.StorableEntity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * @author Clément Garbay
- *
- * TODO : useful ?
  */
-public class PersistenceManager {
+public class PersistenceManager<T extends StorableEntity> {
 
-    private EntityManagerFactory emf;
-    private EntityManager em;
-    private CriteriaBuilder cb;
+    protected enum Action { CREATE, READ, UPDATE, DELETE }
+
+    private EntityManagerFactory entityManagerFactory;
+    private Class<T> entityClassType;
+    protected EntityManager entityManager;
+    protected CriteriaBuilder criteriaBuilder;
 
     public PersistenceManager(String persistenceUnitName) {
-        emf = Persistence.createEntityManagerFactory(persistenceUnitName);
-        em = emf.createEntityManager();
-        cb = em.getCriteriaBuilder();
+        try {
+            this.entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName);
+            this.entityClassType = this.getEntityClassType();
+            this.entityManager = entityManagerFactory.createEntityManager();
+            this.criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
-    public EntityManager getEntityManager() {
-        return em;
+    public void begin() {
+        entityManager.getTransaction().begin();
     }
 
-    public CriteriaBuilder getCriteriaBuilder() {
-        return cb;
+    public void commit() {
+        entityManager.getTransaction().commit();
     }
 
     public void close() {
-        em.close();
-        emf.close();
+        entityManager.close();
+        entityManagerFactory.close();
     }
+
+    public <C extends CommonAbstractCriteria> BaseQuery<T,C> getBaseQuery(Action action) {
+
+        if (action.equals(Action.READ)) {
+            CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.entityClassType);
+            Root<T> root = criteriaQuery.from(this.entityClassType);
+
+            return new BaseQuery<>(root, (C) criteriaQuery);
+        }
+
+        if (action.equals(Action.UPDATE)) {
+            CriteriaUpdate<T> criteriaQuery = criteriaBuilder.createCriteriaUpdate(this.entityClassType);
+            Root<T> root = criteriaQuery.from(this.entityClassType);
+
+            return new BaseQuery<>(root, (C) criteriaQuery);
+        }
+
+        if (action.equals(Action.DELETE)) {
+            CriteriaDelete<T> criteriaQuery = criteriaBuilder.createCriteriaDelete(this.entityClassType);
+            Root<T> root = criteriaQuery.from(this.entityClassType);
+
+            return new BaseQuery<>(root, (C) criteriaQuery);
+        }
+
+        // TODO : throw Exception
+        return new BaseQuery<>(null, null);
+    }
+
+    public Query getReadQueryBy(QueryField... fields) {
+        BaseQuery<T, CriteriaQuery<T>> baseQuery = getBaseQuery(Action.READ);
+        List<Predicate> predicates = new ArrayList<>();
+
+        for (QueryField field : fields) {
+            switch (field.getFilter()) {
+                case LIKE:
+                    predicates.add(criteriaBuilder.like(baseQuery.getEntity().get(field.getName()), field.getValue().toString()));
+                    break;
+                case EQUAL:
+                default:
+                    predicates.add(criteriaBuilder.equal(baseQuery.getEntity().get(field.getName()), field.getValue()));
+                    break;
+            }
+        }
+
+        CriteriaQuery<T> criteriaQuery = baseQuery.getAbstractCriteria()
+                .where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+
+        return entityManager.createQuery(criteriaQuery);
+    }
+
+    protected T getSingleResult(Query query) {
+        query.setMaxResults(1);
+        List<T> list = query.getResultList();
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return list.get(0);
+    }
+
+    protected List<T> getResultList(Query query) {
+        return (List<T>) query.getResultList();
+    }
+
+    protected boolean proceedToQuery(Consumer<EntityManager> consumer) {
+        try {
+            begin();
+            consumer.accept(entityManager);
+            entityManager.flush();
+            commit();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private Class<T> getEntityClassType() throws ClassNotFoundException {
+        return ((Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]);
+    }
+
 }

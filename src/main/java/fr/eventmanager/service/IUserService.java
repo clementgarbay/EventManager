@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * @author Paul Defois
  */
-public interface IUserService {
+public interface IUserService extends IService {
     Optional<User> getUserByEmail(String email);
     boolean isUserExists(String email);
     boolean areCredentialsValid(String email, String password);

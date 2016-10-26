@@ -40,6 +40,12 @@ public class AuthenticationServlet extends Servlet {
         bind(HttpMethod.GET, Path.LOGOUT, false).to(this::logout);
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        this.userService.close();
+    }
+
     private void displayLoginPage(WrappedHttpServlet wrappedHttpServlet) {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();

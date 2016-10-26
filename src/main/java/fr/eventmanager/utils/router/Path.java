@@ -15,9 +15,11 @@ public enum Path {
     LOGIN (PathConstants.AUTH, Pattern.compile("/login")),
     LOGOUT (PathConstants.AUTH, Pattern.compile("/logout")),
     EVENTS (PathConstants.EVENTS, Pattern.compile("/")),
+    EVENTS_NEW (PathConstants.EVENTS, Pattern.compile("/new")),
     EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)")),
-    NEW_EVENT (PathConstants.EVENTS, Pattern.compile("/new")),
-    EDIT_EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/edit")),
+    EVENT_EDIT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/edit")),
+    EVENT_SUBSCRIBE (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/subscribe")),
+    EVENT_UNSUBSCRIBE (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/unsubscribe")),
     PROFIL (PathConstants.PROFIL, Pattern.compile("/"));
 
     private final String pathBase;
