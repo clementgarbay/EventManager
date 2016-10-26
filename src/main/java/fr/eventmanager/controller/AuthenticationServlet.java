@@ -14,7 +14,11 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * @author Clément Garbay
@@ -47,7 +51,7 @@ public class AuthenticationServlet extends Servlet {
         }
     }
 
-    private void login(WrappedHttpServlet wrappedHttpServlet) {
+    private void login(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
@@ -59,7 +63,8 @@ public class AuthenticationServlet extends Servlet {
 
             if (userOptional.isPresent()) { // useless ?
                 SecurityService.setLoggedUser(request, userOptional.get());
-                render(request, response, "events.jsp");
+
+                redirect(response, Path.EVENTS.getFullPath());
             } else {
                 render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
             }

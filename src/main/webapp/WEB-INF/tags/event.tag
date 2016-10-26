@@ -18,7 +18,7 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' H'h'mm" value="${event.date}" />
+                    <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' HH'h'mm" value="${event.date}" />
                 </div>
             </div>
         </div>
