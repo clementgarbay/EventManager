@@ -41,27 +41,27 @@ public class DatabaseManager<T extends StorableEntity> {
         entityManager.getTransaction().commit();
     }
 
-    public BaseQuery<T> getBaseQuery(Action action) {
+    public <C extends CommonAbstractCriteria> BaseQuery<T,C> getBaseQuery(Action action) {
 
         if (action.equals(Action.READ)) {
             CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(this.entityClassType);
             Root<T> root = criteriaQuery.from(this.entityClassType);
 
-            return new BaseQuery<>(root, criteriaQuery);
+            return new BaseQuery<>(root, (C) criteriaQuery);
         }
 
         if (action.equals(Action.UPDATE)) {
             CriteriaUpdate<T> criteriaQuery = criteriaBuilder.createCriteriaUpdate(this.entityClassType);
             Root<T> root = criteriaQuery.from(this.entityClassType);
 
-            return new BaseQuery<>(root, criteriaQuery);
+            return new BaseQuery<>(root, (C) criteriaQuery);
         }
 
         if (action.equals(Action.DELETE)) {
             CriteriaDelete<T> criteriaQuery = criteriaBuilder.createCriteriaDelete(this.entityClassType);
             Root<T> root = criteriaQuery.from(this.entityClassType);
 
-            return new BaseQuery<>(root, criteriaQuery);
+            return new BaseQuery<>(root, (C) criteriaQuery);
         }
 
         // TODO : throw Exception
@@ -69,7 +69,7 @@ public class DatabaseManager<T extends StorableEntity> {
     }
 
     public Query getReadQueryBy(QueryField... fields) {
-        BaseQuery<T> baseQuery = getBaseQuery(Action.READ);
+        BaseQuery<T, CriteriaQuery<T>> baseQuery = getBaseQuery(Action.READ);
         List<Predicate> predicates = new ArrayList<>();
 
         for (QueryField field : fields) {
@@ -84,8 +84,8 @@ public class DatabaseManager<T extends StorableEntity> {
             }
         }
 
-        CriteriaQuery<T> criteriaQuery = (CriteriaQuery<T>) baseQuery.getAbstractCriteria();
-        criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
+        CriteriaQuery<T> criteriaQuery = baseQuery.getAbstractCriteria()
+                .where(criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()])));
 
         return entityManager.createQuery(criteriaQuery);
     }
@@ -107,6 +107,7 @@ public class DatabaseManager<T extends StorableEntity> {
         try {
             begin();
             consumer.accept(entityManager);
+            entityManager.flush();
             commit();
             return true;
         } catch (Exception e) {

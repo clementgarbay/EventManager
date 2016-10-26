@@ -2,12 +2,12 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
+import fr.eventmanager.utils.router.WrappedHttpServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @WebServlet(name = "ProfilServlet", urlPatterns = {Path.PathConstants.PROFIL + "/*"})
 public class ProfilServlet extends Servlet {
@@ -16,11 +16,14 @@ public class ProfilServlet extends Servlet {
     public void init() throws ServletException {
         super.init();
 
-        bind(HttpMethod.GET, Path.PROFIL).to("displayProfilPage");
+        bind(HttpMethod.GET, Path.PROFIL).to(this::displayProfilPage);
     }
 
-    private void displayProfilPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
-        render("profil.jsp", request, response);
+    private void displayProfilPage(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
+        render(request, response, "profil.jsp");
     }
 
 }

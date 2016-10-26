@@ -8,9 +8,9 @@ import javax.persistence.criteria.Root;
 /**
  * @author Clément Garbay
  */
-public class BaseQuery<T> extends Tuple<Root<T>, CommonAbstractCriteria> {
+public class BaseQuery<T, C extends CommonAbstractCriteria> extends Tuple<Root<T>,C> {
 
-    public BaseQuery(Root<T> entity, CommonAbstractCriteria abstractCriteria) {
+    public BaseQuery(Root<T> entity, C abstractCriteria) {
         super(entity, abstractCriteria);
     }
 
@@ -18,7 +18,7 @@ public class BaseQuery<T> extends Tuple<Root<T>, CommonAbstractCriteria> {
         return super.getValue1();
     }
 
-    public CommonAbstractCriteria getAbstractCriteria() {
+    public C getAbstractCriteria() {
         return super.getValue2();
     }
 }

@@ -2,18 +2,17 @@ package fr.eventmanager.utils.router;
 
 import fr.eventmanager.security.SecurityService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 /**
  * ServletRouter
  *
- * Store all available routes with the associated http method and method to call.
+ * Store all available routes with the associated http method and the consumer to apply.
  *
  * @author Clément Garbay
  */
@@ -26,17 +25,17 @@ public abstract class ServletRouter extends HttpServlet {
     }
 
     /**
-     * Bind a path to a servlet's method name (use a temporary "RouteWithoutMethod" object for a more confortable syntax)
+     * Bind a path to a servlet's function (use a temporary "RouteWithoutConsumer" object for a more confortable syntax)
      *
      * @param path          The path item
      * @param isProtected   Required authentication to access to the resource (true by default)
      * @return
      */
-    public RouteWithoutMethod bind(HttpMethod httpMethod, Path path, boolean isProtected) {
-        return new RouteWithoutMethod(this, httpMethod, path, isProtected);
+    public RouteWithoutConsumer bind(HttpMethod httpMethod, Path path, boolean isProtected) {
+        return new RouteWithoutConsumer(this, httpMethod, path, isProtected);
     }
 
-    public RouteWithoutMethod bind(HttpMethod httpMethod, Path path) {
+    public RouteWithoutConsumer bind(HttpMethod httpMethod, Path path) {
         return bind(httpMethod, path, true);
     }
 
@@ -69,7 +68,14 @@ public abstract class ServletRouter extends HttpServlet {
         }
 
         Map<String, String> parameters = route.getPath().extractParametersOf(pathStr);
-        introspectMethodInServlet(route.getMethodNameToCall(), request, response, parameters);
+        WrappedHttpServlet wrappedHttpServlet = new WrappedHttpServlet(request, response, parameters);
+
+        try {
+            route.getConsumer().accept(wrappedHttpServlet);
+        } catch (ServletException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 
     ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
@@ -93,40 +99,6 @@ public abstract class ServletRouter extends HttpServlet {
         }
 
         return Optional.empty();
-    }
-
-    private void introspectMethodInServlet(String methodName, HttpServletRequest request, HttpServletResponse response, Map<String, String> parameters) throws IOException {
-
-        Class<?>[] argsClasses = {HttpServletRequest.class, HttpServletResponse.class, Map.class};
-        Object[] args = {request, response, parameters};
-
-        try {
-            if (!proceedToIntrospect(methodName, argsClasses, args)) {
-
-                Class<?>[] argsClasses1 = {HttpServletRequest.class, HttpServletResponse.class};
-                Object[] args1 = {request, response};
-
-                if (!proceedToIntrospect(methodName, argsClasses1, args1)) {
-                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                }
-            }
-        } catch (InvocationTargetException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private boolean proceedToIntrospect(String methodName, Class<?>[] argsClasses, Object... args) throws InvocationTargetException {
-        boolean success = true;
-
-        try {
-            Method method = this.getClass().getDeclaredMethod(methodName, argsClasses);
-            method.setAccessible(true);
-            method.invoke(this, args);
-        } catch (NoSuchMethodException | IllegalAccessException e) {
-            success = false;
-        }
-
-        return success;
     }
 
 }

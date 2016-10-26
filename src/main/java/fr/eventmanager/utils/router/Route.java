@@ -9,13 +9,13 @@ public class Route {
     private Path path;
     private boolean isProtected;
 
-    private String methodNameToCall;
+    private ServletConsumer<WrappedHttpServlet> consumer;
 
-    public Route(HttpMethod httpMethod, Path path, boolean isProtected, String methodNameToCall) {
+    public Route(HttpMethod httpMethod, Path path, boolean isProtected, ServletConsumer<WrappedHttpServlet> consumer) {
         this.httpMethod = httpMethod;
         this.path = path;
         this.isProtected = isProtected;
-        this.methodNameToCall = methodNameToCall;
+        this.consumer = consumer;
     }
 
     public boolean matchRoute(String str) {
@@ -34,8 +34,8 @@ public class Route {
         return isProtected;
     }
 
-    public String getMethodNameToCall() {
-        return methodNameToCall;
+    public ServletConsumer<WrappedHttpServlet> getConsumer() {
+        return consumer;
     }
 
 }

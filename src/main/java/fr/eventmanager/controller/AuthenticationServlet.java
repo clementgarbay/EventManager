@@ -8,12 +8,12 @@ import fr.eventmanager.service.impl.UserService;
 import fr.eventmanager.utils.Alert;
 import fr.eventmanager.utils.router.HttpMethod;
 import fr.eventmanager.utils.router.Path;
+import fr.eventmanager.utils.router.WrappedHttpServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -31,20 +31,26 @@ public class AuthenticationServlet extends Servlet {
 
         this.userService = new UserService(new UserDAO());
 
-        bind(HttpMethod.GET, Path.LOGIN, false).to("displayLoginPage");
-        bind(HttpMethod.POST, Path.LOGIN, false).to("login");
-        bind(HttpMethod.GET, Path.LOGOUT, false).to("logout");
+        bind(HttpMethod.GET, Path.LOGIN, false).to(this::displayLoginPage);
+        bind(HttpMethod.POST, Path.LOGIN, false).to(this::login);
+        bind(HttpMethod.GET, Path.LOGOUT, false).to(this::logout);
     }
 
-    private void displayLoginPage(HttpServletRequest request,  HttpServletResponse response) throws ServletException, IOException {
+    private void displayLoginPage(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         if (!SecurityService.isLogged(request)) {
-            render("login.jsp", request, response);
+            render(request, response, "login.jsp");
         } else {
-            render("events.jsp", request, response);
+            render(request, response, "events.jsp");
         }
     }
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void login(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         String email = request.getParameter("user_email");
         String password = request.getParameter("user_password");
 
@@ -53,18 +59,21 @@ public class AuthenticationServlet extends Servlet {
 
             if (userOptional.isPresent()) { // useless ?
                 SecurityService.setLoggedUser(request, userOptional.get());
-                render("events.jsp", request, response);
+                render(request, response, "events.jsp");
             } else {
-                render("login.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
+                render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
             }
         } else {
-            render("login.jsp", request, response, new Alert(Alert.AlertType.DANGER, "Couple email / mot de passe incorrect."));
+            render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Couple email / mot de passe incorrect."));
         }
     }
 
-    private void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void logout(WrappedHttpServlet wrappedHttpServlet) {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
         SecurityService.clear(request);
-        render("login.jsp", request, response, new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
+        render(request, response, "login.jsp", new Alert(Alert.AlertType.SUCCESS, "Déconnecté"));
     }
 
 }

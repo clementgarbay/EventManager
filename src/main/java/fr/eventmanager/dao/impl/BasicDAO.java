@@ -39,10 +39,10 @@ public class BasicDAO<T extends StorableEntity> extends DatabaseManager<T> imple
 
     @Override
     public List<T> findAll() {
-        BaseQuery<T> baseQuery = getBaseQuery(Action.READ);
-        CriteriaQuery<T> abstractCriteria = ((CriteriaQuery<T>) baseQuery.getAbstractCriteria())
+        BaseQuery<T, CriteriaQuery<T>> baseQuery = getBaseQuery(Action.READ);
+        CriteriaQuery<T> criteriaQuery = baseQuery.getAbstractCriteria()
                 .select(baseQuery.getEntity());
-        return getResultList(entityManager.createQuery(abstractCriteria));
+        return getResultList(entityManager.createQuery(criteriaQuery));
     }
 
     @Override

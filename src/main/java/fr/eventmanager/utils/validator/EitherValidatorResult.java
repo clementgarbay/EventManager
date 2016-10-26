@@ -1,5 +1,6 @@
 package fr.eventmanager.utils.validator;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -32,8 +33,8 @@ public class EitherValidatorResult<T extends ValidatableEntity> {
         return new EitherValidatorResult<>(Optional.empty(), Optional.of(error));
     }
 
-    public void apply(Consumer<? super ValidationMessage> successConsumer, Consumer<? super ValidationMessage> errorConsumer) {
-        success.ifPresent(successConsumer);
-        error.ifPresent(errorConsumer);
+    public void apply(ValidationConsumer<? super ValidationMessage> successConsumer, ValidationConsumer<? super ValidationMessage> errorConsumer) throws IOException {
+        if (success.isPresent()) successConsumer.accept(success.get());
+        if (error.isPresent()) errorConsumer.accept(error.get());
     }
 }

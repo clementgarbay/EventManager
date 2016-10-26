@@ -44,7 +44,7 @@ public abstract class Servlet extends ServletRouter {
         process(HttpMethod.DELETE, request, response);
     }
 
-    void render(String partialPage, HttpServletRequest request, HttpServletResponse response, Alert alert) {
+    void render(HttpServletRequest request, HttpServletResponse response, String partialPage, Alert alert) {
         request.setAttribute("partialPage", partialPage);
 
         request.setAttribute("SECURITY_IS_LOGGED", SecurityService.isLogged(request));
@@ -69,7 +69,11 @@ public abstract class Servlet extends ServletRouter {
         }
     }
 
-    void render(String partialPage, HttpServletRequest request, HttpServletResponse response) {
-        render(partialPage, request, response, null);
+    void render(HttpServletRequest request, HttpServletResponse response, String partialPage) {
+        render(request, response, partialPage, null);
+    }
+
+    void redirect(HttpServletResponse response, String endPoint) throws IOException {
+        response.sendRedirect(getServletContext().getContextPath() + endPoint);
     }
 }
