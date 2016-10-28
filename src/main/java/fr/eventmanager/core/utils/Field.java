@@ -1,23 +1,21 @@
 package fr.eventmanager.core.utils;
 
+import fr.eventmanager.core.utils.type.Tuple;
+
 /**
  * @author Clément Garbay
  */
-public class Field<T> {
-
-    private String name;
-    private T value;
+public class Field<T> extends Tuple<String,T> {
 
     public Field(String name, T value) {
-        this.name = name;
-        this.value = value;
+        super(name, value);
     }
 
     public String getName() {
-        return name;
+        return super.getValue1();
     }
 
     public T getValue() {
-        return value;
+        return super.getValue2();
     }
 }

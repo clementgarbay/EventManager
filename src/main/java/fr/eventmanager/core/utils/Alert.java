@@ -21,6 +21,14 @@ public class Alert {
         return message;
     }
 
+    // Syntactic sugar
+    public static Alert success(String message) {
+        return new Alert(AlertType.DANGER, message);
+    }
+    public static Alert danger(String message) {
+        return new Alert(AlertType.DANGER, message);
+    }
+
     /**
      * AlertType enumeration
      */

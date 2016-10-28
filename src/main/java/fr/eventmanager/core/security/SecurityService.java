@@ -1,4 +1,4 @@
-package fr.eventmanager.security;
+package fr.eventmanager.core.security;
 
 import fr.eventmanager.core.session.SessionManager;
 import fr.eventmanager.entity.User;

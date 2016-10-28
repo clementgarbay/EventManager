@@ -1,6 +1,6 @@
 package fr.eventmanager.core.router;
 
-import fr.eventmanager.security.SecurityService;
+import fr.eventmanager.core.security.SecurityService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

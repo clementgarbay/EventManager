@@ -11,7 +11,7 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="text" name="user_email" class="form-control" placeholder="Email">
+                        <input type="text" name="user_email" class="form-control" placeholder="Email" value="${user.email}">
                         <span class="material-input"></span>
                     </div>
                 </div>

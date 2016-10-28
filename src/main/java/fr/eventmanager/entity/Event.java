@@ -1,8 +1,8 @@
 package fr.eventmanager.entity;
 
+import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.core.validator.EitherValidatorResult;
 import fr.eventmanager.core.validator.ValidatableEntity;
-import fr.eventmanager.core.validator.ValidationMessage;
 import fr.eventmanager.core.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.*;
@@ -22,43 +22,33 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
 
     static final String tableName = "Event";
 
-    private static final String fieldId = "id";
-    private static final String fieldTitle = "title";
-    private static final String fieldDescription = "description";
-    private static final String fieldDate = "date";
-    private static final String fieldAddress = "address";
-    private static final String fieldMaxTickets = "maxTickets";
-    private static final String fieldPrice = "price";
-    private static final String fieldOwner = "owner";
-    private static final String fieldParticipants = "participants";
-
     @Id
     @GeneratedValue
-    @Column(name = fieldId)
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name = fieldTitle, nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = fieldDescription, columnDefinition = "TEXT", nullable = false)
+    @Column(name = "description", columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Temporal(TemporalType.DATE)
-    @Column(name = fieldDate, nullable = false)
+    @Column(name = "date", nullable = false)
     private Date date;
 
     @Embedded
-    @Column(name = fieldAddress, nullable = false)
+    @Column(name = "address", nullable = false)
     private Address address;
 
-    @Column(name = fieldMaxTickets, nullable = false)
+    @Column(name = "maxTickets", nullable = false)
     private Integer maxTickets;
 
-    @Column(name = fieldPrice, nullable = false)
+    @Column(name = "price", nullable = false)
     private Double price = 0.00;
 
     @ManyToOne
-    @JoinColumn(name = fieldOwner, nullable = false)
+    @JoinColumn(name = "owner", nullable = false)
     private User owner;
 
     @ManyToMany
@@ -152,7 +142,7 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
     }
 
     @Override
-    public EitherValidatorResult<Event> validate() {
+    public EitherValidatorResult validate() {
 
         if ((isNull(title) || title.isEmpty()) ||
             (isNull(description) || description.isEmpty()) ||
@@ -160,15 +150,15 @@ public class Event implements Serializable, StorableEntity, ValidatableEntity {
             isNull(maxTickets) ||
             isNull(price) ||
             isNull(owner)) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.ARE_EMPTY));
+            return EitherValidatorResult.error(PreparedMessage.VALIDATION_ARE_EMPTY.getMessage());
         }
 
         if (isNull(date)) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "\"Date & heure\""));
+            return EitherValidatorResult.error(PreparedMessage.VALIDATION_IS_INCORRECT.getMessage("\"Date & heure\""));
         }
 
         if (String.valueOf(address.zipCode).length() != 5) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.IS_INCORRECT, "\"Code postal\""));
+            return EitherValidatorResult.error(PreparedMessage.VALIDATION_IS_INCORRECT.getMessage("\"Code postal\""));
         }
 
         return EitherValidatorResult.success();

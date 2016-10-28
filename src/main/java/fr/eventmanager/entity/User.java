@@ -1,8 +1,8 @@
 package fr.eventmanager.entity;
 
+import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.core.validator.EitherValidatorResult;
 import fr.eventmanager.core.validator.ValidatableEntity;
-import fr.eventmanager.core.validator.ValidationMessage;
 import fr.eventmanager.core.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.Column;
@@ -21,31 +21,24 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
 
     static final String tableName = "User";
 
-    private static final String fieldId = "id";
-    private static final String fieldName = "name";
-    private static final String fieldEmail = "email";
-    private static final String fieldPassword = "password";
-    private static final String fieldCompany = "company";
-    private static final String fieldRegistered = "registered";
-
     @Id
     @GeneratedValue
-    @Column(name = fieldId)
+    @Column(name = "id")
     private Integer id;
 
-    @Column(name = fieldName, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = fieldEmail, nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = fieldPassword)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = fieldCompany, nullable = false)
+    @Column(name = "company", nullable = false)
     private String company;
 
-    @Column(name = fieldRegistered, nullable = false)
+    @Column(name = "registered", nullable = false)
     private boolean registered = false;
 
     public User(String name, String email, String password, String company, boolean registered) {
@@ -70,6 +63,10 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
         this(name, email, null, company, false);
     }
 
+    public User(String name) {
+        this(name, null, null);
+    }
+
     public User() {}
 
     @Override
@@ -83,6 +80,10 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getCompany() {
@@ -99,11 +100,11 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
         if ((isNull(name) || name.isEmpty()) ||
             (isNull(email) || email.isEmpty()) ||
             (isNull(password) || password.isEmpty())) {
-            return EitherValidatorResult.error(new ValidationMessage(ErrorMessage.ARE_EMPTY));
+            return EitherValidatorResult.error(PreparedMessage.VALIDATION_ARE_EMPTY.getMessage());
         }
 
         if (String.valueOf(password).length() > 8) {
-            return EitherValidatorResult.error(new ValidationMessage("Le mot de passe est trop court."));
+            return EitherValidatorResult.error("Le mot de passe est trop court.");
         }
 
         return EitherValidatorResult.success();

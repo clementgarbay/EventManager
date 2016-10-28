@@ -5,11 +5,12 @@ import fr.eventmanager.core.router.Path;
 import fr.eventmanager.core.router.WrappedHttpServlet;
 import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.core.utils.Alert.AlertType;
+import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.dao.impl.EventDAO;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
 import fr.eventmanager.entity.helper.EventHelper;
-import fr.eventmanager.security.SecurityService;
+import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,8 +28,6 @@ import static java.util.Objects.isNull;
 /**
  * @author Clément Garbay
  * @author Paul Defois
- *
- * TODO : factorize the methods body
  */
 @WebServlet(name = "EventServlet", urlPatterns = {Path.PathConstants.EVENTS + "/*"})
 public class EventsServlet extends Servlet {
@@ -72,12 +72,13 @@ public class EventsServlet extends Servlet {
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
-        if (eventOptional.isPresent()) {
-            request.setAttribute("event", eventOptional.get());
-            render(request, response, "event.jsp");
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.EVENTS.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
         }
+
+        request.setAttribute("event", eventOptional.get());
+        render(request, response, "event.jsp");
     }
 
     private void displayNewEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -95,23 +96,23 @@ public class EventsServlet extends Servlet {
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
-        if (eventOptional.isPresent()) {
-
-            Event event = eventOptional.get();
-            User loggedUser = SecurityService.getLoggedUser(request);
-
-            // Check if the logged user is the owner of this event
-            if (!isNull(loggedUser) && loggedUser.getId().equals(event.getOwner().getId())) {
-                request.setAttribute("event", event);
-                render(request, response, "event_edit.jsp");
-            } else {
-                // 401
-                request.setAttribute("event", event);
-                render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Vous n'avez pas les droits pour modifier cet événement."));
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.EVENTS.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
         }
+
+        Event event = eventOptional.get();
+        User loggedUser = SecurityService.getLoggedUser(request);
+
+        // Check if the logged user is the owner of this event
+        if (isNull(loggedUser) || !loggedUser.getId().equals(event.getOwner().getId())) {
+            String path = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+            redirect(request, response, path, new Alert(AlertType.DANGER, PreparedMessage.FORBIDDEN.getMessage()));
+            return;
+        }
+
+        request.setAttribute("event", event);
+        render(request, response, "event_edit.jsp");
     }
 
     private void addEvent(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -124,14 +125,15 @@ public class EventsServlet extends Servlet {
             .validate()
             .apply(success -> {
                 if (eventService.addEvent(eventBuilt)) {
-                    redirect(request, response, Path.EVENTS.getFullPath() + Integer.toString(eventBuilt.getId()));
+                    String path = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(eventBuilt.getId())));
+                    redirect(request, response, path);
                 } else {
                     request.setAttribute("event", eventBuilt);
-                    render(request, response, "events_new.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
+                    render(request, response, "events_new.jsp", Alert.danger(PreparedMessage.INTERNAL_SERVER_ERROR.getMessage()));
                 }
             }, error -> {
                 request.setAttribute("event", eventBuilt);
-                render(request, response, "events_new.jsp", new Alert(AlertType.DANGER, error.getMessage()));
+                render(request, response, "events_new.jsp", Alert.danger(error));
             });
     }
 
@@ -145,34 +147,37 @@ public class EventsServlet extends Servlet {
         Optional<Event> eventOptional = eventService.getEvent(eventId);
         Event modifiedEventBuilt = EventHelper.build(request);
 
-        if (eventOptional.isPresent()) {
-
-            Event event = eventOptional.get();
-            User loggedUser = SecurityService.getLoggedUser(request);
-
-            // Check if the logged user is the owner of this event
-            if (!isNull(loggedUser) && loggedUser.getId().equals(event.getOwner().getId())) {
-                modifiedEventBuilt.setId(eventId);
-
-                modifiedEventBuilt
-                    .validate()
-                    .apply(success -> {
-                        if (eventService.updateEvent(modifiedEventBuilt)) {
-                            redirect(request, response, Path.EVENTS.getFullPath() + Integer.toString(modifiedEventBuilt.getId()));
-                        } else {
-                            request.setAttribute("event", modifiedEventBuilt);
-                            render(request, response, "event_edit.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
-                        }
-                    }, error -> {
-                        request.setAttribute("event", modifiedEventBuilt);
-                        render(request, response, "event_edit.jsp", new Alert(AlertType.DANGER, error.getMessage()));
-                    });
-            } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-            }
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.EVENTS.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
         }
+
+        Event event = eventOptional.get();
+        User loggedUser = SecurityService.getLoggedUser(request);
+
+        String redirectionPath = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+
+        // Check if the logged user is the owner of this event
+        if (isNull(loggedUser) || loggedUser.getId().equals(event.getOwner().getId())) {
+            redirect(request, response, redirectionPath, Alert.danger(PreparedMessage.FORBIDDEN.getMessage()));
+            return;
+        }
+
+        modifiedEventBuilt.setId(eventId);
+
+        modifiedEventBuilt
+            .validate()
+            .apply(success -> {
+                if (!eventService.updateEvent(modifiedEventBuilt)) {
+                    redirect(request, response, redirectionPath);
+                } else {
+                    request.setAttribute("event", modifiedEventBuilt);
+                    render(request, response, "event_edit.jsp", Alert.danger(PreparedMessage.INTERNAL_SERVER_ERROR.getMessage()));
+                }
+            }, error -> {
+                request.setAttribute("event", modifiedEventBuilt);
+                render(request, response, "event_edit.jsp", Alert.danger(error));
+            });
     }
 
     private void subscribe(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -183,20 +188,22 @@ public class EventsServlet extends Servlet {
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            User loggedUser = SecurityService.getLoggedUser(request);
-
-            if (eventService.subscribe(event, loggedUser)) {
-                redirect(request, response, Path.EVENTS.getFullPath() + eventId);
-            } else {
-                request.setAttribute("event", event);
-                render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
-            }
-        } else {
-            // Si l'événement n'existe pas
-            redirect(request, response, Path.EVENTS.getFullPath());
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.EVENTS.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
         }
+
+        Event event = eventOptional.get();
+        User loggedUser = SecurityService.getLoggedUser(request);
+
+        String redirectionPath = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+
+        if (!eventService.subscribe(event, loggedUser)) {
+            redirect(request, response, redirectionPath, Alert.danger(PreparedMessage.INTERNAL_SERVER_ERROR.getMessage()));
+            return;
+        }
+
+        redirect(request, response, redirectionPath);
     }
 
     private void unsubscribe(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -207,25 +214,27 @@ public class EventsServlet extends Servlet {
         int eventId = Integer.parseInt(parameters.get("eventId"));
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            User loggedUser = SecurityService.getLoggedUser(request);
-
-            if (event.isParticipant(loggedUser)) {
-                if (eventService.unsubscribe(event, loggedUser)) {
-                    redirect(request, response, Path.EVENTS.getFullPath() + eventId);
-                } else {
-                    request.setAttribute("event", event);
-                    render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
-                }
-            } else {
-                request.setAttribute("event", event);
-                render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Vous ne pouvez pas vous désinscrire d'un événement auquel vous ne participez pas."));
-            }
-        } else {
-            // Si l'événement n'existe pas
-            redirect(request, response, Path.EVENTS.getFullPath());
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.EVENTS.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
         }
+
+        Event event = eventOptional.get();
+        User loggedUser = SecurityService.getLoggedUser(request);
+
+        String redirectionPath = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+
+        if (!event.isParticipant(loggedUser)) {
+            redirect(request, response, redirectionPath, Alert.danger("Vous ne pouvez pas vous désinscrire d'un événement auquel vous ne participez pas."));
+            return;
+        }
+
+        if (!eventService.unsubscribe(event, loggedUser)) {
+            redirect(request, response, redirectionPath, Alert.danger(PreparedMessage.INTERNAL_SERVER_ERROR.getMessage()));
+            return;
+        }
+
+        redirect(request, response, redirectionPath);
     }
 
 }
