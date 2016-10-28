@@ -1,10 +1,10 @@
 package fr.eventmanager.controller;
 
-import fr.eventmanager.core.session.SessionManager;
-import fr.eventmanager.security.SecurityService;
-import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.core.router.HttpMethod;
 import fr.eventmanager.core.router.ServletRouter;
+import fr.eventmanager.core.session.SessionManager;
+import fr.eventmanager.core.utils.Alert;
+import fr.eventmanager.security.SecurityService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;

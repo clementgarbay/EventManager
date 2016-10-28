@@ -1,7 +1,7 @@
 package fr.eventmanager.dao;
 
-import fr.eventmanager.entity.StorableEntity;
 import fr.eventmanager.core.persistence.QueryField;
+import fr.eventmanager.entity.StorableEntity;
 
 import java.util.List;
 import java.util.Optional;

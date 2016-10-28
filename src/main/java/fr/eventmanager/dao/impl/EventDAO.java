@@ -1,10 +1,10 @@
 package fr.eventmanager.dao.impl;
 
+import fr.eventmanager.core.persistence.BaseQuery;
+import fr.eventmanager.core.persistence.QueryField;
 import fr.eventmanager.dao.IEventDAO;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
-import fr.eventmanager.core.persistence.BaseQuery;
-import fr.eventmanager.core.persistence.QueryField;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
