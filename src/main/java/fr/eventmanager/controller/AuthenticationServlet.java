@@ -3,11 +3,11 @@ package fr.eventmanager.controller;
 import fr.eventmanager.core.router.HttpMethod;
 import fr.eventmanager.core.router.Path;
 import fr.eventmanager.core.router.WrappedHttpServlet;
+import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.dao.impl.UserDAO;
 import fr.eventmanager.entity.User;
 import fr.eventmanager.entity.helper.UserHelper;
-import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
 
@@ -63,7 +63,7 @@ public class AuthenticationServlet extends Servlet {
         User user = UserHelper.build(request);
 
         if (!userService.areCredentialsValid(user.getEmail(), user.getPassword())) {
-            request.setAttribute("user", new User(user.getName()));
+            request.setAttribute("user", new User(user.getEmail()));
             render(request, response, "login.jsp", Alert.danger("Couple email / mot de passe incorrect."));
             return;
         }

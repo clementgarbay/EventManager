@@ -3,7 +3,6 @@ package fr.eventmanager.entity;
 import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.core.validator.EitherValidatorResult;
 import fr.eventmanager.core.validator.ValidatableEntity;
-import fr.eventmanager.core.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -63,8 +62,8 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
         this(name, email, null, company, false);
     }
 
-    public User(String name) {
-        this(name, null, null);
+    public User(String email) {
+        this(null, email, null);
     }
 
     public User() {}

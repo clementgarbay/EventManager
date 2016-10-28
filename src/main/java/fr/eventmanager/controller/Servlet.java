@@ -2,9 +2,9 @@ package fr.eventmanager.controller;
 
 import fr.eventmanager.core.router.HttpMethod;
 import fr.eventmanager.core.router.ServletRouter;
+import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.core.session.SessionManager;
 import fr.eventmanager.core.utils.Alert;
-import fr.eventmanager.core.security.SecurityService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -74,14 +74,5 @@ public abstract class Servlet extends ServletRouter {
 
     protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage) throws IOException {
         render(request, response, partialPage, null);
-    }
-
-    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint, Alert alert) throws IOException {
-        if (!isNull(alert)) SessionManager.set(request, "ALERT", alert);
-        response.sendRedirect(getServletContext().getContextPath() + endPoint);
-    }
-
-    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint) throws IOException {
-        redirect(request, response, endPoint, null);
     }
 }

@@ -3,6 +3,7 @@ package fr.eventmanager.controller;
 import fr.eventmanager.core.router.HttpMethod;
 import fr.eventmanager.core.router.Path;
 import fr.eventmanager.core.router.WrappedHttpServlet;
+import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.core.utils.Alert.AlertType;
 import fr.eventmanager.core.utils.PreparedMessage;
@@ -10,7 +11,6 @@ import fr.eventmanager.dao.impl.EventDAO;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
 import fr.eventmanager.entity.helper.EventHelper;
-import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.service.IEventService;
 import fr.eventmanager.service.impl.EventService;
 

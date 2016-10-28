@@ -11,7 +11,7 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="text" name="user_email" class="form-control" placeholder="Email" value="${user.email}">
+                        <input type="text" name="email" class="form-control" placeholder="Email" value="${user.email}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                         <i class="fa fa-key"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="password" name="user_password" class="form-control" placeholder="Mot de passe">
+                        <input type="password" name="password" class="form-control" placeholder="Mot de passe">
                         <span class="material-input"></span>
                     </div>
                 </div>

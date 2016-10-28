@@ -1,9 +1,9 @@
 package fr.eventmanager.entity.helper;
 
+import fr.eventmanager.core.security.SecurityService;
 import fr.eventmanager.entity.Address;
 import fr.eventmanager.entity.Event;
 import fr.eventmanager.entity.User;
-import fr.eventmanager.core.security.SecurityService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;

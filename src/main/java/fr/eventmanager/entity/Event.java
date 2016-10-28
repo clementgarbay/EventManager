@@ -3,7 +3,6 @@ package fr.eventmanager.entity;
 import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.core.validator.EitherValidatorResult;
 import fr.eventmanager.core.validator.ValidatableEntity;
-import fr.eventmanager.core.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.*;
 import java.io.Serializable;

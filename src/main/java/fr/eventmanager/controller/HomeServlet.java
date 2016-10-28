@@ -27,6 +27,6 @@ public class HomeServlet extends Servlet {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
-        render(request, response, "events.jsp");
+        redirect(request, response, Path.EVENTS.getFullPath());
     }
 }
