@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static java.util.Objects.isNull;
+
 /**
  * @author Clément Garbay
  */
@@ -100,10 +102,7 @@ public class PersistenceManager<T extends StorableEntity> {
     protected T getSingleResult(Query query) {
         query.setMaxResults(1);
         List<T> list = query.getResultList();
-        if (list == null || list.isEmpty()) {
-            return null;
-        }
-        return list.get(0);
+        return (isNull(list) || list.isEmpty()) ? null : list.get(0);
     }
 
     protected List<T> getResultList(Query query) {

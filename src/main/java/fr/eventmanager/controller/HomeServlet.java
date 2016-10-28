@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author Clément Garbay
@@ -22,7 +23,7 @@ public class HomeServlet extends Servlet {
         bind(HttpMethod.GET, Path.HOME, false).to(this::displayHomePage);
     }
 
-    private void displayHomePage(WrappedHttpServlet wrappedHttpServlet) {
+    private void displayHomePage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 

@@ -1,43 +1,30 @@
 package fr.eventmanager.security;
 
+import fr.eventmanager.core.session.SessionManager;
 import fr.eventmanager.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+
+import static java.util.Objects.isNull;
 
 public class SecurityService {
 
     private static final String LOGGED_USER = "LOGGED_USER";
 
-    public SecurityService() {}
-
     public static void setLoggedUser(HttpServletRequest request, User userConnected) {
-        HttpSession session = request.getSession(false);
-        if (session == null) session = request.getSession();
-        session.setAttribute(LOGGED_USER, userConnected);
+        SessionManager.set(request, LOGGED_USER, userConnected);
     }
 
     public static User getLoggedUser(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        if (session != null) {
-            Object connectedUserObject = session.getAttribute(LOGGED_USER);
-
-            if (connectedUserObject instanceof User) {
-                return (User) connectedUserObject;
-            }
-        }
-
-        return null;
+        return SessionManager.get(request, LOGGED_USER);
     }
 
     public static boolean isLogged(HttpServletRequest request) {
-        return getLoggedUser(request) != null;
+        return !isNull(getLoggedUser(request));
     }
 
     public static void clear(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        if (session != null) session.invalidate();
+        SessionManager.clear(request);
     }
 
 }

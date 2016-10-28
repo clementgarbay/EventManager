@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+import static java.util.Objects.isNull;
+
 /**
  * ServletRouter
  *
@@ -80,7 +82,7 @@ public abstract class ServletRouter extends HttpServlet {
 
     ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
         List<Route> routesForHttpMethod = routes.get(httpMethod);
-        if (routesForHttpMethod == null) routesForHttpMethod = new ArrayList<>();
+        if (isNull(routesForHttpMethod)) routesForHttpMethod = new ArrayList<>();
 
         routesForHttpMethod.add(route);
         routes.put(httpMethod, routesForHttpMethod);

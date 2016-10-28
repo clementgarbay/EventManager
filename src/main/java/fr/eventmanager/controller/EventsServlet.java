@@ -56,7 +56,7 @@ public class EventsServlet extends Servlet {
         this.eventService.close();
     }
 
-    private void displayEventsPage(WrappedHttpServlet wrappedHttpServlet) {
+    private void displayEventsPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
@@ -80,7 +80,7 @@ public class EventsServlet extends Servlet {
         }
     }
 
-    private void displayNewEventPage(WrappedHttpServlet wrappedHttpServlet) {
+    private void displayNewEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
@@ -124,7 +124,7 @@ public class EventsServlet extends Servlet {
             .validate()
             .apply(success -> {
                 if (eventService.addEvent(eventBuilt)) {
-                    redirect(response, Path.EVENTS.getFullPath() + Integer.toString(eventBuilt.getId()));
+                    redirect(request, response, Path.EVENTS.getFullPath() + Integer.toString(eventBuilt.getId()));
                 } else {
                     request.setAttribute("event", eventBuilt);
                     render(request, response, "events_new.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
@@ -158,7 +158,7 @@ public class EventsServlet extends Servlet {
                     .validate()
                     .apply(success -> {
                         if (eventService.updateEvent(modifiedEventBuilt)) {
-                            redirect(response, Path.EVENTS.getFullPath() + Integer.toString(modifiedEventBuilt.getId()));
+                            redirect(request, response, Path.EVENTS.getFullPath() + Integer.toString(modifiedEventBuilt.getId()));
                         } else {
                             request.setAttribute("event", modifiedEventBuilt);
                             render(request, response, "event_edit.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
@@ -188,14 +188,14 @@ public class EventsServlet extends Servlet {
             User loggedUser = SecurityService.getLoggedUser(request);
 
             if (eventService.subscribe(event, loggedUser)) {
-                redirect(response, Path.EVENTS.getFullPath() + eventId);
+                redirect(request, response, Path.EVENTS.getFullPath() + eventId);
             } else {
                 request.setAttribute("event", event);
                 render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
             }
         } else {
             // Si l'événement n'existe pas
-            redirect(response, Path.EVENTS.getFullPath());
+            redirect(request, response, Path.EVENTS.getFullPath());
         }
     }
 
@@ -213,7 +213,7 @@ public class EventsServlet extends Servlet {
 
             if (event.isParticipant(loggedUser)) {
                 if (eventService.unsubscribe(event, loggedUser)) {
-                    redirect(response, Path.EVENTS.getFullPath() + eventId);
+                    redirect(request, response, Path.EVENTS.getFullPath() + eventId);
                 } else {
                     request.setAttribute("event", event);
                     render(request, response, "event.jsp", new Alert(AlertType.DANGER, "Une erreur est survenue. Merci de réessayer."));
@@ -224,7 +224,7 @@ public class EventsServlet extends Servlet {
             }
         } else {
             // Si l'événement n'existe pas
-            redirect(response, Path.EVENTS.getFullPath());
+            redirect(request, response, Path.EVENTS.getFullPath());
         }
     }
 

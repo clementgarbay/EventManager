@@ -1,5 +1,6 @@
 package fr.eventmanager.controller;
 
+import fr.eventmanager.core.session.SessionManager;
 import fr.eventmanager.security.SecurityService;
 import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.core.router.HttpMethod;
@@ -45,11 +46,16 @@ public abstract class Servlet extends ServletRouter {
         process(HttpMethod.DELETE, request, response);
     }
 
-    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage, Alert alert) {
+    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage, Alert alert) throws IOException {
         request.setAttribute("partialPage", partialPage);
 
         request.setAttribute("SECURITY_IS_LOGGED", SecurityService.isLogged(request));
         request.setAttribute("SECURITY_LOGGED_USER", SecurityService.getLoggedUser(request));
+
+        if (isNull(alert)) {
+            alert = SessionManager.get(request, "ALERT");
+            SessionManager.remove(request, "ALERT");
+        }
 
         if (!isNull(alert)) {
             request.setAttribute("alertType", alert.getType().toString());
@@ -62,28 +68,20 @@ public abstract class Servlet extends ServletRouter {
             requestDispatcher.forward(request, response);
         } catch (ServletException | IOException e) {
             e.printStackTrace();
-            try {
-                response.sendError(SC_INTERNAL_SERVER_ERROR);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            response.sendError(SC_INTERNAL_SERVER_ERROR);
         }
     }
 
-    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage) {
+    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage) throws IOException {
         render(request, response, partialPage, null);
     }
 
-    protected void redirect(HttpServletResponse response, String endPoint, Alert alert) throws IOException {
-
-        if (!isNull(alert)) {
-
-        }
-
+    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint, Alert alert) throws IOException {
+        if (!isNull(alert)) SessionManager.set(request, "ALERT", alert);
         response.sendRedirect(getServletContext().getContextPath() + endPoint);
     }
 
-    protected void redirect(HttpServletResponse response, String endPoint) throws IOException {
-        redirect(response, endPoint, null);
+    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint) throws IOException {
+        redirect(request, response, endPoint, null);
     }
 }

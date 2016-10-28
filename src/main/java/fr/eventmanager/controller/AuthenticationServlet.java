@@ -43,7 +43,7 @@ public class AuthenticationServlet extends Servlet {
         this.userService.close();
     }
 
-    private void displayLoginPage(WrappedHttpServlet wrappedHttpServlet) {
+    private void displayLoginPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
@@ -67,7 +67,7 @@ public class AuthenticationServlet extends Servlet {
             if (userOptional.isPresent()) { // useless ?
                 SecurityService.setLoggedUser(request, userOptional.get());
 
-                redirect(response, Path.EVENTS.getFullPath());
+                redirect(request, response, Path.EVENTS.getFullPath());
             } else {
                 render(request, response, "login.jsp", new Alert(Alert.AlertType.DANGER, "Utilisateur introuvable."));
             }
@@ -76,7 +76,7 @@ public class AuthenticationServlet extends Servlet {
         }
     }
 
-    private void logout(WrappedHttpServlet wrappedHttpServlet) {
+    private void logout(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
