@@ -2,7 +2,7 @@ package fr.eventmanager.dao.impl;
 
 import fr.eventmanager.dao.IUserDAO;
 import fr.eventmanager.entity.User;
-import fr.eventmanager.utils.persistence.QueryField;
+import fr.eventmanager.core.persistence.QueryField;
 
 import java.util.Optional;
 

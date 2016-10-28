@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.router;
+package fr.eventmanager.core.router;
 
 import java.util.HashMap;
 import java.util.Map;

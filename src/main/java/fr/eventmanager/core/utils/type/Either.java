@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.type;
+package fr.eventmanager.core.utils.type;
 
 import java.util.Optional;
 import java.util.function.Consumer;

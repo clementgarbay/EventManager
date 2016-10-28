@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.validator;
+package fr.eventmanager.core.validator;
 
 /**
  * @author Clément Garbay

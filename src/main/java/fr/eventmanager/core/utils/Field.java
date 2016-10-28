@@ -1,4 +1,4 @@
-package fr.eventmanager.utils;
+package fr.eventmanager.core.utils;
 
 /**
  * @author Clément Garbay

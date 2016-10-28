@@ -1,9 +1,9 @@
 package fr.eventmanager.controller;
 
 import fr.eventmanager.security.SecurityService;
-import fr.eventmanager.utils.Alert;
-import fr.eventmanager.utils.router.HttpMethod;
-import fr.eventmanager.utils.router.ServletRouter;
+import fr.eventmanager.core.utils.Alert;
+import fr.eventmanager.core.router.HttpMethod;
+import fr.eventmanager.core.router.ServletRouter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static java.util.Objects.isNull;
 import static javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 
 /**
@@ -44,13 +45,13 @@ public abstract class Servlet extends ServletRouter {
         process(HttpMethod.DELETE, request, response);
     }
 
-    void render(HttpServletRequest request, HttpServletResponse response, String partialPage, Alert alert) {
+    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage, Alert alert) {
         request.setAttribute("partialPage", partialPage);
 
         request.setAttribute("SECURITY_IS_LOGGED", SecurityService.isLogged(request));
         request.setAttribute("SECURITY_LOGGED_USER", SecurityService.getLoggedUser(request));
 
-        if (alert != null) {
+        if (!isNull(alert)) {
             request.setAttribute("alertType", alert.getType().toString());
             request.setAttribute("alertMessage", alert.getMessage());
         }
@@ -69,11 +70,20 @@ public abstract class Servlet extends ServletRouter {
         }
     }
 
-    void render(HttpServletRequest request, HttpServletResponse response, String partialPage) {
+    protected void render(HttpServletRequest request, HttpServletResponse response, String partialPage) {
         render(request, response, partialPage, null);
     }
 
-    void redirect(HttpServletResponse response, String endPoint) throws IOException {
+    protected void redirect(HttpServletResponse response, String endPoint, Alert alert) throws IOException {
+
+        if (!isNull(alert)) {
+
+        }
+
         response.sendRedirect(getServletContext().getContextPath() + endPoint);
+    }
+
+    protected void redirect(HttpServletResponse response, String endPoint) throws IOException {
+        redirect(response, endPoint, null);
     }
 }

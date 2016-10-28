@@ -1,6 +1,6 @@
 package fr.eventmanager.tags.application;
 
-import fr.eventmanager.utils.router.Path;
+import fr.eventmanager.core.router.Path;
 import org.json.JSONException;
 import org.json.JSONObject;
 

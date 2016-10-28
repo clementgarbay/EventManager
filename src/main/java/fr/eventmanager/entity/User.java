@@ -1,9 +1,9 @@
 package fr.eventmanager.entity;
 
-import fr.eventmanager.utils.validator.EitherValidatorResult;
-import fr.eventmanager.utils.validator.ValidatableEntity;
-import fr.eventmanager.utils.validator.ValidationMessage;
-import fr.eventmanager.utils.validator.ValidationMessage.ErrorMessage;
+import fr.eventmanager.core.validator.EitherValidatorResult;
+import fr.eventmanager.core.validator.ValidatableEntity;
+import fr.eventmanager.core.validator.ValidationMessage;
+import fr.eventmanager.core.validator.ValidationMessage.ErrorMessage;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

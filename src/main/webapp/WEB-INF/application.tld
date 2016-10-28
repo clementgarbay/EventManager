@@ -29,7 +29,7 @@
             <name>pathId</name>
             <description>L'identifiant correspondant à l'URL à générer.</description>
             <required>true</required>
-            <type>fr.eventmanager.utils.router.Path</type>
+            <type>fr.eventmanager.core.router.Path</type>
         </attribute>
 
         <attribute>

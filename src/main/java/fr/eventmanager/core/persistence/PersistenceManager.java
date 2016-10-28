@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.persistence;
+package fr.eventmanager.core.persistence;
 
 import fr.eventmanager.entity.StorableEntity;
 
@@ -58,17 +58,17 @@ public class PersistenceManager<T extends StorableEntity> {
         }
 
         if (action.equals(Action.UPDATE)) {
-            CriteriaUpdate<T> criteriaQuery = criteriaBuilder.createCriteriaUpdate(this.entityClassType);
-            Root<T> root = criteriaQuery.from(this.entityClassType);
+            CriteriaUpdate<T> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(this.entityClassType);
+            Root<T> root = criteriaUpdate.from(this.entityClassType);
 
-            return new BaseQuery<>(root, (C) criteriaQuery);
+            return new BaseQuery<>(root, (C) criteriaUpdate);
         }
 
         if (action.equals(Action.DELETE)) {
-            CriteriaDelete<T> criteriaQuery = criteriaBuilder.createCriteriaDelete(this.entityClassType);
-            Root<T> root = criteriaQuery.from(this.entityClassType);
+            CriteriaDelete<T> criteriaDelete = criteriaBuilder.createCriteriaDelete(this.entityClassType);
+            Root<T> root = criteriaDelete.from(this.entityClassType);
 
-            return new BaseQuery<>(root, (C) criteriaQuery);
+            return new BaseQuery<>(root, (C) criteriaDelete);
         }
 
         // TODO : throw Exception

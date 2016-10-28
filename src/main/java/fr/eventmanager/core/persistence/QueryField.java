@@ -1,6 +1,6 @@
-package fr.eventmanager.utils.persistence;
+package fr.eventmanager.core.persistence;
 
-import fr.eventmanager.utils.Field;
+import fr.eventmanager.core.utils.Field;
 
 /**
  * @author Clément Garbay

@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.router;
+package fr.eventmanager.core.router;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

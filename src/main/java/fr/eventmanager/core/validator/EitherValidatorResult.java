@@ -1,4 +1,4 @@
-package fr.eventmanager.utils.validator;
+package fr.eventmanager.core.validator;
 
 import java.io.IOException;
 import java.util.Optional;

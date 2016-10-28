@@ -1,6 +1,6 @@
-package fr.eventmanager.utils.persistence;
+package fr.eventmanager.core.persistence;
 
-import fr.eventmanager.utils.type.Tuple;
+import fr.eventmanager.core.utils.type.Tuple;
 
 import javax.persistence.criteria.CommonAbstractCriteria;
 import javax.persistence.criteria.Root;

@@ -5,10 +5,10 @@ import fr.eventmanager.entity.User;
 import fr.eventmanager.security.SecurityService;
 import fr.eventmanager.service.IUserService;
 import fr.eventmanager.service.impl.UserService;
-import fr.eventmanager.utils.Alert;
-import fr.eventmanager.utils.router.HttpMethod;
-import fr.eventmanager.utils.router.Path;
-import fr.eventmanager.utils.router.WrappedHttpServlet;
+import fr.eventmanager.core.utils.Alert;
+import fr.eventmanager.core.router.HttpMethod;
+import fr.eventmanager.core.router.Path;
+import fr.eventmanager.core.router.WrappedHttpServlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
