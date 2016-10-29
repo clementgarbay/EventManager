@@ -9,9 +9,9 @@
 <div class="col-sm-4">
     <a href="<app:getUrl pathId="EVENT" params="{eventId:${event.id}}"/>">
         <div class="card card-stats">
-            <div class="card-header" data-background-color="purple">
-                <i class="material-icons">store</i>
-            </div>
+            <%--<div class="card-header" data-background-color="purple">--%>
+                <%--<i class="material-icons">store</i>--%>
+            <%--</div>--%>
             <div class="card-content">
                 <h3 class="title">${event.title}</h3>
                 <p class="category">${fn:replace(event.description, fn:substring(event.description, 240, fn:length(event.description)), '...')}</p>

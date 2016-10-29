@@ -1,0 +1,71 @@
+/* TODO : review bad '!important' usage */
+
+body {
+  background-color: #eee;
+}
+
+.wrapper > .container {
+  padding-top: 95px;
+}
+
+.navbar.navbar-transparent {
+  color: #555555 !important;
+}
+
+.card {
+  margin-top: 0 !important;
+
+  &-signup {
+    margin-top: 50px !important;
+  }
+
+  &-header {
+    float: none !important;
+    margin: -20px auto !important;
+    padding: 10px !important;
+    width: 80px;
+  }
+
+  &-content {
+    min-height: 190px;
+    position: relative !important;
+    margin-top: 10px !important;
+    text-align: left !important;
+
+    .title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
+
+  &-footer {
+    height: auto !important;
+    padding: 10px 0 0 0 !important;
+
+    .stats .material-icons {
+      top: -1px !important;
+    }
+  }
+
+  &-infos {
+    margin: 20px 0;
+    padding: 10px 20px;
+    border-left: 1px solid #dddddd;
+  }
+}
+
+.alert {
+  position: fixed;
+  width: 90%;
+  margin: 20px 5%;
+  z-index: 99999;
+}
+
+.form-group {
+  margin: 20px 0 0 !important;
+}
+
+.table thead tr th {
+  font-weight: 400;
+}

@@ -8,19 +8,21 @@
 
 <c:set var="nbParticipants" scope="page" value="${fn:length(event.participants)}"/>
 <c:set var="remainingTickets" scope="page" value="${event.maxTickets - nbParticipants}"/>
+<c:set var="newline" value="<%= \"\n\" %>" />
 
 <div class="col-sm-12">
     <div class="card">
         <div class="col-sm-9">
             <h1>${event.title}</h1>
-            <p>${event.description}</p>
+            <p>${fn:replace(event.description, newline, "<br><br>")}</p>
         </div>
         <div class="col-sm-3 card-infos">
             <h3 style="margin-top: 0;">Date et heure</h3>
             <p><fmt:formatDate pattern="dd/MM/yyyy',' HH'h'mm" value="${event.date}" /></p>
 
             <h3>Lieu</h3>
-            <p>${event.address.getName()}<br><small>${event.address.getCity()}, ${event.address.getZipCode()} (${event.address.getCountry()})</small></p>
+            <p>${event.address.getName()}</p>
+            <small>${event.address.getCity()}, ${event.address.getZipCode()} (${event.address.getCountry()})</small>
 
             <h3>Propriétaire</h3>
             <p>${event.owner.getName()}</p>

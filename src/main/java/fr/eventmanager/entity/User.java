@@ -102,8 +102,8 @@ public class User implements Serializable, StorableEntity, ValidatableEntity {
             return EitherValidatorResult.error(PreparedMessage.VALIDATION_ARE_EMPTY.getMessage());
         }
 
-        if (String.valueOf(password).length() > 8) {
-            return EitherValidatorResult.error("Le mot de passe est trop court.");
+        if (String.valueOf(password).length() < 8) {
+            return EitherValidatorResult.error("Le mot de passe est trop court. Il doit être supérieur à 8 caractères.");
         }
 
         return EitherValidatorResult.success();

@@ -8,10 +8,10 @@
             <div class="content">
                 <div class="input-group">
                     <span class="input-group-addon">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-at"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="text" name="email" class="form-control" placeholder="Email" value="${user.email}">
+                        <input type="text" name="email" class="form-control" placeholder="Votre adresse email" value="${user.email}">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -20,7 +20,7 @@
                         <i class="fa fa-key"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="password" name="password" class="form-control" placeholder="Mot de passe">
+                        <input type="password" name="password" class="form-control" placeholder="Votre mot de passe">
                         <span class="material-input"></span>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
             <div class="footer text-center">
                 <button type="submit" class="btn btn-primary" style="margin: 20px 0 0 0;">Se connecter</button>
                 <div style="font-size: .8em; color: #555; margin: 10px 0;">
-                    <a href="" style="color: #555;">S'inscrire</a> | <a href="" style="color: #555;">Mot de passe oublié ?</a>
+                    <a href="<app:getUrl pathId="SIGNUP"/>" style="color: #555;">S'inscrire</a> | <a href="" style="color: #555;">Mot de passe oublié ?</a>
                 </div>
             </div>
         </form>

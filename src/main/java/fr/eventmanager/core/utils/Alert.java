@@ -23,7 +23,7 @@ public class Alert {
 
     // Syntactic sugar
     public static Alert success(String message) {
-        return new Alert(AlertType.DANGER, message);
+        return new Alert(AlertType.SUCCESS, message);
     }
     public static Alert danger(String message) {
         return new Alert(AlertType.DANGER, message);

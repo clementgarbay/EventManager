@@ -19,6 +19,11 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public boolean register(User user) {
+        return userDAO.create(user);
+    }
+
+    @Override
     public boolean areCredentialsValid(String email, String password) {
         return userDAO.findByEmailAndPassword(email, password).isPresent();
     }
@@ -26,11 +31,6 @@ public class UserService implements IUserService {
     @Override
     public Optional<User> getUserByEmail(String email) {
         return userDAO.findByEmail(email);
-    }
-
-    @Override
-    public boolean isUserExists(String email) {
-        return userDAO.findByEmail(email).isPresent();
     }
 
     @Override

@@ -16,6 +16,7 @@ public enum Path {
     HOME (PathConstants.BLANK, Pattern.compile("/")),
     LOGIN (PathConstants.AUTH, Pattern.compile("/login")),
     LOGOUT (PathConstants.AUTH, Pattern.compile("/logout")),
+    SIGNUP (PathConstants.AUTH, Pattern.compile("/signup")),
     EVENTS (PathConstants.EVENTS, Pattern.compile("/")),
     EVENTS_NEW (PathConstants.EVENTS, Pattern.compile("/new")),
     EVENT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)")),

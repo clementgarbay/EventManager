@@ -4,7 +4,7 @@
 
 <div class="col-sm-12">
     <div class="card">
-        <div class="header" data-background-color="purple" style="margin-top: -20px; background: #9c27b0;">
+        <div class="header" data-background-color="purple" style="background: #9c27b0;">
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
                     <ul class="nav nav-tabs" data-tabs="tabs">
