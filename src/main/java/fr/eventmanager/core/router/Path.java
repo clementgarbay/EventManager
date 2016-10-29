@@ -23,6 +23,7 @@ public enum Path {
     EVENT_EDIT (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/edit")),
     EVENT_SUBSCRIBE (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/subscribe")),
     EVENT_UNSUBSCRIBE (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/unsubscribe")),
+    EVENT_REMOVE (PathConstants.EVENTS, Pattern.compile("/(?<eventId>\\d+)/remove")),
     PROFIL (PathConstants.PROFIL, Pattern.compile("/"));
 
     private final String pathBase;

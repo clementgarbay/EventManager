@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="app" uri="application" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <div class="col-sm-12">
     <div class="card">
@@ -37,86 +38,77 @@
                     <h4 style="margin-top: 0;">${SECURITY_LOGGED_USER.name} <small>${SECURITY_LOGGED_USER.email}</small></h4>
                 </div>
                 <div class="tab-pane" id="events_owner">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Titre</th>
-                                <th>Lieu</th>
-                                <th>Date</th>
-                                <th style="width: 20%;"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <a href="#">
-                                    <td>convention</td>
-                                    <td>Nantes</td>
-                                    <td>15/10</td>
-                                </a>
-                                <td class="td-actions">
-                                    <button type="button" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button type="button" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <a href="#">
-                                    <td>Festival</td>
-                                    <td>Vannes</td>
-                                    <td>18/10</td>
-                                </a>
-                                <td class="td-actions">
-                                    <button type="button" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
-                                        <i class="fa fa-edit"></i>
-                                    </button>
-                                    <button type="button" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <c:choose>
+                        <c:when test="${not empty eventsCreated}">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Lieu</th>
+                                        <th>Date</th>
+                                        <th style="width: 20%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="event" items="${eventsCreated}">
+                                        <tr>
+                                            <a href="#">
+                                                <td>${event.title}</td>
+                                                <td>${event.address.city}</td>
+                                                <td>${event.date}</td>
+                                            </a>
+                                            <td class="td-actions">
+                                                <button type="button" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
+                                                    <i class="fa fa-edit"></i>
+                                                </button>
+                                                <button type="button" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when>
+                        <c:when test="${empty eventsCreated}">
+                            <h4>Vous n'avez créé aucun évènement.</h4>
+                        </c:when>
+                    </c:choose>
                 </div>
                 <div class="tab-pane" id="events_participant">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th>Titre</th>
-                            <th>Lieu</th>
-                            <th>Date</th>
-                            <th style="width: 20%;"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <a href="#">
-                                <td>convention</td>
-                                <td>Nantes</td>
-                                <td>15/10</td>
-                            </a>
-                            <td class="td-actions">
-                                <button type="button" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <a href="#">
-                                <td>Festival</td>
-                                <td>Vannes</td>
-                                <td>18/10</td>
-                            </a>
-                            <td class="td-actions">
-                                <button type="button" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
-                                    <i class="fa fa-times"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <c:choose>
+                        <c:when test="${not empty eventsSuscribed}">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Titre</th>
+                                        <th>Lieu</th>
+                                        <th>Date</th>
+                                        <th style="width: 20%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <c:forEach var="event" items="${eventsSuscribed}">
+                                        <tr>
+                                            <a href="#">
+                                                <td>${event.title}</td>
+                                                <td>${event.address.city}</td>
+                                                <td>${event.date}</td>
+                                            </a>
+                                            <td class="td-actions">
+                                                <button type="button" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </c:forEach>
+                                </tbody>
+                            </table>
+                        </c:when>
+                        <c:when test="${empty eventsSuscribed}">
+                            <h4>Vous ne participez à aucun évènement.</h4>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>
