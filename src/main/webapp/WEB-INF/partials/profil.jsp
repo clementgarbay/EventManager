@@ -4,10 +4,10 @@
 
 <div class="col-sm-12">
     <div class="card">
-        <div class="header" data-background-color="purple" style="background: #9c27b0;">
+        <div class="header" data-background-color="purple" style="padding: 0; background: #9c27b0;">
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
-                    <ul class="nav nav-tabs" data-tabs="tabs">
+                    <ul class="nav nav-tabs" data-tabs="tabs" style="padding: 0;">
                         <li class="active">
                             <a href="#profile" data-toggle="tab" aria-expanded="true">
                                 <i class="fa fa-child"></i> Profil
