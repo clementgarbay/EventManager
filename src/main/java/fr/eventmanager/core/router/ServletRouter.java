@@ -76,6 +76,7 @@ public abstract class ServletRouter extends HttpServlet {
         WrappedHttpServlet wrappedHttpServlet = new WrappedHttpServlet(request, response, parameters);
 
         try {
+            wrappedHttpServlet.getRequest().setCharacterEncoding("UTF-8");
             route.getConsumer().accept(wrappedHttpServlet);
         } catch (ServletException e) {
             e.printStackTrace();

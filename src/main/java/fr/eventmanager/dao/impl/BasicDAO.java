@@ -11,9 +11,7 @@ import fr.eventmanager.entity.User;
 
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.*;
 
