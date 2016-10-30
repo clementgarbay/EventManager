@@ -54,9 +54,23 @@ public class EventService implements IEventService {
         return eventDAO.update(event);
     }
 
-
     @Override
     public void close() {
         eventDAO.close();
+    }
+
+    @Override
+    public List<Event> findByOwner(User user) {
+        return eventDAO.findByOwner(user);
+    }
+
+    @Override
+    public List<Event> findByParticipant(User user) {
+        return eventDAO.findByParticipant(user);
+    }
+
+    @Override
+    public boolean removeEvent(int id) {
+        return eventDAO.delete(id);
     }
 }

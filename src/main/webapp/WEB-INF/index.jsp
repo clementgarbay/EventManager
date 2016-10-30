@@ -10,7 +10,7 @@
     <meta charset="UTF-8">
 
     <!-- External CSS files -->
-    <%--<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>--%>
+    <%--<link rel="stylesheet"  type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700"/>--%>
 
     <!-- CSS files -->
     <link href="<app:getResource path="/css/main.css"/>" rel="stylesheet" type="text/css" />

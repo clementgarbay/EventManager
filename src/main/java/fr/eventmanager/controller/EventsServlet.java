@@ -48,6 +48,7 @@ public class EventsServlet extends Servlet {
         bind(HttpMethod.POST, Path.EVENT_EDIT).to(this::editEvent);
         bind(HttpMethod.POST, Path.EVENT_SUBSCRIBE).to(this::subscribe);
         bind(HttpMethod.POST, Path.EVENT_UNSUBSCRIBE).to(this::unsubscribe);
+        bind(HttpMethod.POST, Path.EVENT_REMOVE).to(this::remove);
     }
 
     @Override
@@ -237,4 +238,34 @@ public class EventsServlet extends Servlet {
         redirect(request, response, redirectionPath);
     }
 
+    private void remove(WrappedHttpServlet wrappedHttpServlet) throws IOException {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+        Map<String, String> parameters = wrappedHttpServlet.getParameters();
+
+        int eventId = Integer.parseInt(parameters.get("eventId"));
+        Optional<Event> eventOptional = eventService.getEvent(eventId);
+
+        if (!eventOptional.isPresent()) {
+            redirect(request, response, Path.PROFIL.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            return;
+        }
+
+        Event event = eventOptional.get();
+        User loggedUser = SecurityService.getLoggedUser(request);
+
+        String redirectionPath = Path.PROFIL.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+
+        if (!event.isOwner(loggedUser)) {
+            redirect(request, response, redirectionPath, Alert.danger("Vous ne pouvez pas supprimer un événement qui ne vous appartient pas."));
+            return;
+        }
+
+        if (!eventService.removeEvent(eventId)) {
+            redirect(request, response, redirectionPath, Alert.danger(PreparedMessage.INTERNAL_SERVER_ERROR.getMessage()));
+            return;
+        }
+
+        redirect(request, response, redirectionPath);
+    }
 }

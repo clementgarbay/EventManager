@@ -16,4 +16,7 @@ public interface IEventService extends IService {
     boolean updateEvent(Event event);
     boolean subscribe(Event event, User user);
     boolean unsubscribe(Event event, User user);
+    List<Event> findByOwner(User user);
+    List<Event> findByParticipant(User user);
+    boolean removeEvent(int id);
 }
