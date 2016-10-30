@@ -48,7 +48,7 @@ public enum Path {
     /**
      * Replace pattern's named group with values and return the instantiate fullpath
      *
-     * For instance, Path.EVENT_EDIT.getFullPath(Collections.singletonMap("eventId", 2))
+     * For instance, Path.EVENT_EDIT.getFullPath(Collections.singletonMap("eventId", "2"))
      * return "/events/2/edit"
      */
     public String getFullPath(Map<String, String> params) {
@@ -69,7 +69,7 @@ public enum Path {
     /**
      * Extract parameters in a path string from a corresponding path pattern.
      *
-     * For instance, Path.EVENT.extractParametersOf("/events/2")
+     * For instance, Path.EVENT.extractParametersOf("/2")
      * return a Map of {eventId: 2}
      */
     public Map<String, String> extractParametersOf(String pathStr) {

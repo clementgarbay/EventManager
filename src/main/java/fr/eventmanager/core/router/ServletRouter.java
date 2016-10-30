@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
  */
 public abstract class ServletRouter extends HttpServlet {
 
-    private Map<HttpMethod, List<Route>> routes;
+    Map<HttpMethod, List<Route>> routes;
 
     public ServletRouter() {
         this.routes = new HashMap<>();
@@ -84,6 +84,15 @@ public abstract class ServletRouter extends HttpServlet {
         }
     }
 
+    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint, Alert alert) throws IOException {
+        if (!isNull(alert)) SessionManager.set(request, "ALERT", alert);
+        response.sendRedirect(getServletContext().getContextPath() + endPoint);
+    }
+
+    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint) throws IOException {
+        redirect(request, response, endPoint, null);
+    }
+
     ServletRouter registerRoute(HttpMethod httpMethod, Route route) {
         List<Route> routesForHttpMethod = routes.get(httpMethod);
         if (isNull(routesForHttpMethod)) routesForHttpMethod = new ArrayList<>();
@@ -92,15 +101,6 @@ public abstract class ServletRouter extends HttpServlet {
         routes.put(httpMethod, routesForHttpMethod);
 
         return this;
-    }
-
-    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint, Alert alert) throws IOException {
-        if (!isNull(alert)) SessionManager.set(request, "ALERT", alert);
-        response.sendRedirect(getServletContext().getContextPath() + endPoint);
-    }
-
-    protected void redirect(HttpServletRequest request, HttpServletResponse response, String endPoint) throws IOException {
-        redirect(request, response, endPoint, null);
     }
 
     private Optional<Route> getRoute(HttpMethod httpMethod, String path) {
