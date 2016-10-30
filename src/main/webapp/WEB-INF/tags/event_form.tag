@@ -6,15 +6,23 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <input type="text" name="title" class="form-control" placeholder="Titre" value="${event.title}">
-        <textarea name="description" class="form-control" placeholder="Description" rows="8">${event.description}</textarea>
+        <div class="form-group">
+            <label class="control-label">Nom de l'événement</label>
+            <input type="text" name="title" class="form-control" placeholder="Donnez-lui un titre court et distinctif" value="${event.title}">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Description</label>
+            <textarea name="description" class="form-control" placeholder="Décrivez cet événement pour présenter son contenu, les intervenants, son organisation, etc" rows="8">${event.description}</textarea>
+        </div>
+
     </div>
 </div>
 <div class="row">
     <div class="col-sm-6">
         <div class="form-group">
             <label class="control-label">Adresse</label>
-            <input type="text" name="address_name" class="form-control" placeholder="2 Rue Alfred Kastler" value="${event.address.name}">
+            <input type="text" name="address_name" class="form-control" placeholder="Précisez où il est organisé" value="${event.address.name}">
             <span class="material-input"></span>
         </div>
     </div>
@@ -28,7 +36,7 @@
     <div class="col-sm-2">
         <div class="form-group">
             <label class="control-label">Code postal</label>
-            <input type="number" name="address_zipCode" min="0" class="form-control" placeholder="44300" value="${event.address.zipCode}">
+            <input type="number" name="address_zipCode" min="0" class="form-control" placeholder="44000" value="${event.address.zipCode}">
             <span class="material-input"></span>
         </div>
     </div>
@@ -36,7 +44,7 @@
 <div class="row">
     <div class="col-sm-2">
         <div class="form-group">
-            <label class="control-label">Nombre de places</label>
+            <label class="control-label">Nombre de places (maximum)</label>
             <input type="number" name="maxTickets" min="0" class="form-control" placeholder="40" value="${event.maxTickets}">
             <span class="material-input"></span>
         </div>
@@ -51,7 +59,7 @@
     <div class="col-sm-2 col-sm-offset-2">
         <div class="form-group">
             <label class="control-label">Date & heure</label>
-            <input type="text" name="date_day" id="datepicker" class="form-control" placeholder="01/01/2016" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${event.date}"/>">
+            <input type="text" name="date_day" id="datepicker" class="form-control" placeholder="dd/mm/yyyy" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${event.date}"/>">
             <span class="material-input"></span>
         </div>
     </div>

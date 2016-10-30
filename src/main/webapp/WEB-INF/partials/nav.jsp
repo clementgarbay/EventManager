@@ -18,6 +18,15 @@
                         Prochains événements
                     </a>
                 </li>
+
+                <c:if test="${SECURITY_IS_LOGGED}">
+                    <li>
+                        <a href="<app:getUrl pathId="EVENTS_NEW"/>">
+                            <i class="fa fa-plus" style="margin: 3px 5px 0 0; font-size: 10px; float: left;"></i> Créer un événement
+                        </a>
+                    </li>
+                </c:if>
+
                 <c:choose>
                     <c:when test="${SECURITY_IS_LOGGED}">
                         <li class="dropdown">

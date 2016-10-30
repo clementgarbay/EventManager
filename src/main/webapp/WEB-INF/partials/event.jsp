@@ -67,6 +67,11 @@
                     </a>
                     <p class="text-muted" style="line-height: 1; text-align: center;"><small>Veuillez vous connecter pour vous inscrire à l'événement.</small></p>
                 </c:when>
+                <c:when test="${SECURITY_IS_LOGGED && event.isOwner(SECURITY_LOGGED_USER)}">
+                    <a href="<app:getUrl pathId="EVENT_EDIT" params="{eventId:${event.id}}"/>" class="btn btn-warning" style="width: 100%; margin-top: 40px;">
+                        Éditer l'événement
+                    </a>
+                </c:when>
             </c:choose>
 
         </div>

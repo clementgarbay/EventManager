@@ -6,11 +6,11 @@
 <div class="col-sm-12">
     <div class="card">
         <div class="content">
-            <h4>Modifier l'événement <small>#${event.id}</small></h4>
+            <h3 style="margin-top: 0;">Modifier l'événement <small>#${event.id}</small></h3>
 
             <form method="post" action="<app:getUrl pathId="EVENT_EDIT" params="{eventId:${event.id}}"/>">
                 <app:eventForm event="${event}" />
-                <button type="submit" class="btn btn-default" style="margin-top: 40px">Enregistrer les modifications</button>
+                <button type="submit" class="btn btn-success" style="margin-top: 40px">Enregistrer les modifications</button>
             </form>
         </div>
     </div>

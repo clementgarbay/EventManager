@@ -8,21 +8,21 @@
             <div class="nav-tabs-navigation">
                 <div class="nav-tabs-wrapper">
                     <ul class="nav nav-tabs" data-tabs="tabs" style="padding: 0;">
-                        <li class="active">
+                        <li class="active" style="margin-bottom: 0;">
                             <a href="#profile" data-toggle="tab" aria-expanded="true">
-                                <i class="fa fa-child"></i> Profil
+                                <i class="fa fa-child" style="margin-right: 5px;"></i> Mon profil
                                 <div class="ripple-container"></div>
                             </a>
                         </li>
-                        <li>
+                        <li style="margin-bottom: 0;">
                             <a href="#events_owner" data-toggle="tab" aria-expanded="false">
-                                <i class="fa fa-calendar-o"></i> Mes événements
+                                <i class="fa fa-calendar-o" style="margin-right: 5px;"></i> Mes événements
                                 <div class="ripple-container"></div>
                             </a>
                         </li>
-                        <li>
+                        <li style="margin-bottom: 0;">
                             <a href="#events_participant" data-toggle="tab" aria-expanded="false">
-                                <i class="fa fa-calendar-o"></i> Événements auxquels je participe
+                                <i class="fa fa-calendar-times-o" style="margin-right: 5px;"></i> Événements auxquels je suis inscrit
                                 <div class="ripple-container"></div>
                             </a>
                         </li>
@@ -34,7 +34,7 @@
         <div class="content">
             <div class="tab-content">
                 <div class="tab-pane active" id="profile">
-                    <h4 style="margin-top: 0;">${SECURITY_LOGGED_USER.name} <small>${SECURITY_LOGGED_USER.email}</small></h4>
+                    <p>Vous êtes connecté en tant que <b>${SECURITY_LOGGED_USER.name} <small>(${SECURITY_LOGGED_USER.email})</small></b>.</p>
                 </div>
                 <div class="tab-pane" id="events_owner">
                     <table class="table">
