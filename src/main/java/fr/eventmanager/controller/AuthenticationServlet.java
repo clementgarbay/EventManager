@@ -4,6 +4,7 @@ import fr.eventmanager.core.router.HttpMethod;
 import fr.eventmanager.core.router.Path;
 import fr.eventmanager.core.router.WrappedHttpServlet;
 import fr.eventmanager.core.security.SecurityService;
+import fr.eventmanager.core.session.SessionManager;
 import fr.eventmanager.core.utils.Alert;
 import fr.eventmanager.core.utils.PreparedMessage;
 import fr.eventmanager.dao.impl.UserDAO;
@@ -18,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+
+import static java.util.Objects.isNull;
 
 /**
  * @author Clément Garbay
@@ -56,6 +59,10 @@ public class AuthenticationServlet extends Servlet {
             return;
         }
 
+        // TOREVIEW : used for redirection after login
+        String urlEndPoint = request.getParameter("url");
+        if (!isNull(urlEndPoint)) SessionManager.set(request, "urlEndPointAfterLogin", urlEndPoint);
+
         render(request, response, "login.jsp");
     }
 
@@ -82,7 +89,15 @@ public class AuthenticationServlet extends Servlet {
 
         SecurityService.setLoggedUser(request, userOptional.get());
 
-        redirect(request, response, Path.EVENTS.getFullPath());
+        // TOREVIEW : used for redirection after login
+        String urlEndPointFromSession = SessionManager.get(request, "urlEndPointAfterLogin");
+        String endPoint = Path.EVENTS.getFullPath();
+        if (!isNull(urlEndPointFromSession)) {
+            endPoint = urlEndPointFromSession;
+            SessionManager.remove(request, "urlEndPointAfterLogin");
+        }
+
+        redirect(request, response, endPoint);
     }
 
     private void logout(WrappedHttpServlet wrappedHttpServlet) throws IOException {

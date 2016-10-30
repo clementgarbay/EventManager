@@ -14,13 +14,13 @@ public class SessionManager {
 
     public static void set(HttpServletRequest request, String key, Object value) {
         HttpSession session = request.getSession(false);
-        if (session == null) session = request.getSession();
+        if (isNull(session)) session = request.getSession();
         session.setAttribute(key, value);
     }
 
     public static <T> T get(HttpServletRequest request, String key) {
         HttpSession session = request.getSession(false);
-        if (session != null) {
+        if (!isNull(session)) {
             Object value = session.getAttribute(key);
             return isNull(value) ? null : (T) value;
         }
@@ -29,12 +29,12 @@ public class SessionManager {
 
     public static void remove(HttpServletRequest request, String key) {
         HttpSession session = request.getSession(false);
-        if (session != null) session.removeAttribute(key);
+        if (!isNull(session)) session.removeAttribute(key);
     }
 
     public static void clear(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        if (session != null) session.invalidate();
+        if (!isNull(session)) session.invalidate();
     }
 
 }

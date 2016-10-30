@@ -7,6 +7,7 @@ import fr.eventmanager.service.IEventService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Clément Garbay
@@ -21,7 +22,11 @@ public class EventService implements IEventService {
 
     @Override
     public List<Event> getEvents() {
-        return eventDAO.findAll();
+        return eventDAO
+                .findAll()
+                .stream()
+                .sorted((e1, e2) -> e1.getDate().compareTo(e2.getDate()))
+                .collect(Collectors.toList());
     }
 
     @Override

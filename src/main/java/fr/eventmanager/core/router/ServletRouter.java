@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
+import static fr.eventmanager.core.utils.Utils.ifNull;
 import static java.util.Objects.isNull;
 
 /**
@@ -53,9 +54,7 @@ public abstract class ServletRouter extends HttpServlet {
      * @throws IOException
      */
     protected void process(HttpMethod httpMethod, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathInfo = request.getPathInfo();
-        String pathStr = (pathInfo != null) ? pathInfo : "/";
-
+        String pathStr = ifNull(request.getPathInfo(), request.getRequestURI());
         Optional<Route> routeOptional = getRoute(httpMethod, pathStr);
 
         if (!routeOptional.isPresent()) {
@@ -106,7 +105,7 @@ public abstract class ServletRouter extends HttpServlet {
     private Optional<Route> getRoute(HttpMethod httpMethod, String path) {
         List<Route> routesForHttpMethod = routes.get(httpMethod);
 
-        if (routesForHttpMethod != null) {
+        if (!isNull(routesForHttpMethod)) {
             return routesForHttpMethod
                     .stream()
                     .filter(route -> route.matchRoute(path))

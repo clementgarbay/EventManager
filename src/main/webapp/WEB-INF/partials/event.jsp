@@ -62,7 +62,7 @@
                     </form>
                 </c:when>
                 <c:when test="${!SECURITY_IS_LOGGED}">
-                    <a href="<app:getUrl pathId="LOGIN"/>" class="btn" style="width: 100%; margin-top: 40px;">
+                    <a href="<app:getUrl pathId="LOGIN"/>?url=/events/${event.id}" class="btn" style="width: 100%; margin-top: 40px;">
                         Se connecter
                     </a>
                     <p class="text-muted" style="line-height: 1; text-align: center;"><small>Veuillez vous connecter pour vous inscrire à l'événement.</small></p>
