@@ -17,31 +17,17 @@ import java.io.IOException;
 
 @WebServlet(name = "ProfilServlet", urlPatterns = {Path.PathConstants.PROFIL + "/*"})
 public class ProfilServlet extends Servlet {
-    private IEventService eventService;
 
     @Override
     public void init() throws ServletException {
         super.init();
 
-        eventService = new EventService(new EventDAO());
-
         bind(HttpMethod.GET, Path.PROFIL).to(this::displayProfilPage);
-    }
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        this.eventService.close();
     }
 
     private void displayProfilPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
         HttpServletRequest request = wrappedHttpServlet.getRequest();
         HttpServletResponse response = wrappedHttpServlet.getResponse();
-
-        User currentUser = SecurityService.getLoggedUser(request);
-
-        request.setAttribute("eventsSuscribed", eventService.findByParticipant(currentUser));
-        request.setAttribute("eventsCreated", eventService.findByOwner(currentUser));
 
         render(request, response, "profil.jsp");
     }

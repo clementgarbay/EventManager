@@ -41,8 +41,9 @@ public class EventsServlet extends Servlet {
         this.eventService = new EventService(new EventDAO());
 
         bind(HttpMethod.GET, Path.EVENTS, false).to(this::displayEventsPage);
-        bind(HttpMethod.GET, Path.EVENT, false).to(this::displayEventPage);
         bind(HttpMethod.GET, Path.EVENTS_NEW).to(this::displayNewEventPage);
+        bind(HttpMethod.GET, Path.EVENTS_MY).to(this::displayMyEventsPage);
+        bind(HttpMethod.GET, Path.EVENT, false).to(this::displayEventPage);
         bind(HttpMethod.GET, Path.EVENT_EDIT).to(this::displayEditEventPage);
         bind(HttpMethod.POST, Path.EVENTS_NEW).to(this::addEvent);
         bind(HttpMethod.POST, Path.EVENT_EDIT).to(this::editEvent);
@@ -87,6 +88,18 @@ public class EventsServlet extends Servlet {
         HttpServletResponse response = wrappedHttpServlet.getResponse();
 
         render(request, response, "events_new.jsp");
+    }
+
+    private void displayMyEventsPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
+        HttpServletRequest request = wrappedHttpServlet.getRequest();
+        HttpServletResponse response = wrappedHttpServlet.getResponse();
+
+        User currentUser = SecurityService.getLoggedUser(request);
+
+        request.setAttribute("eventsSuscribed", eventService.findByParticipant(currentUser));
+        request.setAttribute("eventsCreated", eventService.findByOwner(currentUser));
+
+        render(request, response, "events_my.jsp");
     }
 
     private void displayEditEventPage(WrappedHttpServlet wrappedHttpServlet) throws IOException {
@@ -247,14 +260,14 @@ public class EventsServlet extends Servlet {
         Optional<Event> eventOptional = eventService.getEvent(eventId);
 
         if (!eventOptional.isPresent()) {
-            redirect(request, response, Path.PROFIL.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
+            redirect(request, response, Path.EVENTS_MY.getFullPath(), Alert.danger(PreparedMessage.NOT_FOUND.getMessage()));
             return;
         }
 
         Event event = eventOptional.get();
         User loggedUser = SecurityService.getLoggedUser(request);
 
-        String redirectionPath = Path.PROFIL.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
+        String redirectionPath = Path.EVENTS_MY.getFullPath();
 
         if (!event.isOwner(loggedUser)) {
             redirect(request, response, redirectionPath, Alert.danger("Vous ne pouvez pas supprimer un événement qui ne vous appartient pas."));

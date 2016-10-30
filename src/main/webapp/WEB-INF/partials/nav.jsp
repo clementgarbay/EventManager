@@ -36,6 +36,7 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li><a href="<app:getUrl pathId="PROFIL"/>">Profil</a></li>
+                                <li><a href="<app:getUrl pathId="EVENTS_MY"/>">Mes événements</a></li>
                                 <li class="divider"></li>
                                 <li><a href="<app:getUrl pathId="LOGOUT"/>">Se déconnecter</a></li>
                             </ul>
