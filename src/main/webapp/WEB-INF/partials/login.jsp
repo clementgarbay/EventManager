@@ -11,7 +11,7 @@
                         <i class="fa fa-at"></i>
                     </span>
                     <div class="form-group is-empty">
-                        <input type="text" name="email" class="form-control" placeholder="Votre adresse email" value="${user.email}">
+                        <input type="text" name="email" class="form-control" placeholder="Votre adresse email" value="${user.email}" autofocus>
                         <span class="material-input"></span>
                     </div>
                 </div>

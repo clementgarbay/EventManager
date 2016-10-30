@@ -68,7 +68,7 @@ public abstract class ServletRouter extends HttpServlet {
         boolean userIsAuthenticated = SecurityService.isLogged(request);
 
         if (route.isProtected() && !userIsAuthenticated) {
-            redirect(request, response, Path.HOME.getFullPath(), Alert.danger(PreparedMessage.UNAUTHORIZED.getMessage()));
+            redirect(request, response, Path.LOGIN.getFullPath(), Alert.danger(PreparedMessage.UNAUTHORIZED.getMessage()));
             return;
         }
 
