@@ -10,15 +10,9 @@ npm install
 bower install
 ```
 
-To configure data persistence (in the `META-INF` directory) :
- 
-```
-cp persistence-default.xml persistence.xml
-```
+To change data persistence configure properties in the `persistence.xml` file (in the `META-INF` directory).
 
-and configure your own persistence properties.
-
-## Build
+## Front-end (with gulp)
 
 To create, compile SASS files and copy useful JavaScript and fonts files in the `assets` directory run (in the `front-src` directory) :
 
@@ -26,7 +20,9 @@ To create, compile SASS files and copy useful JavaScript and fonts files in the 
 gulp
 ```
 
-To build the application and run it in a embedded Tomcat (in the root folder) : 
+## Build
+
+To run unit tests, build the application (front and back end) and run it in a embedded Tomcat (in the root folder) : 
 
 ```
 mvn clean tomcat7:run-war
