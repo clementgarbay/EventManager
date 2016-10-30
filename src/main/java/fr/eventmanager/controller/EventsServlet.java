@@ -158,7 +158,7 @@ public class EventsServlet extends Servlet {
         String redirectionPath = Path.EVENT.getFullPath(Collections.singletonMap("eventId", Integer.toString(event.getId())));
 
         // Check if the logged user is the owner of this event
-        if (isNull(loggedUser) || loggedUser.getId().equals(event.getOwner().getId())) {
+        if (isNull(loggedUser) || !loggedUser.getId().equals(event.getOwner().getId())) {
             redirect(request, response, redirectionPath, Alert.danger(PreparedMessage.FORBIDDEN.getMessage()));
             return;
         }
@@ -168,7 +168,7 @@ public class EventsServlet extends Servlet {
         modifiedEventBuilt
             .validate()
             .apply(success -> {
-                if (!eventService.updateEvent(modifiedEventBuilt)) {
+                if (eventService.updateEvent(modifiedEventBuilt)) {
                     redirect(request, response, redirectionPath);
                 } else {
                     request.setAttribute("event", modifiedEventBuilt);
