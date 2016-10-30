@@ -52,6 +52,7 @@
 
     <script type="text/javascript">
     // TODO : place it in an external js file
+    // TODO : fix i18n for datepicker : french text ignored ?
     $(function() {
         $('#datepicker').datepicker({
             altField: "#datepicker",
@@ -65,7 +66,7 @@
             dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
             dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
             weekHeader: 'Sem.',
-            dateFormat: 'dd/mm/yyyy'
+            format: 'dd/mm/yyyy'
         });
     });
     </script>

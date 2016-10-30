@@ -28,7 +28,7 @@ public class EventHelper {
         Date date = null;
         try {
             String dateStr = request.getParameter("date_day") + "-" + request.getParameter("date_hour");
-            date = new SimpleDateFormat("yyyy-MM-dd-HH:mm").parse(dateStr);
+            date = new SimpleDateFormat("dd/MM/yyyy-HH:mm").parse(dateStr);
         } catch (ParseException ignored) {}
 
         String addressName = request.getParameter("address_name");
