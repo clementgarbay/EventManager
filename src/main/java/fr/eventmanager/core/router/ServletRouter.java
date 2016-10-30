@@ -54,7 +54,8 @@ public abstract class ServletRouter extends HttpServlet {
      * @throws IOException
      */
     protected void process(HttpMethod httpMethod, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String pathStr = ifNull(request.getPathInfo(), request.getRequestURI());
+        String pathFromRequestUri = request.getRequestURI().replace(getServletContext().getContextPath(), "");
+        String pathStr = ifNull(request.getPathInfo(), pathFromRequestUri);
         Optional<Route> routeOptional = getRoute(httpMethod, pathStr);
 
         if (!routeOptional.isPresent()) {
