@@ -57,13 +57,18 @@
                                                 <td>${event.address.city}</td>
                                                 <td>${event.date}</td>
                                             </a>
+
                                             <td class="td-actions">
-                                                <button type="button" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
-                                                    <i class="fa fa-edit"></i>
-                                                </button>
-                                                <button type="button" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
+                                                <form method="GET" action="<app:getUrl pathId="EVENT_EDIT" params="{eventId:${event.id}}"/>">
+                                                    <button type="submit" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+                                                </form>
+                                                <form method="POST" action="<app:getUrl pathId="EVENT_REMOVE" params="{eventId:${event.id}}"/>">
+                                                    <button type="submit" rel="tooltip" title="Supprimer" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -96,9 +101,11 @@
                                                 <td>${event.date}</td>
                                             </a>
                                             <td class="td-actions">
-                                                <button type="button" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
-                                                    <i class="fa fa-times"></i>
-                                                </button>
+                                                <form method="POST" action="<app:getUrl pathId="EVENT_UNSUBSCRIBE" params="{eventId:${event.id}}" />">
+                                                    <button type="submit" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
+                                                        <i class="fa fa-times"></i>
+                                                    </button>
+                                                </form>
                                             </td>
                                         </tr>
                                     </c:forEach>
