@@ -162,7 +162,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1</version>
                 <configuration>
-                    <warSourceExcludes>/front-src/**</warSourceExcludes>
+                    <warSourceExcludes>front-src/**</warSourceExcludes>
                 </configuration>
             </plugin>
         </plugins>
