@@ -1,5 +1,6 @@
 <%@ tag pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="app" uri="application" %>
@@ -18,8 +19,13 @@
             </div>
             <div class="card-footer">
                 <div class="stats">
-                    <i class="material-icons">date_range</i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' HH'h'mm" value="${event.date}" />
+                    <i class="fa fa-calendar" style="margin-right: 5px;"></i> <fmt:formatDate pattern="'le' dd/MM/yyyy 'à' HH'h'mm" value="${event.date}"/>
                 </div>
+                <c:if test="${event.isParticipant(SECURITY_LOGGED_USER)}">
+                    <div class="stats pull-right" style="color: #4caf50;">
+                        <i class="fa fa-check" style="margin-right: 5px;"></i> Inscrit
+                    </div>
+                </c:if>
             </div>
         </div>
     </a>

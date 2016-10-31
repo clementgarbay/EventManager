@@ -2,6 +2,7 @@
 
 <%@ taglib prefix="app" uri="application" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="col-sm-12">
     <div class="card">
@@ -16,7 +17,7 @@
                         </li>
                         <li style="margin-bottom: 0;">
                             <a href="#events_participant" data-toggle="tab" aria-expanded="false">
-                                <i class="fa fa-calendar-times-o" style="margin-right: 5px;"></i> Événements auxquels je suis inscrit
+                                <i class="fa fa-calendar-check-o" style="margin-right: 5px;"></i> Événements auxquels je suis inscrit
                             </a>
                         </li>
                     </ul>
@@ -35,19 +36,37 @@
                                     <th>Titre</th>
                                     <th>Lieu</th>
                                     <th>Date</th>
-                                    <th style="width: 20%;"></th>
+                                    <th>Inscrits</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="event" items="${eventsCreated}">
                                     <tr>
-                                        <a href="#">
-                                            <td>${event.title}</td>
-                                            <td>${event.address.city}</td>
-                                            <td>${event.date}</td>
-                                        </a>
+                                        <td>${event.title}</td>
+                                        <td>${event.address.city}</td>
+                                        <td><fmt:formatDate pattern="dd/MM/yyyy 'à' HH'h'mm" value="${event.date}" /></td>
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${not empty event.participants}">
+                                                    <ul>
+                                                    <c:forEach var="participant" items="${event.participants}">
+                                                        <li>${participant.name} <small>(${participant.email})</small></li>
+                                                    </c:forEach>
+                                                    </ul>
+                                                </c:when>
+                                                <c:when test="${empty event.participants}">
+                                                    <i>Il n'y a aucun inscrit.</i>
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
 
                                         <td class="td-actions">
+                                            <form method="GET" action="<app:getUrl pathId="EVENT" params="{eventId:${event.id}}"/>">
+                                                <button type="submit" rel="tooltip" title="Voir" class="btn btn-simple btn-xs">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </form>
                                             <form method="GET" action="<app:getUrl pathId="EVENT_EDIT" params="{eventId:${event.id}}"/>">
                                                 <button type="submit" rel="tooltip" title="Modifier" class="btn btn-simple btn-xs">
                                                     <i class="fa fa-edit"></i>
@@ -78,18 +97,21 @@
                                     <th>Titre</th>
                                     <th>Lieu</th>
                                     <th>Date</th>
-                                    <th style="width: 20%;"></th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="event" items="${eventsSuscribed}">
                                     <tr>
-                                        <a href="#">
-                                            <td>${event.title}</td>
-                                            <td>${event.address.city}</td>
-                                            <td>${event.date}</td>
-                                        </a>
+                                        <td>${event.title}</td>
+                                        <td>${event.address.city}</td>
+                                        <td><fmt:formatDate pattern="dd/MM/yyyy 'à' HH'h'mm" value="${event.date}" /></td>
                                         <td class="td-actions">
+                                            <form method="GET" action="<app:getUrl pathId="EVENT" params="{eventId:${event.id}}"/>">
+                                                <button type="submit" rel="tooltip" title="Voir" class="btn btn-simple btn-xs">
+                                                    <i class="fa fa-eye"></i>
+                                                </button>
+                                            </form>
                                             <form method="POST" action="<app:getUrl pathId="EVENT_UNSUBSCRIBE" params="{eventId:${event.id}}" />">
                                                 <button type="submit" rel="tooltip" title="Se désinscrire" class="btn btn-danger btn-simple btn-xs">
                                                     <i class="fa fa-times"></i>

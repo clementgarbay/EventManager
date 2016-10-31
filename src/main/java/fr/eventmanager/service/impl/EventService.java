@@ -22,11 +22,7 @@ public class EventService implements IEventService {
 
     @Override
     public List<Event> getEvents() {
-        return eventDAO
-                .findAll()
-                .stream()
-                .sorted((e1, e2) -> e1.getDate().compareTo(e2.getDate()))
-                .collect(Collectors.toList());
+        return sortByDate(eventDAO.findAll());
     }
 
     @Override
@@ -61,16 +57,22 @@ public class EventService implements IEventService {
 
     @Override
     public List<Event> findByOwner(User user) {
-        return eventDAO.findByOwner(user);
+        return sortByDate(eventDAO.findByOwner(user));
     }
 
     @Override
     public List<Event> findByParticipant(User user) {
-        return eventDAO.findByParticipant(user);
+        return sortByDate(eventDAO.findByParticipant(user));
     }
 
     @Override
     public boolean removeEvent(int id) {
         return eventDAO.delete(id);
+    }
+
+    private List<Event> sortByDate(List<Event> events) {
+        return events.stream()
+                .sorted((e1, e2) -> e1.getDate().compareTo(e2.getDate()))
+                .collect(Collectors.toList());
     }
 }
