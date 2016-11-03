@@ -1,5 +1,8 @@
 # Event Manager
 
+Project at Ecole des Mines de Nantes to discover basis concepts of JEE.
+
+The goal was to create a web application to manage public events (Eventbrite, Meetup like).
 
 ## Installation 
 
