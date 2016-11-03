@@ -13,7 +13,7 @@
             <%--<div class="card-header" data-background-color="purple">--%>
                 <%--<i class="material-icons">store</i>--%>
             <%--</div>--%>
-            <div class="card-content">
+            <div class="card-content" style="height: 200px!important">
                 <h3 class="title">${event.title}</h3>
                 <p class="category">${fn:replace(event.description, fn:substring(event.description, 240, fn:length(event.description)), '...')}</p>
             </div>
